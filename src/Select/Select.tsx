@@ -1,4 +1,4 @@
-import { FC, SelectHTMLAttributes } from "react";
+import { FC, SelectHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
@@ -39,54 +39,67 @@ interface SelectFieldProps
   required?: boolean;
 }
 
-export const SelectField: FC<SelectFieldProps> = ({
-  className,
-  inputSize,
-  rounded,
-  disabled,
-  label,
-  hasError = false,
-  errorMessage = "There was an error",
-  options,
-  defaultOption = "Seleccione una opción",
-  required = false,
-  ...props
-}) => {
-  const fieldClass = cn(
-    field({ inputSize, rounded }),
-    className,
-    hasError ? "bg-red-100 border border-red-500" : ""
-  );
-  const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
+const SelectField: FC<SelectFieldProps> = forwardRef<
+  HTMLSelectElement,
+  SelectFieldProps
+>(
+  (
+    {
+      className,
+      inputSize,
+      rounded,
+      disabled,
+      label,
+      hasError = false,
+      errorMessage = "There was an error",
+      options,
+      defaultOption = "Seleccione una opción",
+      required = false,
+      ...props
+    },
+    ref
+  ) => {
+    const fieldClass = cn(
+      field({ inputSize, rounded }),
+      className,
+      hasError ? "bg-red-100 border border-red-500" : ""
+    );
+    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
 
-  return (
-    <div>
-      {label && (
-        <label className="block mb-1 text-gray-700" htmlFor={props.id}>
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
-      )}
-      <select
-        id={props.id}
-        className={`${fieldClass} ${disabledClass}`}
-        disabled={disabled}
-        aria-required={required}
-        aria-invalid={hasError}
-        aria-describedby={hasError ? `${props.id}-error` : undefined}
-        {...props}
-      >
-        {defaultOption && <option value="">{defaultOption}</option>}
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      {hasError && (
-        <p id={`${props.id}-error`} className="text-red-500 text-sm mt-1">
-          {errorMessage}
-        </p>
-      )}
-    </div>
-  );
-};
+    return (
+      <div>
+        {label && (
+          <label className="block mb-1 text-gray-700" htmlFor={props.id}>
+            {label} {required && <span className="text-red-500">*</span>}
+          </label>
+        )}
+        <select
+          ref={ref}
+          id={props.id}
+          className={`${fieldClass} ${disabledClass}`}
+          disabled={disabled}
+          aria-required={required}
+          aria-invalid={hasError}
+          aria-describedby={hasError ? `${props.id}-error` : undefined}
+          {...props}
+        >
+          {defaultOption && <option value="">{defaultOption}</option>}
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        {hasError && (
+          <p id={`${props.id}-error`} className="text-red-500 text-sm mt-1">
+            {errorMessage}
+          </p>
+        )}
+      </div>
+    );
+  }
+);
+
+SelectField.displayName = "SelectField";
+
+export { SelectField };

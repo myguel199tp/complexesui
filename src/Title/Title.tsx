@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from "react";
+import { ElementType, FC, HTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
@@ -32,22 +32,34 @@ const titleStyle = cva("font-bold", {
 
 interface TitleProps
   extends HTMLAttributes<HTMLParagraphElement>,
-    VariantProps<typeof titleStyle> {}
+    VariantProps<typeof titleStyle> {
+  as?: ElementType;
+}
 
-export const Title: FC<TitleProps> = ({
-  children,
-  className,
-  colVariant,
-  size,
-  font,
-  ...props
-}) => {
-  return (
-    <p
-      className={cn(titleStyle({ colVariant, size, font, className }))}
-      {...props}
-    >
-      {children}
-    </p>
-  );
-};
+const Title: FC<TitleProps> = forwardRef<HTMLParagraphElement, TitleProps>(
+  (
+    {
+      as: Component = "h1",
+      children,
+      className,
+      colVariant,
+      size,
+      font,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Component
+        ref={ref}
+        className={cn(titleStyle({ colVariant, size, font, className }))}
+        {...props}
+      >
+        {children}
+      </Component>
+    );
+  }
+);
+
+Title.displayName = "Title";
+export { Title };

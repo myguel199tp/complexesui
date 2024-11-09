@@ -40,6 +40,7 @@ export const Primary: Story = {
   args: {
     children: "Title",
     colVariant: "primary",
+    as: "h1",
   },
 };
 

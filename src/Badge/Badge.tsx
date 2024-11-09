@@ -1,7 +1,8 @@
-import { FC, HTMLAttributes, ElementType } from "react";
+import { FC, HTMLAttributes, ElementType, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
+// Definición de las variantes y clases CSS
 const badgeStyle = cva("font-bold", {
   variants: {
     colVariant: {
@@ -57,34 +58,44 @@ interface BadgeProps
   as?: ElementType;
 }
 
-export const Badge: FC<BadgeProps> = ({
-  as: Component = "span",
-  children,
-  className,
-  colVariant,
-  size,
-  font,
-  background,
-  padding,
-  rounded,
-  ...props
-}) => {
-  return (
-    <Component
-      className={cn(
-        badgeStyle({
-          colVariant,
-          size,
-          font,
-          background,
-          padding,
-          rounded,
-          className,
-        })
-      )}
-      {...props}
-    >
-      {children}
-    </Component>
-  );
-};
+const Badge: FC<BadgeProps> = forwardRef<HTMLElement, BadgeProps>(
+  (
+    {
+      as: Component = "span",
+      children,
+      className,
+      colVariant,
+      size,
+      font,
+      background,
+      padding,
+      rounded,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Component
+        ref={ref}
+        className={cn(
+          badgeStyle({
+            colVariant,
+            size,
+            font,
+            background,
+            padding,
+            rounded,
+            className,
+          })
+        )}
+        {...props}
+      >
+        {children}
+      </Component>
+    );
+  }
+);
+
+Badge.displayName = "Badge";
+
+export { Badge };

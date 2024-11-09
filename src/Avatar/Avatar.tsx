@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
@@ -36,23 +36,22 @@ interface AvatarProps
   alt: string;
 }
 
-export const Avatar: FC<AvatarProps> = ({
-  src,
-  alt,
-  size,
-  shape,
-  border,
-  className,
-  ...props
-}) => {
-  return (
-    <picture>
-      <img
-        src={src}
-        alt={alt}
-        className={cn(avatarStyle({ size, shape, border, className }))}
-        {...props}
-      />
-    </picture>
-  );
-};
+const Avatar: FC<AvatarProps> = forwardRef<HTMLImageElement, AvatarProps>(
+  ({ src, alt, size, shape, border, className, ...props }, ref) => {
+    return (
+      <picture>
+        <img
+          ref={ref}
+          src={src}
+          alt={alt}
+          className={cn(avatarStyle({ size, shape, border, className }))}
+          {...props}
+        />
+      </picture>
+    );
+  }
+);
+
+Avatar.displayName = "Avatar";
+
+export { Avatar };

@@ -1,4 +1,11 @@
-import { FC, HTMLAttributes, ElementType, useEffect, useState } from "react";
+import {
+  FC,
+  HTMLAttributes,
+  ElementType,
+  useEffect,
+  useState,
+  forwardRef,
+} from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
@@ -58,53 +65,63 @@ interface FlagProps
   disappearTime?: number;
 }
 
-export const Flag: FC<FlagProps> = ({
-  children,
-  className,
-  colVariant,
-  size,
-  font,
-  background,
-  padding,
-  rounded,
-  disappearTime = 10000,
-  as: Tag = "div",
-  ...props
-}) => {
-  const [opacity, setOpacity] = useState(1);
+const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
+  (
+    {
+      children,
+      className,
+      colVariant,
+      size,
+      font,
+      background,
+      padding,
+      rounded,
+      disappearTime = 10000,
+      as: Tag = "div",
+      ...props
+    },
+    ref
+  ) => {
+    const [opacity, setOpacity] = useState(1);
 
-  useEffect(() => {
-    const interval = disappearTime / 100;
-    const step = 1 / 100;
+    useEffect(() => {
+      const interval = disappearTime / 100;
+      const step = 1 / 100;
 
-    const timer = setInterval(() => {
-      setOpacity((prev) => Math.max(prev - step, 0));
-    }, interval);
+      const timer = setInterval(() => {
+        setOpacity((prev) => Math.max(prev - step, 0));
+      }, interval);
 
-    return () => clearInterval(timer);
-  }, [disappearTime]);
+      return () => clearInterval(timer);
+    }, [disappearTime]);
 
-  if (opacity === 0) {
-    return null;
+    if (opacity === 0) {
+      return null;
+    }
+
+    return (
+      <Tag
+        ref={ref}
+        className={cn(
+          flagStyle({
+            colVariant,
+            size,
+            font,
+            background,
+            padding,
+            rounded,
+          }),
+          className
+        )}
+        style={{ opacity }}
+        {...props}
+      >
+        <div>{children}</div>
+      </Tag>
+    );
   }
+);
 
-  return (
-    <Tag
-      className={cn(
-        flagStyle({
-          colVariant,
-          size,
-          font,
-          background,
-          padding,
-          rounded,
-        }),
-        className
-      )}
-      style={{ opacity }}
-      {...props}
-    >
-      <div>{children}</div>
-    </Tag>
-  );
-};
+Flag.displayName = "Flag";
+
+export { Flag };

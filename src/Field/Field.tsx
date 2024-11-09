@@ -1,4 +1,4 @@
-import { FC, InputHTMLAttributes } from "react";
+import { FC, InputHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
@@ -31,34 +31,45 @@ interface FieldProps
   errorMessage?: string;
 }
 
-export const InputField: FC<FieldProps> = ({
-  className,
-  inputSize,
-  rounded,
-  disabled,
-  placeholder,
-  label,
-  hasError = false,
-  errorMessage = "There was an error",
-  ...props
-}) => {
-  const fieldClass = cn(
-    field({ inputSize, rounded }),
-    className,
-    hasError ? "bg-red-100 border border-red-500" : ""
-  );
-  const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
+const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
+  (
+    {
+      className,
+      inputSize,
+      rounded,
+      disabled,
+      placeholder,
+      label,
+      hasError = false,
+      errorMessage = "There was an error",
+      ...props
+    },
+    ref
+  ) => {
+    const fieldClass = cn(
+      field({ inputSize, rounded }),
+      className,
+      hasError ? "bg-red-100 border border-red-500" : ""
+    );
+    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
 
-  return (
-    <div>
-      {label && <label className="block mb-1 text-gray-700">{label}</label>}
-      <input
-        placeholder={placeholder}
-        className={`${fieldClass} ${disabledClass}`}
-        disabled={disabled}
-        {...props}
-      />
-      {hasError && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
-    </div>
-  );
-};
+    return (
+      <div ref={ref}>
+        {label && <label className="block mb-1 text-gray-700">{label}</label>}
+        <input
+          placeholder={placeholder}
+          className={`${fieldClass} ${disabledClass}`}
+          disabled={disabled}
+          {...props}
+        />
+        {hasError && (
+          <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+        )}
+      </div>
+    );
+  }
+);
+
+InputField.displayName = "InputField";
+
+export { InputField };

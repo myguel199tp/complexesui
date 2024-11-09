@@ -1,8 +1,7 @@
-import { FC, useState, ReactNode } from "react";
+import { useState, ReactNode, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
-// Definición de las variantes de estilo con cva
 const tabStyle = cva("font-bold", {
   variants: {
     colVariant: {
@@ -62,34 +61,38 @@ interface TabsProps {
   tabs: TabProps[];
 }
 
-export const Tabs: FC<TabsProps> = ({ tabs, defaultActiveIndex = 0 }) => {
-  const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
+  ({ tabs, defaultActiveIndex = 0 }, ref) => {
+    const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
 
-  return (
-    <div>
-      <div className="flex space-x-4">
-        {tabs.map((tab, index) => (
-          <button
-            key={index}
-            className={cn(
-              tabStyle({
-                colVariant: activeIndex === index ? "primary" : "default",
-                font: activeIndex === index ? "bold" : "normal",
-                size: tab.size, // Aplicar tamaño dinámico
-                background: tab.background, // Aplicar fondo dinámico
-                padding: tab.padding, // Aplicar padding dinámico
-                rounded: tab.rounded, // Aplicar borde redondeado dinámico
-              })
-            )}
-            onClick={() => setActiveIndex(index)}
-          >
-            {tab.label}
-          </button>
-        ))}
+    return (
+      <div ref={ref}>
+        <div className="flex space-x-4">
+          {tabs.map((tab, index) => (
+            <button
+              key={index}
+              className={cn(
+                tabStyle({
+                  colVariant: activeIndex === index ? "primary" : "default",
+                  font: activeIndex === index ? "bold" : "normal",
+                  size: tab.size,
+                  background: tab.background,
+                  padding: tab.padding,
+                  rounded: tab.rounded,
+                })
+              )}
+              onClick={() => setActiveIndex(index)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <div className="mt-4">
+          {tabs[activeIndex] && <div>{tabs[activeIndex].children}</div>}
+        </div>
       </div>
-      <div className="mt-4">
-        {tabs[activeIndex] && <div>{tabs[activeIndex].children}</div>}
-      </div>
-    </div>
-  );
-};
+    );
+  }
+);
+
+Tabs.displayName = "Tabs";

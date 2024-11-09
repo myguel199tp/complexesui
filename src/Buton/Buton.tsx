@@ -1,8 +1,7 @@
-import { ButtonHTMLAttributes, FC } from "react";
+import { ButtonHTMLAttributes, FC, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
-// Renamed to "button" for clarity
 const button = cva(
   "inline-block border-2 px-5 py-3 font-bold transition-all duration-200",
   {
@@ -53,30 +52,40 @@ interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {}
 
-export const Buton: FC<ButtonProps> = ({
-  children,
-  className,
-  colVariant,
-  size,
-  fonts,
-  rounded,
-  disabled,
-  borderWidth,
-  ...props
-}) => {
-  const buttonClass = cn(
-    button({ colVariant, fonts, borderWidth, size, rounded, className })
-  );
+const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      children,
+      className,
+      colVariant,
+      size,
+      fonts,
+      rounded,
+      disabled,
+      borderWidth,
+      ...props
+    },
+    ref
+  ) => {
+    const buttonClass = cn(
+      button({ colVariant, fonts, borderWidth, size, rounded, className })
+    );
 
-  const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
+    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
 
-  return (
-    <button
-      className={`${buttonClass} ${disabledClass}`}
-      disabled={disabled}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
+    return (
+      <button
+        ref={ref}
+        className={`${buttonClass} ${disabledClass}`}
+        disabled={disabled}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";
+
+export { Button };

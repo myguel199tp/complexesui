@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, ElementType } from "react";
+import { FC, HTMLAttributes, ElementType, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
@@ -36,21 +36,30 @@ interface TextProps
   as?: ElementType;
 }
 
-export const Text: FC<TextProps> = ({
-  as: Component = "p",
-  children,
-  className,
-  colVariant,
-  size,
-  font,
-  ...props
-}) => {
-  return (
-    <Component
-      className={cn(textStyle({ colVariant, size, font, className }))}
-      {...props}
-    >
-      {children}
-    </Component>
-  );
-};
+const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
+  (
+    {
+      as: Component = "p",
+      children,
+      className,
+      colVariant,
+      size,
+      font,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <Component
+        ref={ref}
+        className={cn(textStyle({ colVariant, size, font, className }))}
+        {...props}
+      >
+        {children}
+      </Component>
+    );
+  }
+);
+
+Text.displayName = "Text";
+export { Text };
