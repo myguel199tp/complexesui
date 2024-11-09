@@ -52,7 +52,7 @@ interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {}
 
-const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
+const Buton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       children,
@@ -86,6 +86,6 @@ const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-Button.displayName = "Button";
+Buton.displayName = "Button";
 
-export { Button };
+export { Buton };
