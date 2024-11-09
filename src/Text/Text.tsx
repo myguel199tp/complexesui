@@ -1,8 +1,8 @@
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, ElementType } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
-const titleStyle = cva("font-bold", {
+const textStyle = cva("font-bold", {
   variants: {
     colVariant: {
       default: "text-black-500",
@@ -17,10 +17,10 @@ const titleStyle = cva("font-bold", {
       normal: "font-normal",
     },
     size: {
-      xs: "text-2xl",
-      sm: "text-3xl",
-      md: "text-5xl",
-      lg: "text-7xl",
+      xs: "text-xs",
+      sm: "text-sm",
+      md: "text-xl",
+      lg: "text-2xl",
     },
   },
   defaultVariants: {
@@ -30,11 +30,14 @@ const titleStyle = cva("font-bold", {
   },
 });
 
-interface TitleProps
-  extends HTMLAttributes<HTMLParagraphElement>,
-    VariantProps<typeof titleStyle> {}
+interface TextProps
+  extends HTMLAttributes<HTMLElement>,
+    VariantProps<typeof textStyle> {
+  as?: ElementType;
+}
 
-export const Title: FC<TitleProps> = ({
+export const Text: FC<TextProps> = ({
+  as: Component = "p",
   children,
   className,
   colVariant,
@@ -43,11 +46,11 @@ export const Title: FC<TitleProps> = ({
   ...props
 }) => {
   return (
-    <p
-      className={cn(titleStyle({ colVariant, size, font, className }))}
+    <Component
+      className={cn(textStyle({ colVariant, size, font, className }))}
       {...props}
     >
       {children}
-    </p>
+    </Component>
   );
 };

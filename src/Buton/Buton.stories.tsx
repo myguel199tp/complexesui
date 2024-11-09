@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Title } from "./Title";
+import { Buton } from "./Buton";
 
-const meta: Meta<typeof Title> = {
-  title: "Components/Title",
+const meta: Meta<typeof Buton> = {
+  title: "Components/Butons",
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-  component: Title,
+  component: Buton,
   argTypes: {
     children: {
-      description: "The Title",
+      description: "The buton label",
     },
     colVariant: {
       type: "string",
@@ -17,15 +17,27 @@ const meta: Meta<typeof Title> = {
       control: { type: "radio" },
       description: "colors",
     },
-    font: {
+    fonts: {
       type: "string",
-      options: ["bold", "semi", "normal"],
+      options: ["bold", "semi", "thin"],
+      control: { type: "radio" },
+      description: "colors",
+    },
+    borderWidth: {
+      type: "string",
+      options: ["bold", "semi", "thin"],
+      control: { type: "radio" },
+      description: "colors",
+    },
+    rounded: {
+      type: "string",
+      options: ["basic", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "bordes",
     },
     size: {
       type: "string",
-      options: ["xs", "sm", "md", "lg"],
+      options: ["full", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "size",
     },
@@ -34,32 +46,36 @@ const meta: Meta<typeof Title> = {
 
 export default meta;
 
-type Story = StoryObj<typeof Title>;
+type Story = StoryObj<typeof Buton>;
 
 export const Primary: Story = {
   args: {
-    children: "Title",
+    children: "Button",
     colVariant: "primary",
+    disabled: true,
   },
 };
 
 export const success: Story = {
   args: {
-    children: "Title",
+    children: "Button",
     colVariant: "success",
+    disabled: true,
   },
 };
 
 export const warning: Story = {
   args: {
-    children: "Title",
+    children: "Button",
     colVariant: "warning",
+    disabled: true,
   },
 };
 
 export const danger: Story = {
   args: {
-    children: "Title",
+    children: "Button",
     colVariant: "danger",
+    disabled: true,
   },
 };
