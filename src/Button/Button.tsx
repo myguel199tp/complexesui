@@ -39,7 +39,12 @@ const button = cva("inline-block bg-blue-400 px-5 py-3 font-bold", {
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof button> {}
+    VariantProps<typeof button> {
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  rounded?: "basic" | "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "full";
+  fonts?: "bold" | "semi" | "thin";
+}
 
 export const Button: FC<ButtonProps> = ({
   children,

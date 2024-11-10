@@ -29,6 +29,8 @@ interface FieldProps
   hasError?: boolean;
   label?: string;
   errorMessage?: string;
+  rounded?: "basic" | "sm" | "md" | "lg";
+  inputSize?: "full" | "sm" | "md" | "lg";
 }
 
 const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(

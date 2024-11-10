@@ -34,6 +34,9 @@ interface AvatarProps
     VariantProps<typeof avatarStyle> {
   src: string;
   alt: string;
+  size: "xs" | "sm" | "md" | "lg" | "xl";
+  shape: "round" | "square" | "rounded";
+  border: "none" | "thin" | "thick";
 }
 
 const Avatar: FC<AvatarProps> = forwardRef<HTMLImageElement, AvatarProps>(

@@ -37,6 +37,8 @@ interface SelectFieldProps
   options: Option[];
   defaultOption?: string;
   required?: boolean;
+  rounded?: "sm" | "md" | "lg" | "basic";
+  inputSize?: "sm" | "md" | "lg" | "full";
 }
 
 const SelectField: FC<SelectFieldProps> = forwardRef<

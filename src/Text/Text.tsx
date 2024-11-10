@@ -34,6 +34,9 @@ interface TextProps
   extends HTMLAttributes<HTMLElement>,
     VariantProps<typeof textStyle> {
   as?: ElementType;
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  size?: "xs" | "sm" | "md" | "lg";
+  font?: "bold" | "semi" | "normal";
 }
 
 const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(

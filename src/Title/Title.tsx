@@ -34,6 +34,9 @@ interface TitleProps
   extends HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof titleStyle> {
   as?: ElementType;
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  size?: "xs" | "sm" | "md" | "lg";
+  font?: "bold" | "semi" | "normal";
 }
 
 const Title: FC<TitleProps> = forwardRef<HTMLParagraphElement, TitleProps>(

@@ -50,7 +50,13 @@ const button = cva(
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof button> {}
+    VariantProps<typeof button> {
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  rounded?: "basic" | "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "full";
+  fonts?: "bold" | "semi" | "thin";
+  borderWidth?: "bold" | "semi" | "thin";
+}
 
 const Buton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
   (

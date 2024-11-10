@@ -2,7 +2,6 @@ import { FC, HTMLAttributes, ElementType, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
-// Definición de las variantes y clases CSS
 const badgeStyle = cva("font-bold", {
   variants: {
     colVariant: {
@@ -56,6 +55,13 @@ interface BadgeProps
   extends HTMLAttributes<HTMLElement>,
     VariantProps<typeof badgeStyle> {
   as?: ElementType;
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  size?: "xs" | "sm" | "md" | "lg";
+  background?: "default" | "primary" | "success" | "warning" | "danger";
+  padding?: "default" | "sm" | "md";
+  rounded?: "basic" | "sm" | "md" | "lg";
+
+  font?: "bold" | "semi" | "normal";
 }
 
 const Badge: FC<BadgeProps> = forwardRef<HTMLElement, BadgeProps>(

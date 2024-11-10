@@ -63,6 +63,12 @@ interface FlagProps
     VariantProps<typeof flagStyle> {
   as?: ElementType;
   disappearTime?: number;
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  font?: "bold" | "semi" | "normal";
+  background?: "default" | "primary" | "success" | "warning" | "danger";
+  size?: "sm" | "md" | "lg" | "xs";
+  padding?: "sm" | "md" | "default";
+  rounded?: "basic" | "sm" | "md" | "lg";
 }
 
 const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
