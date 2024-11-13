@@ -82,7 +82,7 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
       background,
       padding,
       rounded,
-      disappearTime = 10000,
+      disappearTime,
       as: Tag = "div",
       ...props
     },
@@ -91,14 +91,16 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
     const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
-      const interval = disappearTime / 100;
-      const step = 1 / 100;
+      if (disappearTime) {
+        const interval = disappearTime / 100;
+        const step = 1 / 100;
 
-      const timer = setInterval(() => {
-        setOpacity((prev) => Math.max(prev - step, 0));
-      }, interval);
+        const timer = setInterval(() => {
+          setOpacity((prev) => Math.max(prev - step, 0));
+        }, interval);
 
-      return () => clearInterval(timer);
+        return () => clearInterval(timer);
+      }
     }, [disappearTime]);
 
     if (opacity === 0) {

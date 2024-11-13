@@ -2,7 +2,7 @@
 
 Versions
 
-V1.0.0 => Components
+V1.1.4 => Components
 Avatar
 | Badge
 | Button
@@ -14,6 +14,16 @@ Avatar
 | Text
 | SelectField
 
-V0.0.1 =>
+---
+
+=> usability
+
+| install: $ npm i complexes-next-components@lastest
+| inside tailwind.config.ts:
+export default {
+content: [
+"./node_modules/complexes-next-components/dist/complexes-next-components.js"
+]
+}
 
 # complexesui

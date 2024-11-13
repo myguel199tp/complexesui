@@ -2,26 +2,29 @@ import { FC, SelectHTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 
-const field = cva("inline-block bg-gray-200 px-5 py-3 font-thin border-none", {
-  variants: {
-    rounded: {
-      basic: "rounded-none",
-      sm: "rounded-sm",
-      md: "rounded-md",
-      lg: "rounded-2xl",
+const field = cva(
+  "inline-block bg-gray-200 px-5 py-3 font-thin border-none w-full",
+  {
+    variants: {
+      rounded: {
+        basic: "rounded-none",
+        sm: "rounded-sm",
+        md: "rounded-md",
+        lg: "rounded-2xl",
+      },
+      inputSize: {
+        sm: "py-1 px-2 text-xs",
+        md: "py-2 px-4 text-base",
+        lg: "py-3 px-6 text-lg",
+        full: "py-3 px-6 text-lg w-full",
+      },
     },
-    inputSize: {
-      sm: "py-1 px-2 text-xs",
-      md: "py-2 px-4 text-base",
-      lg: "py-3 px-6 text-lg",
-      full: "py-3 px-6 text-lg w-full",
+    defaultVariants: {
+      inputSize: "md",
+      rounded: "md",
     },
-  },
-  defaultVariants: {
-    inputSize: "md",
-    rounded: "md",
-  },
-});
+  }
+);
 
 interface Option {
   value: string;
