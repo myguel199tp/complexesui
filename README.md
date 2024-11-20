@@ -2,7 +2,7 @@
 
 Versions
 
-V1.1.4 => Components
+V1.1.6 => Components
 Avatar
 | Badge
 | Button
@@ -13,6 +13,7 @@ Avatar
 | Title
 | Text
 | SelectField
+| Modal
 
 ---
 
