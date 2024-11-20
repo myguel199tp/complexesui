@@ -11,3 +11,4 @@ export { Tabs } from "./Tab/Tabs";
 export { Title } from "./Title/Title";
 export { Text } from "./Text/Text";
 export { SelectField } from "./Select/Select";
+export { Modal } from "./Modal/modal";

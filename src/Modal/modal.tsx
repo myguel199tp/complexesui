@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { forwardRef, ReactNode, ForwardRefRenderFunction } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -7,7 +7,10 @@ interface ModalProps {
   title?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
+const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
+  { isOpen, onClose, children, title },
+  ref
+) => {
   if (!isOpen) return null;
 
   return (
@@ -16,8 +19,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
       onClick={onClose}
     >
       <div
+        ref={ref}
         className="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6 relative"
-        onClick={(e) => e.stopPropagation()} // Evita cerrar el modal al hacer clic dentro
+        onClick={(e) => e.stopPropagation()}
       >
         {title && <h2 className="text-xl font-semibold mb-4">{title}</h2>}
         <button
@@ -32,4 +36,5 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
   );
 };
 
-export default Modal;
+// Aquí se envuelve el componente con forwardRef
+export const Modal = forwardRef(ModalBase);
