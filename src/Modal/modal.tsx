@@ -36,5 +36,4 @@ const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
   );
 };
 
-// Aquí se envuelve el componente con forwardRef
 export const Modal = forwardRef(ModalBase);

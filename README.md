@@ -3,7 +3,7 @@
 => Versions
 
 <div alingn="center">
-<p>VERSION: v1.1.7</p>
+<p>VERSION: v1.1.8</p>
 <P>COMPONENTS</P>
 <br />
  <p>Avatar</p>
@@ -17,6 +17,7 @@
  <p>Text</p>
  <p>SelectField</p>
  <p>Modal</p>
+ <p>Tooltip</p>
 
 </div>
 
@@ -35,15 +36,35 @@ import type { Config } from "tailwindcss";
   ]
 ```
 
-# complexesui usalle
+# complexesui usalle Button
 
 ```ts
-import { Button, Title } from "complexes-next-components";
+import { Button } from "complexes-next-components";
 
    <Title size="md" font="semi">Complexes</Title>
 
-   <Button colVariant="warning">
+    <Button colVariant="warning">
         button
     </Button>
 
+```
+
+# complexesui usalle Tittle
+
+```ts
+import { Title } from "complexes-next-components";
+
+<Title size="md" font="semi">
+  Complexes
+</Title>;
+```
+
+# complexesui usalle Tittle
+
+```ts
+import { Text } from "complexes-next-components";
+
+<Text size="lg" font="semi">
+  Complexes
+</Text>;
 ```
