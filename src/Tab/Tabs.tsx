@@ -67,7 +67,9 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
 
     return (
       <div ref={ref}>
-        <div className="flex space-x-4">
+        <div
+          className={cn("flex space-x-4 sm:flex-col sm:space-x-0 sm:space-y-2")}
+        >
           {tabs.map((tab, index) => (
             <button
               key={index}
