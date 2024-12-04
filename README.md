@@ -3,7 +3,7 @@
 => Versions
 
 <div alingn="center">
-<p>VERSION: v1.1.8</p>
+<p>VERSION: v1.1.10</p>
 <P>COMPONENTS</P>
 <br />
  <p>Avatar</p>

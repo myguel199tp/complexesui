@@ -68,7 +68,9 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     return (
       <div ref={ref}>
         <div
-          className={cn("flex space-x-4 sm:flex-col sm:space-x-0 sm:space-y-2")}
+          className={cn(
+            "flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0"
+          )}
         >
           {tabs.map((tab, index) => (
             <button
@@ -89,6 +91,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
             </button>
           ))}
         </div>
+
         <div className="mt-4">
           {tabs[activeIndex] && <div>{tabs[activeIndex].children}</div>}
         </div>
