@@ -77,4 +77,4 @@ import { Text } from "complexes-next-components";
 
 If you have ideas, find any issues, or want to contribute, please visit our GitHub repository:
 
-[GitHub - complexes-next-components](https://github.com/myguel199tp/complexes)
+[GitHub - complexes-next-components](https://github.com/myguel199tp/complexesui)
