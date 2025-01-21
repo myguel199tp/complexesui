@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.1.11</p>
+<p>VERSION: v1.1.13</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -40,6 +40,111 @@ import type { Config } from "tailwindcss";
   ]
 ```
 
+# complexesui usalle Avatar
+
+```ts
+import { Avatar } from "complexes-next-components";
+
+<Avatar
+  src="/GitHub.png"
+  alt="Miguel"
+  size="sm"
+  border="none"
+  shape="rounded"
+/>;
+```
+
+# complexesui usalle InputField
+
+```ts
+import { InputField } from "complexes-next-components";
+
+<InputField
+  placeholder="nombre"
+  inputSize="full"
+  rounded="md"
+  className="mt-2"
+  type="text"
+  {...register("name")}
+  hasError={!!errors.name}
+  errorMessage={errors.name?.message}
+/>;
+```
+
+# complexesui usalle InputField
+
+```ts
+import { InputField } from "complexes-next-components";
+
+<InputField
+  placeholder="nombre"
+  inputSize="full"
+  rounded="md"
+  className="mt-2"
+  type="text"
+  {...register("name")}
+  hasError={!!errors.name}
+  errorMessage={errors.name?.message}
+/>;
+```
+
+# complexesui usalle SelectField
+
+```ts
+import { SelectField } from "complexes-next-components";
+
+const [selectedOption, setSelectedOption] = useState("");
+
+const options = [
+  { value: "Bogotá", label: "Bogotá" },
+  { value: "Medellin", label: "Medellin" },
+  { value: "Cali", label: "Cali" },
+];
+
+<SelectField
+  className="mt-2"
+  id="city"
+  defaultOption="Ciudad"
+  value={selectedOption}
+  options={options}
+  inputSize="full"
+  rounded="md"
+  hasError={!!errors.city}
+/>;
+```
+
+# complexesui usalle Tabs
+
+```ts
+import { Tabs } from "complexes-next-components";
+
+ const tabs = [
+    {
+      label: "Frontend",
+      children: <FrontedSkill />,
+      colVariant: "default",
+      size: "md",
+      background: "default",
+      padding: "md",
+      rounded: "lg",
+    },
+ ]
+
+  <Tabs tabs={tabs} defaultActiveIndex={0} />
+
+
+```
+
+# complexesui usalle Modal
+
+```ts
+import { Modal, Text } from "complexes-next-components";
+
+<Modal isOpen={isOpen} onClose={onClose} title={title}>
+  <Text colVariant="primary">description</Text>
+</Modal>;
+```
+
 # complexesui usalle Button
 
 ```ts
@@ -53,6 +158,19 @@ import { Button } from "complexes-next-components";
 
 ```
 
+# complexesui usalle Buton
+
+```ts
+import { Button } from "complexes-next-components";
+
+   <Title size="md" font="semi">Complexes</Title>
+
+    <Buton colVariant="warning">
+        button
+    </Buton>
+
+```
+
 # complexesui usalle Tittle
 
 ```ts
@@ -63,7 +181,7 @@ import { Title } from "complexes-next-components";
 </Title>;
 ```
 
-# complexesui usalle Tittle
+# complexesui usalle Text
 
 ```ts
 import { Text } from "complexes-next-components";
