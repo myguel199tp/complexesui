@@ -72,7 +72,7 @@ export const Success: Story = {
     colVariant: "success",
     background: "success",
     padding: "md",
-    disappearTime: 15000,
+    // disappearTime: 15000,
   },
 };
 

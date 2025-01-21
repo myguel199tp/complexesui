@@ -35,7 +35,7 @@ const meta: Meta<typeof Tooltip> = {
     },
     children: {
       description: "The element that triggers the tooltip",
-      control: { disable: true }, // No se controla directamente en el panel
+      control: { disable: true },
     },
   },
 
