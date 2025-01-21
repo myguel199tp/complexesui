@@ -1,32 +1,36 @@
-# complexes components
+# Complexes Components
 
-=> Versions
+## Versions
 
-<div alingn="center">
-<p>VERSION: v1.1.10</p>
-<P>COMPONENTS</P>
+<div align="center">
+<p>VERSION: v1.1.11</p>
+<p>COMPONENTS</p>
 <br />
- <p>Avatar</p>
- <p>Badge</p>
- <p>Button</p>
- <p>Buton</p>
- <p>InputField</p>
- <p>Flag</p>
- <p>Tabs</p>
- <p>Title</p>
- <p>Text</p>
- <p>SelectField</p>
- <p>Modal</p>
- <p>Tooltip</p>
-
+<ul>
+ <li>Avatar</li>
+ <li>Badge</li>
+ <li>Button</li>
+ <li>InputField</li>
+ <li>Flag</li>
+ <li>Tabs</li>
+ <li>Title</li>
+ <li>Text</li>
+ <li>SelectField</li>
+ <li>Modal</li>
+ <li>Tooltip</li>
+ <li>Table</li>
+</ul>
 </div>
 
-# complexes before started
+---
 
-=> usability
+## Before Starting
+
+### Installation
 
 ```shell
 npm i complexes-next-components
+
 
 /tailwind.config.ts
 import type { Config } from "tailwindcss";
@@ -68,3 +72,9 @@ import { Text } from "complexes-next-components";
   Complexes
 </Text>;
 ```
+
+## Contributing
+
+If you have ideas, find any issues, or want to contribute, please visit our GitHub repository:
+
+[GitHub - complexes-next-components](https://github.com/myguel199tp/complexes)
