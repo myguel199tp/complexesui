@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.1.13</p>
+<p>VERSION: v1.1.14</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -51,23 +51,6 @@ import { Avatar } from "complexes-next-components";
   size="sm"
   border="none"
   shape="rounded"
-/>;
-```
-
-# complexesui usalle InputField
-
-```ts
-import { InputField } from "complexes-next-components";
-
-<InputField
-  placeholder="nombre"
-  inputSize="full"
-  rounded="md"
-  className="mt-2"
-  type="text"
-  {...register("name")}
-  hasError={!!errors.name}
-  errorMessage={errors.name?.message}
 />;
 ```
 
