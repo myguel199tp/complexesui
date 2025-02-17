@@ -131,63 +131,68 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
     );
 
     return (
-      <>
-        <Tag ref={ref} className={classes} {...props}>
-          <thead className="border-2 border-gray-400 rounded-md">
-            <tr>
-              {headers.map((header, index) => (
-                <th
-                  key={index}
-                  className="px-4 py-2 text-center"
-                  style={
-                    columnWidths[index] ? { width: columnWidths[index] } : {}
-                  }
-                >
-                  {header}
-                </th>
-              ))}
-              {actions.length > 0 && <th className="text-center">Actions</th>}
-            </tr>
-          </thead>
-          <tbody className="border border-gray-400 rounded-md">
-            {currentRows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border border-gray-400 rounded-md">
-                {row.map((cell, cellIndex) => (
-                  <td
-                    key={cellIndex}
-                    className={classNames(
-                      "px-4 py-2 text-center",
-                      cellClasses[rowIndex]?.[cellIndex]
-                    )}
+      <div className="w-full overflow-x-auto p-4">
+        <div className="w-full">
+          <Tag ref={ref} className={classes} {...props}>
+            <thead className="border-2 border-gray-400 rounded-md">
+              <tr>
+                {headers.map((header, index) => (
+                  <th
+                    key={index}
+                    className="px-4 py-2 text-center"
                     style={
-                      columnWidths[cellIndex]
-                        ? { width: columnWidths[cellIndex] }
-                        : {}
+                      columnWidths[index] ? { width: columnWidths[index] } : {}
                     }
                   >
-                    {cell}
-                  </td>
+                    {header}
+                  </th>
                 ))}
-                {actions.length > 0 && (
-                  <td className="flex justify-center items-center space-x-2 px-4 py-2 text-center">
-                    {actions.map((action, actionIndex) => (
-                      <button
-                        key={actionIndex}
-                        className="text-white bg-blue-500 px-2 py-1 rounded-md hover:bg-blue-600"
-                        onClick={() => action.onClick(rowIndex)}
-                      >
-                        {action.icon && (
-                          <span className="mr-1">{action.icon}</span>
-                        )}
-                        {action.label}
-                      </button>
-                    ))}
-                  </td>
-                )}
+                {actions.length > 0 && <th className="text-center">Actions</th>}
               </tr>
-            ))}
-          </tbody>
-        </Tag>
+            </thead>
+            <tbody className="border border-gray-400 rounded-md">
+              {currentRows.map((row, rowIndex) => (
+                <tr
+                  key={rowIndex}
+                  className="border border-gray-400 rounded-md"
+                >
+                  {row.map((cell, cellIndex) => (
+                    <td
+                      key={cellIndex}
+                      className={classNames(
+                        "px-4 py-2 text-center",
+                        cellClasses[rowIndex]?.[cellIndex]
+                      )}
+                      style={
+                        columnWidths[cellIndex]
+                          ? { width: columnWidths[cellIndex] }
+                          : {}
+                      }
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                  {actions.length > 0 && (
+                    <td className="flex justify-center items-center space-x-2 px-4 py-2 text-center">
+                      {actions.map((action, actionIndex) => (
+                        <button
+                          key={actionIndex}
+                          className="text-white bg-blue-500 px-2 py-1 rounded-md hover:bg-blue-600"
+                          onClick={() => action.onClick(rowIndex)}
+                        >
+                          {action.icon && (
+                            <span className="mr-1">{action.icon}</span>
+                          )}
+                          {action.label}
+                        </button>
+                      ))}
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </Tag>
+        </div>
 
         {/* Paginación */}
         <div className="flex justify-center space-x-2 mt-4">
@@ -211,7 +216,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
             <GrCaretNext size={20} />
           </Button>
         </div>
-      </>
+      </div>
     );
   }
 );

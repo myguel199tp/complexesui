@@ -222,6 +222,9 @@ export const WithWiderColumns: Story = {
       "Header 8",
       "Header 9",
       "Header 10",
+      "Header 11",
+      "Header 12",
+      "Header 13",
     ],
     rows: [
       [
@@ -235,6 +238,7 @@ export const WithWiderColumns: Story = {
         "Row 1, Col 8",
         "Row 1, Col 9",
         "Row 1, Col 10",
+        "Row 1, Col 11",
       ],
       [
         "Row 2, Col 1",
