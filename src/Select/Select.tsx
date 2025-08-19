@@ -86,9 +86,14 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
           aria-required={required}
           aria-invalid={hasError}
           aria-describedby={hasError ? `${props.id}-error` : undefined}
+          defaultValue="" // 👈 clave para que se muestre el placeholder
           {...props}
         >
-          {defaultOption && <option value="">{defaultOption}</option>}
+          {defaultOption && (
+            <option value="" disabled hidden>
+              {defaultOption}
+            </option>
+          )}
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

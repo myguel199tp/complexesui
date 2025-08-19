@@ -41,7 +41,7 @@ const meta: Meta<typeof SelectField> = {
     defaultOption: {
       type: "string",
       control: { type: "text" },
-      description: "Opción por defecto que aparece en el select",
+      description: "Opción por defecto que aparece en el select (placeholder)",
     },
     required: {
       type: "boolean",

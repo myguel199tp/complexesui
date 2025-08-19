@@ -131,8 +131,8 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
     );
 
     return (
-      <div className="w-full overflow-x-auto p-4">
-        <div className="w-full">
+      <>
+        <div className="w-full overflow-x-auto p-4">
           <Tag ref={ref} className={classes} {...props}>
             <thead className="border-2 border-gray-400 rounded-md">
               <tr>
@@ -216,7 +216,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
             <GrCaretNext size={20} />
           </Button>
         </div>
-      </div>
+      </>
     );
   }
 );
