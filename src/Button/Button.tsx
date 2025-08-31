@@ -1,6 +1,8 @@
-import { ButtonHTMLAttributes, FC } from "react";
+import { ButtonHTMLAttributes, FC, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const button = cva("inline-block bg-blue-400 px-5 py-3 font-bold", {
   variants: {
@@ -44,6 +46,8 @@ interface ButtonProps
   rounded?: "basic" | "sm" | "md" | "lg";
   size?: "sm" | "md" | "lg" | "full";
   fonts?: "bold" | "semi" | "thin";
+  tKey?: string;
+  language?: "es" | "en" | "pt";
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -54,6 +58,8 @@ export const Button: FC<ButtonProps> = ({
   rounded,
   fonts,
   disabled,
+  tKey,
+  language,
   ...props
 }) => {
   const buttonClass = cn(
@@ -61,14 +67,20 @@ export const Button: FC<ButtonProps> = ({
   );
 
   const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
+  const { t } = useTranslation();
 
+  useEffect(() => {
+    if (language) {
+      i18n.changeLanguage(language);
+    }
+  }, [language]);
   return (
     <button
       className={`${buttonClass} ${disabledClass}`}
       disabled={disabled}
       {...props}
     >
-      {children}
+      {tKey ? t(tKey) : children}{" "}
     </button>
   );
 };

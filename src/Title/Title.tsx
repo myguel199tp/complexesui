@@ -1,6 +1,8 @@
-import { ElementType, FC, HTMLAttributes, forwardRef } from "react";
+import { ElementType, FC, HTMLAttributes, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const titleStyle = cva("font-bold", {
   variants: {
@@ -9,6 +11,7 @@ const titleStyle = cva("font-bold", {
       primary: "text-blue-500",
       success: "text-green-500",
       warning: "text-orange-500",
+      on: "text-white",
       danger: "text-red-500",
     },
     font: {
@@ -34,9 +37,11 @@ interface TitleProps
   extends HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof titleStyle> {
   as?: ElementType;
-  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger" | "on";
   size?: "xs" | "sm" | "md" | "lg";
   font?: "bold" | "semi" | "normal";
+  tKey?: string;
+  language?: "es" | "en" | "pt";
 }
 
 const Title: FC<TitleProps> = forwardRef<HTMLParagraphElement, TitleProps>(
@@ -48,17 +53,26 @@ const Title: FC<TitleProps> = forwardRef<HTMLParagraphElement, TitleProps>(
       colVariant,
       size,
       font,
+      tKey,
+      language,
       ...props
     },
     ref
   ) => {
+    const { t } = useTranslation();
+
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
     return (
       <Component
         ref={ref}
         className={cn(titleStyle({ colVariant, size, font, className }))}
         {...props}
       >
-        {children}
+        {tKey ? t(tKey) : children}
       </Component>
     );
   }

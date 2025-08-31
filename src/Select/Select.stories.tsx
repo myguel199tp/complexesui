@@ -94,3 +94,18 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+export const WithHelpText: Story = {
+  args: {
+    ...Default.args,
+    helpText: "Selecciona una de las opciones disponibles.",
+  },
+};
+
+export const WithCustomColors: Story = {
+  args: {
+    ...Default.args,
+    className: "text-blue-600 bg-yellow-100 font-semibold",
+    label: "Select con colores personalizados",
+  },
+};

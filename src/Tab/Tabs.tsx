@@ -1,6 +1,8 @@
-import { useState, ReactNode, forwardRef } from "react";
+import { useState, ReactNode, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const tabStyle = cva("font-bold", {
   variants: {
@@ -52,18 +54,27 @@ const tabStyle = cva("font-bold", {
 });
 
 interface TabProps extends VariantProps<typeof tabStyle> {
-  label: string;
+  label?: string;
+  tKey?: string; // <-- para traducción
   children: ReactNode;
 }
 
 interface TabsProps {
   defaultActiveIndex?: number;
   tabs: TabProps[];
+  language?: "es" | "en" | "pt"; // <-- idioma global
 }
 
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  ({ tabs, defaultActiveIndex = 0 }, ref) => {
+  ({ tabs, defaultActiveIndex = 0, language }, ref) => {
     const [activeIndex, setActiveIndex] = useState(defaultActiveIndex);
+    const { t } = useTranslation();
+
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
 
     return (
       <div ref={ref}>
@@ -87,7 +98,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
               )}
               onClick={() => setActiveIndex(index)}
             >
-              {tab.label}
+              {tab.tKey ? t(tab.tKey) : tab.label}
             </button>
           ))}
         </div>

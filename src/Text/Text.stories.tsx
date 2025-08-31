@@ -1,33 +1,41 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
 import { Text } from "./Text";
+import i18n from "../i18n";
+import { useState } from "react";
 
-const meta: Meta<typeof Text> = {
+const meta: Meta<typeof Text & { language?: "es" | "en" | "pt" }> = {
   title: "Components/Text",
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   component: Text,
   argTypes: {
     children: {
-      description: "The Text",
+      description: "Texto a mostrar (si no se usa tKey)",
+    },
+    tKey: {
+      description: "Clave de traducción de i18n",
+      control: "text",
     },
     colVariant: {
-      type: "string",
       options: ["default", "primary", "success", "warning", "danger"],
       control: { type: "radio" },
-      description: "colors",
+      description: "Colores predefinidos",
     },
     font: {
-      type: "string",
       options: ["bold", "semi", "normal"],
       control: { type: "radio" },
-      description: "bordes",
+      description: "Estilo de fuente",
     },
     size: {
-      type: "string",
-      options: ["xs", "sm", "md", "lg"],
+      options: ["xxs", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
-      description: "size",
+      description: "Tamaño del texto",
+    },
+    language: {
+      // 👈 definimos un control
+      options: ["es", "en", "pt"],
+      control: { type: "radio" },
+      description: "Idioma de la traducción",
     },
   },
 };
@@ -36,31 +44,103 @@ export default meta;
 
 type Story = StoryObj<typeof Text>;
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
-    children: "Texxt",
-    colVariant: "primary",
-    as: "span",
+    children: "Texto por defecto",
+    colVariant: "default",
   },
 };
 
-export const success: Story = {
+export const Success: Story = {
   args: {
-    children: "Texxt",
+    children: "Éxito",
     colVariant: "success",
   },
 };
 
-export const warning: Story = {
+export const Warning: Story = {
   args: {
-    children: "Texxt",
+    children: "Advertencia",
     colVariant: "warning",
   },
 };
 
-export const danger: Story = {
+export const Danger: Story = {
   args: {
-    children: "Texxt",
+    children: "Peligro",
     colVariant: "danger",
+  },
+};
+
+export const WithTranslationEsp: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "primary",
+    as: "span",
+    language: "es",
+  },
+  render: (args) => {
+    i18n.changeLanguage(args.language);
+    return <Text {...args} />;
+  },
+};
+
+export const WithTranslationEn: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "primary",
+    as: "span",
+    language: "en",
+  },
+  render: (args) => {
+    i18n.changeLanguage(args.language);
+    return <Text {...args} />;
+  },
+};
+
+export const WithTranslationPt: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "primary",
+    as: "span",
+    language: "pt",
+  },
+  render: (args) => {
+    i18n.changeLanguage(args.language);
+    return <Text {...args} />;
+  },
+};
+
+export const WithButtonToggleLanguage: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "primary",
+    as: "span",
+  },
+  render: (args) => {
+    // 👇 Definimos un componente React válido aquí
+    const ToggleLanguageComponent = () => {
+      const [language, setLanguage] = useState<"es" | "en" | "pt">("es");
+
+      const changeLanguage = () => {
+        const next = language === "es" ? "en" : language === "en" ? "pt" : "es";
+        setLanguage(next);
+        i18n.changeLanguage(next);
+      };
+
+      return (
+        <div className="flex flex-col gap-4 items-center">
+          <Text {...args} />
+          <button
+            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            onClick={changeLanguage}
+          >
+            Cambiar idioma (actual: {language})
+          </button>
+        </div>
+      );
+    };
+
+    return <ToggleLanguageComponent />;
   },
 };

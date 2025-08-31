@@ -17,7 +17,7 @@ const meta: Meta<typeof Avatar> = {
     },
     size: {
       type: "string",
-      options: ["xs", "sm", "md", "lg", "xl"],
+      options: ["xs", "sm", "md", "lg", "xl", "xxl"],
       control: { type: "radio" },
       description: "Size of the avatar",
     },

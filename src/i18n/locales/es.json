@@ -1,0 +1,29 @@
+{
+  "example": {
+    "hello": "Hola Mundo"
+  },
+  "tab": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "settings": "Configuración"
+  },
+    "table": {
+    "actions": "Acciones",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "rowsPerPage": "Filas por página",
+    "noData": "No hay datos disponibles"
+  },
+    "form": {
+    "fullName": "Nombre completo",
+    "enterName": "Ingresa tu nombre",
+    "nameHelp": "Por favor escribe tu nombre completo.",
+    "errorRequired": "Este campo es obligatorio"
+  }
+}

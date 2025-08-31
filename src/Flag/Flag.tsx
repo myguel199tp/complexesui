@@ -8,6 +8,8 @@ import {
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const flagStyle = cva("font-bold", {
   variants: {
@@ -69,6 +71,8 @@ interface FlagProps
   size?: "sm" | "md" | "lg" | "xs";
   padding?: "sm" | "md" | "default";
   rounded?: "basic" | "sm" | "md" | "lg";
+  tKey?: string;
+  language?: "es" | "en" | "pt";
 }
 
 const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
@@ -84,11 +88,20 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
       rounded,
       disappearTime,
       as: Tag = "div",
+      tKey,
+      language,
       ...props
     },
     ref
   ) => {
     const [opacity, setOpacity] = useState(1);
+    const { t } = useTranslation();
+
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
 
     useEffect(() => {
       if (disappearTime) {
@@ -124,7 +137,7 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
         style={{ opacity }}
         {...props}
       >
-        <div>{children}</div>
+        <div> {tKey ? t(tKey) : children}</div>
       </Tag>
     );
   }

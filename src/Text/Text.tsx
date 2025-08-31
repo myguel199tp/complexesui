@@ -1,6 +1,8 @@
-import { FC, HTMLAttributes, ElementType, forwardRef } from "react";
+import { FC, HTMLAttributes, ElementType, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const textStyle = cva("font-bold", {
   variants: {
@@ -9,6 +11,7 @@ const textStyle = cva("font-bold", {
       primary: "text-blue-500",
       success: "text-green-500",
       warning: "text-orange-500",
+      on: "text-white",
       danger: "text-red-500",
     },
     font: {
@@ -17,6 +20,7 @@ const textStyle = cva("font-bold", {
       normal: "font-normal",
     },
     size: {
+      xxs: "text-[10px]", // 👈 más pequeño que xs
       xs: "text-xs",
       sm: "text-sm",
       md: "text-xl",
@@ -34,9 +38,11 @@ interface TextProps
   extends HTMLAttributes<HTMLElement>,
     VariantProps<typeof textStyle> {
   as?: ElementType;
-  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
-  size?: "xs" | "sm" | "md" | "lg";
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger" | "on";
+  size?: "xxs" | "xs" | "sm" | "md" | "lg";
   font?: "bold" | "semi" | "normal";
+  tKey?: string;
+  language?: "es" | "en" | "pt";
 }
 
 const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
@@ -48,17 +54,27 @@ const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
       colVariant,
       size,
       font,
+      tKey,
+      language,
       ...props
     },
     ref
   ) => {
+    const { t } = useTranslation();
+
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
+
     return (
       <Component
         ref={ref}
         className={cn(textStyle({ colVariant, size, font, className }))}
         {...props}
       >
-        {children}
+        {tKey ? t(tKey) : children}
       </Component>
     );
   }

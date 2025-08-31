@@ -1,0 +1,29 @@
+{
+  "example": {
+    "hello": "Hello World"
+  },
+   "tab": {
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+     "table": {
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "next": "Next",
+    "previous": "Previous",
+    "rowsPerPage": "Rows per page",
+    "noData": "No data available"
+  },
+    "form": {
+    "fullName": "Full Name",
+    "enterName": "Enter your name",
+    "nameHelp": "Please enter your full name.",
+    "errorRequired": "This field is required"
+  }
+}

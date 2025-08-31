@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
+import { useState } from "react";
 import { Table } from "./Table";
 import { Buton } from "../Buton/Buton";
 import { Button } from "../Button/Button";
+import i18n from "../i18n"; // 👈 asegúrate de tener tu configuración de i18n
 
-const meta: Meta<typeof Table> = {
+const meta: Meta<typeof Table & { language?: "es" | "en" | "pt" }> = {
   title: "Components/Table",
   tags: ["autodocs"],
   parameters: { layout: "centered" },
@@ -85,32 +86,7 @@ export const Default: Story = {
       ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
       ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
       ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-      ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
     ],
-
     cellClasses: [
       ["bg-red-100", "bg-red-100", "bg-red-100"],
       ["bg-yellow-100", "bg-purple-100", ""],
@@ -240,30 +216,6 @@ export const WithWiderColumns: Story = {
         "Row 1, Col 10",
         "Row 1, Col 11",
       ],
-      [
-        "Row 2, Col 1",
-        "Row 2, Col 2",
-        "Row 2, Col 3",
-        "Row 2, Col 4",
-        "Row 2, Col 5",
-        "Row 2, Col 6",
-        "Row 2, Col 7",
-        "Row 2, Col 8",
-        "Row 2, Col 9",
-        "Row 2, Col 10",
-      ],
-      [
-        "Row 3, Col 1",
-        "Row 3, Col 2",
-        "Row 3, Col 3",
-        "Row 3, Col 4",
-        "Row 3, Col 5",
-        "Row 3, Col 6",
-        "Row 3, Col 7",
-        "Row 3, Col 8",
-        "Row 3, Col 9",
-        "Row 3, Col 10",
-      ],
     ],
     colVariant: "default",
     font: "normal",
@@ -272,10 +224,80 @@ export const WithWiderColumns: Story = {
     padding: "md",
     rounded: "sm",
     as: "table",
-    cellClasses: [
-      ["w-[200px]", "", "", "w-[300px]", "", "", "", "", "", ""],
-      ["w-[200px]", "", "", "w-[300px]", "", "", "", "", "", ""],
-      ["w-[200px]", "", "", "w-[300px]", "", "", "", "", "", ""],
-    ],
+    cellClasses: [["w-[200px]", "", "", "w-[300px]", "", "", "", "", "", ""]],
   },
+};
+
+// 🔥 Nuevo story con traducción
+const LanguageSwitcherTable = () => {
+  const [language, setLanguage] = useState<"es" | "en" | "pt">("es");
+
+  const changeLanguage = (lng: "es" | "en" | "pt") => {
+    setLanguage(lng);
+    i18n.changeLanguage(lng);
+  };
+
+  const translations = {
+    es: {
+      headers: ["Nombre", "Correo", "Acciones"],
+      rows: [
+        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
+        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
+      ],
+    },
+    en: {
+      headers: ["Name", "Email", "Actions"],
+      rows: [
+        ["John Doe", "juan.perez@example.com", "Action 1"],
+        ["Jane Smith", "jane.smith@example.com", "Action 2"],
+      ],
+    },
+    pt: {
+      headers: ["Nome", "Email", "Ações"],
+      rows: [
+        ["João Silva", "juan.perez@example.com", "Ação 1"],
+        ["Maria Souza", "maria.souza@example.com", "Ação 2"],
+      ],
+    },
+  };
+
+  return (
+    <div>
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => changeLanguage("es")}
+          className="px-3 py-1 bg-gray-200 rounded"
+        >
+          Español
+        </button>
+        <button
+          onClick={() => changeLanguage("en")}
+          className="px-3 py-1 bg-gray-200 rounded"
+        >
+          English
+        </button>
+        <button
+          onClick={() => changeLanguage("pt")}
+          className="px-3 py-1 bg-gray-200 rounded"
+        >
+          Português
+        </button>
+      </div>
+
+      <Table
+        headers={translations[language].headers}
+        rows={translations[language].rows}
+        colVariant="primary"
+        font="normal"
+        size="md"
+        background="default"
+        padding="md"
+        rounded="sm"
+      />
+    </div>
+  );
+};
+
+export const WithLanguageSwitcher: Story = {
+  render: () => <LanguageSwitcherTable />,
 };

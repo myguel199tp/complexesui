@@ -10,6 +10,7 @@ const avatarStyle = cva("object-cover", {
       md: "w-[48px] h-[48px]",
       lg: "w-[64px] h-[64px]",
       xl: "w-[96px] h-[96px]",
+      xxl: "w-[150px] h-[150px]",
     },
     shape: {
       round: "rounded-full",
@@ -34,7 +35,7 @@ interface AvatarProps
     VariantProps<typeof avatarStyle> {
   src: string;
   alt: string;
-  size: "xs" | "sm" | "md" | "lg" | "xl";
+  size: "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
   shape: "round" | "square" | "rounded";
   border: "none" | "thin" | "thick";
 }

@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.1.15</p>
+<p>VERSION: v1.1.16</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -20,6 +20,7 @@
  <li>Tooltip</li>
  <li>Table</li>
 </ul>
+<p>Todos los componentes aceptna traducción</p>
 </div>
 
 ---

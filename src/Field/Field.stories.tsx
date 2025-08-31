@@ -41,3 +41,15 @@ export const Field: Story = {
     errorMessage: "falta un numero",
   },
 };
+
+export const WithHelpText: Story = {
+  args: {
+    placeholder: "Primary Input",
+    inputSize: "md",
+    rounded: "md",
+    disabled: false,
+    label: "nombre completo",
+    errorMessage: "falta un numero",
+    helpText: "Selecciona una de las opciones disponibles.",
+  },
+};

@@ -1,14 +1,16 @@
 import { forwardRef, ReactNode, ForwardRefRenderFunction } from "react";
+import clsx from "clsx";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
   title?: string;
+  className?: string; // 👈 nueva prop para estilos
 }
 
 const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
-  { isOpen, onClose, children, title },
+  { isOpen, onClose, children, title, className },
   ref
 ) => {
   if (!isOpen) return null;
@@ -20,7 +22,11 @@ const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
     >
       <div
         ref={ref}
-        className="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6 relative"
+        className={clsx(
+          "bg-white rounded-lg shadow-lg p-6 relative",
+          "w-11/12 max-w-md", // default
+          className // 👈 sobrescribes si pasas algo
+        )}
         onClick={(e) => e.stopPropagation()}
       >
         {title && <h2 className="text-xl font-semibold mb-4">{title}</h2>}

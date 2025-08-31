@@ -1,7 +1,9 @@
 import { Meta, StoryObj } from "@storybook/react";
 import { Flag } from "./Flag";
+import i18n from "../i18n";
+import { useState } from "react";
 
-const meta: Meta<typeof Flag> = {
+const meta: Meta<typeof Flag & { language?: "es" | "en" | "pt" }> = {
   title: "Components/Flag",
   component: Flag,
   argTypes: {
@@ -93,5 +95,82 @@ export const Danger: Story = {
     background: "danger",
     padding: "md",
     disappearTime: 25000,
+  },
+};
+
+export const WithTranslationEsp: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "success",
+    background: "success",
+    padding: "md",
+    language: "es",
+  },
+  render: (args) => {
+    i18n.changeLanguage(args.language);
+    return <Flag {...args} />;
+  },
+};
+
+export const WithTranslationEn: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "success",
+    background: "success",
+    padding: "md",
+    language: "en",
+  },
+  render: (args) => {
+    i18n.changeLanguage(args.language);
+    return <Flag {...args} />;
+  },
+};
+
+export const WithTranslationPt: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "success",
+    background: "success",
+    padding: "md",
+    language: "pt",
+  },
+  render: (args) => {
+    i18n.changeLanguage(args.language);
+    return <Flag {...args} />;
+  },
+};
+
+export const WithFlagToggleLanguage: Story = {
+  args: {
+    tKey: "example.hello",
+    colVariant: "success",
+    background: "success",
+    padding: "md",
+  },
+  render: (args) => {
+    // 👇 Definimos un componente React válido aquí
+    const ToggleLanguageComponent = () => {
+      const [language, setLanguage] = useState<"es" | "en" | "pt">("es");
+
+      const changeLanguage = () => {
+        const next = language === "es" ? "en" : language === "en" ? "pt" : "es";
+        setLanguage(next);
+        i18n.changeLanguage(next);
+      };
+
+      return (
+        <div className="flex flex-col gap-4 items-center">
+          <Flag {...args} />
+          <button
+            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+            onClick={changeLanguage}
+          >
+            Cambiar idioma (actual: {language})
+          </button>
+        </div>
+      );
+    };
+
+    return <ToggleLanguageComponent />;
   },
 };

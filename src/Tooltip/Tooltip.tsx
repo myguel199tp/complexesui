@@ -1,12 +1,16 @@
-import React, { useState, useRef, forwardRef, Ref } from "react";
+import React, { useState, useRef, forwardRef, Ref, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 interface TooltipProps {
   children: React.ReactNode;
   content: React.ReactNode;
   position?: "top" | "right" | "bottom" | "left";
-  className?: string;
+  className?: string; // 👉 permite cambiar colores, tamaños, etc.
   maxWidth?: string;
   maxHeight?: string;
+  tKey?: string;
+  language?: "es" | "en" | "pt";
 }
 
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
@@ -18,6 +22,8 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       className = "",
       maxWidth = "16rem",
       maxHeight = "8rem",
+      tKey,
+      language,
     },
     ref: Ref<HTMLDivElement>
   ) => {
@@ -40,6 +46,14 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       timeoutRef.current = setTimeout(() => setIsVisible(false), 200);
     };
 
+    const { t } = useTranslation();
+
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
+
     return (
       <div
         className="relative inline-block"
@@ -50,7 +64,12 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         {children}
         {isVisible && (
           <div
-            className={`absolute z-10 bg-gray-800 text-white text-sm rounded px-3 py-2 shadow-lg overflow-auto ${positionClasses[position]} ${className}`}
+            className={`
+              absolute z-10 rounded px-3 py-2 shadow-lg overflow-auto
+              text-sm
+              ${positionClasses[position]}
+              ${className}   // 👉 esto sobrescribe el default
+            `}
             style={{
               maxWidth,
               maxHeight,
@@ -59,7 +78,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {content}
+            {tKey ? t(tKey) : content}
           </div>
         )}
       </div>

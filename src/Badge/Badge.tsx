@@ -1,6 +1,8 @@
-import { FC, HTMLAttributes, ElementType, forwardRef } from "react";
+import { FC, HTMLAttributes, ElementType, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const badgeStyle = cva("font-bold", {
   variants: {
@@ -60,7 +62,8 @@ interface BadgeProps
   background?: "default" | "primary" | "success" | "warning" | "danger";
   padding?: "default" | "sm" | "md";
   rounded?: "basic" | "sm" | "md" | "lg";
-
+  tKey?: string;
+  language?: "es" | "en" | "pt";
   font?: "bold" | "semi" | "normal";
 }
 
@@ -76,10 +79,19 @@ const Badge: FC<BadgeProps> = forwardRef<HTMLElement, BadgeProps>(
       background,
       padding,
       rounded,
+      tKey,
+      language,
       ...props
     },
     ref
   ) => {
+    const { t } = useTranslation();
+
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
     return (
       <Component
         ref={ref}
@@ -96,7 +108,7 @@ const Badge: FC<BadgeProps> = forwardRef<HTMLElement, BadgeProps>(
         )}
         {...props}
       >
-        {children}
+        {tKey ? t(tKey) : children}
       </Component>
     );
   }

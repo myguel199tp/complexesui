@@ -1,6 +1,8 @@
-import { ButtonHTMLAttributes, FC, forwardRef } from "react";
+import { ButtonHTMLAttributes, FC, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 const button = cva(
   "inline-block border-2 px-5 py-3 font-bold transition-all duration-200",
@@ -56,6 +58,8 @@ interface ButtonProps
   size?: "sm" | "md" | "lg" | "full";
   fonts?: "bold" | "semi" | "thin";
   borderWidth?: "bold" | "semi" | "thin";
+  tKey?: string;
+  language?: "es" | "en" | "pt";
 }
 
 const Buton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -69,6 +73,8 @@ const Buton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
       rounded,
       disabled,
       borderWidth,
+      tKey,
+      language,
       ...props
     },
     ref
@@ -78,7 +84,13 @@ const Buton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
+    const { t } = useTranslation();
 
+    useEffect(() => {
+      if (language) {
+        i18n.changeLanguage(language);
+      }
+    }, [language]);
     return (
       <button
         ref={ref}
@@ -86,7 +98,7 @@ const Buton: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         {...props}
       >
-        {children}
+        {tKey ? t(tKey) : children}
       </button>
     );
   }
