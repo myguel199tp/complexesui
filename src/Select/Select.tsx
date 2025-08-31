@@ -176,3 +176,4 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 );
 
 SelectField.displayName = "SelectField";
+export { SelectField };
