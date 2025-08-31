@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { FC, SelectHTMLAttributes, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -48,12 +49,13 @@ interface SelectFieldProps
   rounded?: "sm" | "md" | "lg" | "basic";
   inputSize?: "sm" | "md" | "lg" | "full";
 
-  // 🔑 claves de traducción
   tKeyLabel?: string;
   tKeyHelpText?: string;
   tKeyError?: string;
   tKeyDefaultOption?: string;
   language?: "es" | "en" | "pt";
+
+  sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
 }
 
 const SelectField: FC<SelectFieldProps> = forwardRef<
@@ -78,6 +80,8 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       tKeyError,
       tKeyDefaultOption,
       language,
+      sizeHelp,
+      hidden, // 👈 viene de SelectHTMLAttributes
       ...props
     },
     ref
@@ -97,6 +101,11 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       }
     }, [language]);
 
+    // 🚨 Si es hidden, no renderices nada extra
+    if (hidden) {
+      return <select ref={ref} hidden {...props} />;
+    }
+
     return (
       <div>
         {(label || tKeyLabel) && (
@@ -114,7 +123,11 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
           )}
         >
           {(helpText || tKeyHelpText) && !hasError && (
-            <Text id={`${props.id}-help`} size="xxs" colVariant="default">
+            <Text
+              id={`${props.id}-help`}
+              size={sizeHelp ?? "xxs"} // 👈 dinámico
+              colVariant="default"
+            >
               {tKeyHelpText ? t(tKeyHelpText) : helpText}
             </Text>
           )}
@@ -163,5 +176,3 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 );
 
 SelectField.displayName = "SelectField";
-
-export { SelectField };

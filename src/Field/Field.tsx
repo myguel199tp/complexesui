@@ -43,6 +43,7 @@ interface FieldProps
   tKeyError?: string;
   tKeyPlaceholder?: string;
   language?: "es" | "en" | "pt";
+  sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
 }
 
 const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
@@ -62,6 +63,8 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       tKeyError,
       tKeyPlaceholder,
       language,
+      type,
+      sizeHelp,
       ...props
     },
     ref
@@ -81,8 +84,13 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       }
     }, [language]);
 
+    // 🚨 Si es hidden, no renderices nada extra
+    if (type === "hidden") {
+      return <input type="hidden" ref={ref} {...props} />;
+    }
+
     return (
-      <div ref={ref} className="w-full">
+      <div className="w-full">
         {(label || tKeyLabel) && (
           <label className="block mb-1 text-gray-700">
             {tKeyLabel ? t(tKeyLabel) : label}
@@ -94,7 +102,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
           {(helpText || tKeyHelpText) && !hasError && (
             <Text
               id={`${props.id}-help`}
-              size="xxs"
+              size={sizeHelp ?? "xxs"} // 👈 valor por defecto dinámico
               colVariant="default"
               className="mt-1"
             >
@@ -102,6 +110,8 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
             </Text>
           )}
           <input
+            type={type}
+            ref={ref}
             placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
             className={`bg-transparent outline-none ${disabledClass}`}
             disabled={disabled}
