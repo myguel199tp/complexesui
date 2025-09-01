@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.2.0</p>
+<p>VERSION: v1.2.1</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -133,11 +133,11 @@ import { Modal, Text } from "complexes-next-components";
 
 ```ts
 import { Button } from "complexes-next-components";
-
+    const { t } = useTranslation();
    <Title size="md" font="semi">Complexes</Title>
 
-    <Button colVariant="warning">
-        button
+    <Button tKey={language} colVariant="warning">
+      t("traduccion")
     </Button>
 
 ```
