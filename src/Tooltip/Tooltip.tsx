@@ -29,6 +29,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   ) => {
     const [isVisible, setIsVisible] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const { t } = useTranslation();
 
     const positionClasses = {
       top: "bottom-full left-1/2 transform -translate-x-1/2 mb-2",
@@ -45,8 +46,6 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const handleMouseLeave = () => {
       timeoutRef.current = setTimeout(() => setIsVisible(false), 200);
     };
-
-    const { t } = useTranslation();
 
     useEffect(() => {
       if (language) {
@@ -78,7 +77,11 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {tKey ? t(tKey) : content}
+            {tKey
+              ? t(tKey)
+              : typeof content === "string"
+              ? t(content)
+              : content}
           </div>
         )}
       </div>

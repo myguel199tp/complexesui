@@ -3,7 +3,7 @@ import { Tooltip } from "./Tooltip";
 import { Button } from "../Button/Button";
 import { Title } from "../main";
 import i18n from "../i18n";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const meta: Meta<typeof Tooltip & { language?: "es" | "en" | "pt" }> = {
   title: "Components/Tooltip",
@@ -158,5 +158,52 @@ export const PurpleBig: Story = {
     position: "top",
     className: "bg-purple-600 text-white text-lg w-[352px]",
     children: <Button>Hover me</Button>,
+  },
+};
+
+export const ContentWithTranslation: Story = {
+  args: {
+    content: "example.hello",
+    children: <Button>Hover me</Button>,
+    language: "es",
+  },
+  render: (args) => {
+    const TooltipWrapper = () => {
+      const [language, setLanguage] = useState<"es" | "en" | "pt">(
+        args.language || "es"
+      );
+
+      useEffect(() => {
+        i18n.changeLanguage(language);
+      }, [language]);
+
+      return (
+        <div className="flex flex-col gap-4 items-center">
+          <Tooltip {...args} language={language} />
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() => setLanguage("es")}
+              className="px-2 py-1 border"
+            >
+              ES
+            </button>
+            <button
+              onClick={() => setLanguage("en")}
+              className="px-2 py-1 border"
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLanguage("pt")}
+              className="px-2 py-1 border"
+            >
+              PT
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    return <TooltipWrapper />;
   },
 };
