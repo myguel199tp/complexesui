@@ -24,8 +24,7 @@ const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
         ref={ref}
         className={clsx(
           "bg-white rounded-lg shadow-lg p-6 relative",
-          "w-11/12 max-w-md", // default
-          className // 👈 sobrescribes si pasas algo
+          className ?? "w-11/12 max-w-md" // 👈 si pasas className, ignora default
         )}
         onClick={(e) => e.stopPropagation()}
       >

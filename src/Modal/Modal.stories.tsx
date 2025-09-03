@@ -52,6 +52,7 @@ const ModalWrapper: React.FC<{ args: ModalProps }> = ({ args }) => {
           setIsOpen(false);
           args.onClose();
         }}
+        className="w-[400px]"
       >
         {args.children}
       </Modal>

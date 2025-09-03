@@ -227,7 +227,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                   {actions.length > 0 && (
                     <td
                       className={classNames(
-                        "flex justify-center items-center space-x-2 px-4 py-2 text-center border border-gray-300",
+                        "flex justify-center items-center space-x-2 px-4 py-2 text-center  border-gray-300",
                         rowIndex === currentRows.length - 1 && "rounded-br-lg"
                       )}
                     >
