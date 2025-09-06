@@ -14,57 +14,54 @@ import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
-const TableStyle = cva(
-  "font-bold border-collapse w-full border border-gray-300",
-  {
-    variants: {
-      colVariant: {
-        default: "text-black-500",
-        primary: "text-blue-500",
-        success: "text-green-500",
-        warning: "text-orange-500",
-        danger: "text-red-500",
-      },
-      font: {
-        bold: "font-bold",
-        semi: "font-semibold",
-        normal: "font-normal",
-      },
-      size: {
-        xs: "text-xs",
-        sm: "text-sm",
-        md: "text-xl",
-        lg: "text-2xl",
-      },
-      background: {
-        default: "bg-transparent",
-        primary: "bg-blue-100",
-        success: "bg-green-100",
-        warning: "bg-orange-100",
-        danger: "bg-red-100",
-      },
-      padding: {
-        default: "p-0",
-        sm: "p-1",
-        md: "p-3",
-      },
-      rounded: {
-        basic: "rounded-none",
-        sm: "rounded-sm",
-        md: "rounded-md",
-        lg: "rounded-2xl",
-      },
+const TableStyle = cva("font-bold border-collapse w-full", {
+  variants: {
+    colVariant: {
+      default: "text-black-500",
+      primary: "text-blue-500",
+      success: "text-green-500",
+      warning: "text-orange-500",
+      danger: "text-red-500",
     },
-    defaultVariants: {
-      colVariant: "default",
-      size: "md",
-      font: "normal",
-      background: "default",
-      padding: "md",
-      rounded: "sm",
+    font: {
+      bold: "font-bold",
+      semi: "font-semibold",
+      normal: "font-normal",
     },
-  }
-);
+    size: {
+      xs: "text-xs",
+      sm: "text-sm",
+      md: "text-xl",
+      lg: "text-2xl",
+    },
+    background: {
+      default: "bg-transparent",
+      primary: "bg-blue-100",
+      success: "bg-green-100",
+      warning: "bg-orange-100",
+      danger: "bg-red-100",
+    },
+    padding: {
+      default: "p-0",
+      sm: "p-1",
+      md: "p-3",
+    },
+    rounded: {
+      basic: "rounded-none",
+      sm: "rounded-sm",
+      md: "rounded-md",
+      lg: "rounded-2xl",
+    },
+  },
+  defaultVariants: {
+    colVariant: "default",
+    size: "md",
+    font: "normal",
+    background: "default",
+    padding: "md",
+    rounded: "sm",
+  },
+});
 
 interface Action {
   label?: string;
@@ -78,12 +75,13 @@ interface TableProps
     VariantProps<typeof TableStyle> {
   as?: ElementType;
   headers?: string[];
-  headerKeys?: string[]; // 👈 Para traducción de headers
+  headerKeys?: string[];
   rows?: ReactNode[][];
   actions?: Action[];
   cellClasses?: string[][];
   columnWidths?: string[];
   language?: "es" | "en" | "pt";
+  borderColor?: string; // 👈 nuevo prop
 }
 
 const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
@@ -104,6 +102,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
       columnWidths = [],
       className,
       language,
+      borderColor = "border-gray-300", // 👈 por defecto
       ...props
     },
     ref
@@ -144,53 +143,45 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
         <div className="w-full overflow-x-auto p-4">
           <Tag
             ref={ref}
-            className={classes + " rounded-lg overflow-hidden"}
+            className={classNames(
+              classes,
+              "rounded-lg overflow-hidden",
+              borderColor
+            )}
             {...props}
           >
             <thead className="bg-gray-100">
               <tr>
-                {headerKeys.length > 0
-                  ? headerKeys.map((key, index) => (
-                      <th
-                        key={index}
-                        className={classNames(
-                          "px-4 py-2 text-center border border-gray-300",
-                          index === 0 && "rounded-tl-lg",
-                          index === headerKeys.length - 1 &&
-                            actions.length === 0 &&
-                            "rounded-tr-lg"
-                        )}
-                        style={
-                          columnWidths[index]
-                            ? { width: columnWidths[index] }
-                            : {}
-                        }
-                      >
-                        {t(key)}
-                      </th>
-                    ))
-                  : headers.map((header, index) => (
-                      <th
-                        key={index}
-                        className={classNames(
-                          "px-4 py-2 text-center border border-gray-300",
-                          index === 0 && "rounded-tl-lg",
-                          index === headers.length - 1 &&
-                            actions.length === 0 &&
-                            "rounded-tr-lg"
-                        )}
-                        style={
-                          columnWidths[index]
-                            ? { width: columnWidths[index] }
-                            : {}
-                        }
-                      >
-                        {header}
-                      </th>
-                    ))}
+                {(headerKeys.length > 0 ? headerKeys : headers).map(
+                  (header, index) => (
+                    <th
+                      key={index}
+                      className={classNames(
+                        "px-4 py-2 text-center border",
+                        borderColor,
+                        index === 0 && "rounded-tl-lg",
+                        index === headers.length - 1 &&
+                          actions.length === 0 &&
+                          "rounded-tr-lg"
+                      )}
+                      style={
+                        columnWidths[index]
+                          ? { width: columnWidths[index] }
+                          : {}
+                      }
+                    >
+                      {headerKeys.length > 0 ? t(header as string) : header}
+                    </th>
+                  )
+                )}
 
                 {actions.length > 0 && (
-                  <th className="px-4 py-2 text-center border border-gray-300 rounded-tr-lg bg-gray-100">
+                  <th
+                    className={classNames(
+                      "px-4 py-2 text-center border rounded-tr-lg bg-gray-100",
+                      borderColor
+                    )}
+                  >
                     {t("table.actions")}
                   </th>
                 )}
@@ -199,12 +190,16 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
 
             <tbody>
               {currentRows.map((row, rowIndex) => (
-                <tr key={rowIndex} className="border border-gray-300">
+                <tr
+                  key={rowIndex}
+                  className={classNames("border", borderColor)}
+                >
                   {row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
                       className={classNames(
-                        "px-4 py-2 text-center border border-gray-300",
+                        "px-4 py-2 text-center border",
+                        borderColor,
                         cellClasses[rowIndex]?.[cellIndex],
                         rowIndex === currentRows.length - 1 &&
                           cellIndex === 0 &&
@@ -227,14 +222,14 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                   {actions.length > 0 && (
                     <td
                       className={classNames(
-                        "flex justify-center items-center space-x-2 px-4 py-2 text-center  border-gray-300",
+                        "flex justify-center items-center space-x-2 px-4 py-2 text-center border",
+                        borderColor,
                         rowIndex === currentRows.length - 1 && "rounded-br-lg"
                       )}
                     >
                       {actions.map((action, actionIndex) => (
                         <button
                           key={actionIndex}
-                          className="text-white bg-blue-500 px-2 py-1 rounded-md hover:bg-blue-600"
                           onClick={() => action.onClick(rowIndex)}
                         >
                           {action.icon && (

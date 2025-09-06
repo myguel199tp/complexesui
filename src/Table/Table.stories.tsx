@@ -142,18 +142,18 @@ export const WithActions: Story = {
         "John Doe",
         "john.doe@example.com",
         <div className="flex gap-2">
-          <button
-            className="bg-blue-500 text-white px-2 py-1 rounded"
+          <div
+            className=" text-black px-2 py-1 rounded"
             onClick={() => alert("Edit John Doe")}
           >
             Edit
-          </button>
-          <button
+          </div>
+          <div
             className="bg-red-500 text-white px-2 py-1 rounded"
             onClick={() => alert("Delete John Doe")}
           >
             Delete
-          </button>
+          </div>
         </div>,
       ],
       [
@@ -314,4 +314,34 @@ const LanguageSwitcherTable = () => {
 
 export const WithLanguageSwitcher: Story = {
   render: () => <LanguageSwitcherTable />,
+};
+
+export const WithRedBorder: Story = {
+  args: {
+    headers: ["Col 1", "Col 2", "Col 3"],
+    rows: [
+      ["Fila 1, Col 1", "Fila 1, Col 2", "Fila 1, Col 3"],
+      ["Fila 2, Col 1", "Fila 2, Col 2", "Fila 2, Col 3"],
+    ],
+    colVariant: "default",
+    font: "normal",
+    size: "md",
+    background: "default",
+    padding: "md",
+    rounded: "sm",
+    as: "table",
+    // 👇 aquí le agregamos borde rojo a todas las celdas
+    cellClasses: [
+      [
+        "border border-red-500",
+        "border border-red-500",
+        "border border-red-500",
+      ],
+      [
+        "border border-red-500",
+        "border border-red-500",
+        "border border-red-500",
+      ],
+    ],
+  },
 };
