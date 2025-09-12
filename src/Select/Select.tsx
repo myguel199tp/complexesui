@@ -156,7 +156,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               <option
                 key={option.value}
                 value={option.value}
-                className="bg-red-200 px-4 py-2 w-full"
+                className="bg-rgray-200 px-4 py-2 w-full"
               >
                 {option.tKeyLabel ? t(option.tKeyLabel) : option.label}
               </option>

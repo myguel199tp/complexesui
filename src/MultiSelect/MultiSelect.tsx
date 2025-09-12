@@ -3,7 +3,7 @@
 import { FC, HTMLAttributes, forwardRef, useEffect, useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
-import { Text } from "../main";
+import { Badge, Text } from "../main";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
@@ -38,7 +38,7 @@ interface Option {
 }
 
 interface MultiSelectProps
-  extends HTMLAttributes<HTMLDivElement>, // 🔹 corregido
+  extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof field> {
   hasError?: boolean;
   label?: string;
@@ -75,7 +75,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       errorMessage = "There was an error",
       helpText,
       options,
-      defaultOption = "Seleccione opciones",
+      defaultOption,
       required = false,
       tKeyLabel,
       tKeyHelpText,
@@ -91,6 +91,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
   ) => {
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState<string[]>([]);
+    const [showAll, setShowAll] = useState(false);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -108,8 +109,12 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     };
 
     if (hidden) {
-      return <div ref={ref} hidden {...props} />; // 🔹 cambiado a div
+      return <div ref={ref} hidden {...props} />;
     }
+
+    const selectedOptions = options.filter((opt) =>
+      selected.includes(opt.value)
+    );
 
     return (
       <div ref={ref} {...props}>
@@ -120,23 +125,82 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
           </label>
         )}
 
-        {/* Contenedor principal */}
         <div
           className={cn(
             field({ inputSize, rounded }),
-            className, // 🔹 ya se usa className
+            className,
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
             hasError ? "bg-red-100 border border-red-500" : ""
           )}
           onClick={() => !disabled && setOpen(!open)}
         >
-          <span className="truncate">
-            {selected.length > 0
-              ? `${selected.length} ${t("selected")}`
-              : tKeyDefaultOption
-              ? t(tKeyDefaultOption)
-              : defaultOption}
-          </span>
+          {(helpText || tKeyHelpText) && !hasError && (
+            <Text
+              id={`${id}-help`}
+              size={sizeHelp ?? "xxs"}
+              colVariant="default"
+              className="text-gray-500"
+            >
+              {tKeyHelpText ? t(tKeyHelpText) : helpText}
+            </Text>
+          )}
+
+          <div className="flex flex-col w-full">
+            <div className="flex space-x-2 overflow-x-auto max-w-full no-scrollbar">
+              {selected.length === 0 ? (
+                <span className="text-gray-500 whitespace-nowrap">
+                  {tKeyDefaultOption
+                    ? t(tKeyDefaultOption)
+                    : defaultOption ?? "Seleccione opciones"}
+                </span>
+              ) : (
+                <>
+                  {/* Solo los primeros 3 badges */}
+                  {selectedOptions.slice(0, 3).map((opt) => (
+                    <Badge
+                      key={opt.value}
+                      colVariant="primary"
+                      rounded="lg"
+                      background="primary"
+                    >
+                      {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                    </Badge>
+                  ))}
+
+                  {/* Botón +X para mostrar el resto */}
+                  {selected.length > 3 &&
+                    (!showAll ? (
+                      <span
+                        className="text-gray-500 whitespace-nowrap cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowAll(true);
+                        }}
+                      >
+                        +{selected.length - 3}
+                      </span>
+                    ) : (
+                      <div className="mt-2 bg-gray-100 rounded-md shadow-sm p-2 space-y-2">
+                        {selectedOptions.slice(3).map((opt) => (
+                          <div key={opt.value} className="flex items-center">
+                            {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                          </div>
+                        ))}
+                        <span
+                          className="text-gray-500 whitespace-nowrap cursor-pointer block text-right"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowAll(false);
+                          }}
+                        >
+                          Ver menos
+                        </span>
+                      </div>
+                    ))}
+                </>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Dropdown */}
@@ -157,13 +221,6 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
               </label>
             ))}
           </div>
-        )}
-
-        {/* Mensajes */}
-        {(helpText || tKeyHelpText) && !hasError && (
-          <Text id={`${id}-help`} size={sizeHelp ?? "xxs"} colVariant="default">
-            {tKeyHelpText ? t(tKeyHelpText) : helpText}
-          </Text>
         )}
 
         {hasError && (
