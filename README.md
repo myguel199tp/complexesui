@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.2.3</p>
+<p>VERSION: v1.3.0</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -16,6 +16,7 @@
  <li>Title</li>
  <li>Text</li>
  <li>SelectField</li>
+  <li>Multiselect</li>
  <li>Modal</li>
  <li>Tooltip</li>
  <li>Table</li>
@@ -72,6 +73,32 @@ import { InputField } from "complexes-next-components";
 />;
 ```
 
+# complexesui usalle MultiSelect
+
+```ts
+import { MultiSelect } from "complexes-next-components";
+
+const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+const options = [
+  { value: "Bogotá", label: "Bogotá" },
+  { value: "Medellin", label: "Medellin" },
+  { value: "Cali", label: "Cali" },
+];
+
+<MultiSelect
+  id="city"
+  defaultOption="Ciudad"
+  options={options}
+  inputSize="full"
+  rounded="md"
+  hasError={false}
+  className="mt-2"
+  onChange={setSelectedOptions}
+  value={selectedOptions}
+/>;
+```
+
 # complexesui usalle SelectField
 
 ```ts
@@ -99,25 +126,24 @@ const options = [
 
 # complexesui usalle Tabs
 
-```ts
+ts
 import { Tabs } from "complexes-next-components";
 
- const tabs = [
-    {
-      label: "Frontend",
-      children: <FrontedSkill />,
-      colVariant: "default",
-      size: "md",
-      background: "default",
-      padding: "md",
-      rounded: "lg",
-    },
- ]
+const tabs = [
+{
+label: "Frontend",
+children: <FrontedSkill />,
+colVariant: "default",
+size: "md",
+background: "default",
+padding: "md",
+rounded: "lg",
+},
+]
 
   <Tabs tabs={tabs} defaultActiveIndex={0} />
 
-
-```
+````
 
 # complexesui usalle Modal
 
@@ -127,7 +153,7 @@ import { Modal, Text } from "complexes-next-components";
 <Modal isOpen={isOpen} onClose={onClose} title={title}>
   <Text colVariant="primary">description</Text>
 </Modal>;
-```
+````
 
 # complexesui usalle Button
 
