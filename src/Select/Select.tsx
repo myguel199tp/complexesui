@@ -33,7 +33,7 @@ const field = cva(
 interface Option {
   value: string;
   label: string;
-  tKeyLabel?: string; // 👈 si quieres traducir también las opciones
+  tKeyLabel?: string;
 }
 
 interface SelectFieldProps
@@ -81,7 +81,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       tKeyDefaultOption,
       language,
       sizeHelp,
-      hidden, // 👈 viene de SelectHTMLAttributes
+      hidden,
       ...props
     },
     ref
@@ -101,7 +101,6 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       }
     }, [language]);
 
-    // 🚨 Si es hidden, no renderices nada extra
     if (hidden) {
       return <select ref={ref} hidden {...props} />;
     }
@@ -157,7 +156,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               <option
                 key={option.value}
                 value={option.value}
-                className="bg-gray-200 px-4 py-2 w-full"
+                className="bg-red-200 px-4 py-2 w-full"
               >
                 {option.tKeyLabel ? t(option.tKeyLabel) : option.label}
               </option>
