@@ -15,3 +15,4 @@ export { Modal } from "./Modal/modal";
 export { Tooltip } from "./Tooltip/Tooltip";
 
 export { Table } from "./Table/Table";
+export { MultiSelect } from "./MultiSelect/MultiSelect";
