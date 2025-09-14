@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.3.2</p>
+<p>VERSION: v1.3.3</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -114,6 +114,7 @@ const options = [
 
 <SelectField
   className="mt-2"
+  searchable= true
   id="city"
   defaultOption="Ciudad"
   value={selectedOption}
