@@ -3,7 +3,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.3.4</p>
+<p>VERSION: v1.3.5</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -113,15 +113,19 @@ const options = [
 ];
 
 <SelectField
-  className="mt-2"
-  searchable= true
-  id="city"
-  defaultOption="Ciudad"
-  value={selectedOption}
+  tKeyHelpText={t("country")}
+  tKeyDefaultOption={t("country")}
+  searchable
+  defaultOption="Pais"
+  helpText="Pais"
+  sizeHelp="sm"
+  id="country"
   options={options}
-  inputSize="full"
+  inputSize="lg"
   rounded="md"
-  hasError={!!errors.city}
+  {...register("country")}
+  hasError={!!errors.country}
+  errorMessage={errors.country?.message}
 />;
 ```
 
