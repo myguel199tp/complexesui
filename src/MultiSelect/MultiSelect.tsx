@@ -38,7 +38,7 @@ interface Option {
 }
 
 interface MultiSelectProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange">,
     VariantProps<typeof field> {
   hasError?: boolean;
   label?: string;
@@ -55,10 +55,14 @@ interface MultiSelectProps
   tKeyError?: string;
   tKeyDefaultOption?: string;
   language?: "es" | "en" | "pt";
-  disabled: boolean;
+  disabled?: boolean;
 
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
-  searchable?: boolean; // 🔹 nueva prop
+  searchable?: boolean;
+
+  // Props nuevas
+  value?: string[];
+  onChange?: (value: string[]) => void;
 }
 
 const MultiSelect: FC<MultiSelectProps> = forwardRef<
@@ -70,7 +74,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       className,
       inputSize,
       rounded,
-      disabled,
+      disabled = false,
       label,
       hasError = false,
       errorMessage = "There was an error",
@@ -86,15 +90,17 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       sizeHelp,
       hidden,
       id,
-      searchable = false, // 🔹 por defecto false
+      searchable = false,
+      value,
+      onChange,
       ...props
     },
     ref
   ) => {
     const [open, setOpen] = useState(false);
-    const [selected, setSelected] = useState<string[]>([]);
+    const [selected, setSelected] = useState<string[]>(value ?? []);
     const [showAll, setShowAll] = useState(false);
-    const [search, setSearch] = useState(""); // 🔹 estado de búsqueda
+    const [search, setSearch] = useState("");
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -103,12 +109,17 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       }
     }, [language]);
 
-    const toggleOption = (value: string) => {
-      setSelected((prev) =>
-        prev.includes(value)
-          ? prev.filter((v) => v !== value)
-          : [...prev, value]
-      );
+    // Mantener sincronizado con `value` externo
+    useEffect(() => {
+      if (value) setSelected(value);
+    }, [value]);
+
+    const toggleOption = (val: string) => {
+      const newValues = selected.includes(val)
+        ? selected.filter((v) => v !== val)
+        : [...selected, val];
+      setSelected(newValues);
+      onChange?.(newValues); // Avisar al formulario/padre
     };
 
     if (hidden) {
@@ -119,7 +130,6 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       selected.includes(opt.value)
     );
 
-    // 🔹 Filtrar opciones si searchable
     const filteredOptions = searchable
       ? options.filter((opt) =>
           (opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label)
@@ -195,7 +205,13 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                       <div className="mt-2 bg-gray-100 rounded-md shadow-sm p-2 space-y-2">
                         {selectedOptions.slice(3).map((opt) => (
                           <div key={opt.value} className="flex items-center">
-                            {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                            <Badge
+                              background="primary"
+                              colVariant="primary"
+                              size="xs"
+                            >
+                              {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                            </Badge>
                           </div>
                         ))}
                         <span
@@ -218,7 +234,6 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
         {/* Dropdown */}
         {open && !disabled && (
           <div className="absolute left-0 top-full w-full bg-gray-200 border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto z-10">
-            {/* 🔹 Input de búsqueda */}
             {searchable && (
               <input
                 type="text"
@@ -229,7 +244,6 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
               />
             )}
 
-            {/* Opciones */}
             {filteredOptions.length > 0 ? (
               filteredOptions.map((opt) => (
                 <label
