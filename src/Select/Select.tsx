@@ -28,10 +28,6 @@ const field = cva(
         full: "py-3 px-6 text-lg w-full",
       },
     },
-    defaultVariants: {
-      inputSize: "md",
-      rounded: "md",
-    },
   }
 );
 
@@ -58,6 +54,8 @@ interface SelectFieldProps
   language?: "es" | "en" | "pt";
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
   searchable?: boolean;
+  inputSize?: "sm" | "md" | "lg" | "full";
+  rounded?: "basic" | "sm" | "md" | "lg";
 }
 
 const SelectField: FC<SelectFieldProps> = forwardRef<
