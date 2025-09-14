@@ -84,7 +84,6 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       }
     }, [language]);
 
-    // 🚨 Si es hidden, no renderices nada extra
     if (type === "hidden") {
       return <input type="hidden" ref={ref} {...props} />;
     }
@@ -92,17 +91,16 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
     return (
       <div className="w-full">
         {(label || tKeyLabel) && (
-          <label className="block mb-1 text-gray-700">
+          <label className="block mb-1 text-gray-500">
             {tKeyLabel ? t(tKeyLabel) : label}
           </label>
         )}
 
-        {/* CONTENEDOR GRIS */}
         <div className={`${fieldClass} flex flex-col`}>
           {(helpText || tKeyHelpText) && !hasError && (
             <Text
               id={`${props.id}-help`}
-              size={sizeHelp ?? "xxs"} // 👈 valor por defecto dinámico
+              size={sizeHelp ?? "xxs"}
               colVariant="default"
               className="mt-1"
             >
@@ -120,9 +118,9 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
         </div>
 
         {hasError && (
-          <p className="text-red-500 text-sm mt-1">
+          <Text size="xs" colVariant="danger" className="mt-1">
             {tKeyError ? t(tKeyError) : errorMessage}
-          </p>
+          </Text>
         )}
       </div>
     );

@@ -109,3 +109,11 @@ export const WithCustomColors: Story = {
     label: "Select con colores personalizados",
   },
 };
+
+export const WithSearch: Story = {
+  args: {
+    ...Default.args,
+    searchable: true,
+    helpText: "Selecciona una de las opciones disponibles.",
+  },
+};

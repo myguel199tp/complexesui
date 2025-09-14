@@ -58,6 +58,7 @@ interface MultiSelectProps
   disabled: boolean;
 
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
+  searchable?: boolean; // 🔹 nueva prop
 }
 
 const MultiSelect: FC<MultiSelectProps> = forwardRef<
@@ -85,6 +86,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       sizeHelp,
       hidden,
       id,
+      searchable = false, // 🔹 por defecto false
       ...props
     },
     ref
@@ -92,6 +94,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState<string[]>([]);
     const [showAll, setShowAll] = useState(false);
+    const [search, setSearch] = useState(""); // 🔹 estado de búsqueda
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -116,8 +119,17 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       selected.includes(opt.value)
     );
 
+    // 🔹 Filtrar opciones si searchable
+    const filteredOptions = searchable
+      ? options.filter((opt) =>
+          (opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label)
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        )
+      : options;
+
     return (
-      <div ref={ref} {...props}>
+      <div ref={ref} {...props} className="relative">
         {(label || tKeyLabel) && (
           <label className="block mb-1 text-gray-700" htmlFor={id}>
             {tKeyLabel ? t(tKeyLabel) : label}{" "}
@@ -125,6 +137,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
           </label>
         )}
 
+        {/* Input principal */}
         <div
           className={cn(
             field({ inputSize, rounded }),
@@ -152,22 +165,21 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                   {tKeyDefaultOption
                     ? t(tKeyDefaultOption)
                     : defaultOption ?? "Seleccione opciones"}
+                  {required && <span className="text-gray-500 ml-1">*</span>}
                 </span>
               ) : (
                 <>
-                  {/* Solo los primeros 3 badges */}
                   {selectedOptions.slice(0, 3).map((opt) => (
                     <Badge
                       key={opt.value}
                       colVariant="primary"
                       rounded="lg"
+                      size="xs"
                       background="primary"
                     >
                       {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
                     </Badge>
                   ))}
-
-                  {/* Botón +X para mostrar el resto */}
                   {selected.length > 3 &&
                     (!showAll ? (
                       <span
@@ -205,21 +217,39 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
 
         {/* Dropdown */}
         {open && !disabled && (
-          <div className="bg-gray-200 border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {options.map((opt) => (
-              <label
-                key={opt.value}
-                className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={selected.includes(opt.value)}
-                  onChange={() => toggleOption(opt.value)}
-                  className="mr-2"
-                />
-                {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
-              </label>
-            ))}
+          <div className="absolute left-0 top-full w-full bg-gray-200 border border-gray-300 rounded-md shadow-md max-h-60 overflow-y-auto z-10">
+            {/* 🔹 Input de búsqueda */}
+            {searchable && (
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t("Buscar...")}
+                className="w-full bg-gray-200 h-10 p-2 py-1 text-sm border-b focus:outline-none"
+              />
+            )}
+
+            {/* Opciones */}
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((opt) => (
+                <label
+                  key={opt.value}
+                  className="flex items-center px-3 py-2 hover:bg-gray-300 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected.includes(opt.value)}
+                    onChange={() => toggleOption(opt.value)}
+                    className="mr-2"
+                  />
+                  {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                </label>
+              ))
+            ) : (
+              <div className="px-4 py-2 text-gray-500">
+                {t("No hay opciones")}
+              </div>
+            )}
           </div>
         )}
 
