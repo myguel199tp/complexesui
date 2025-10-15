@@ -66,6 +66,7 @@ export const Default: Story = {
     isOpen: false,
     title: "Modal Reutilizable",
     children: "¡Este es el contenido del modal!",
+    className: "w-[900px]",
   },
 };
 
@@ -75,5 +76,15 @@ export const Opened: Story = {
     isOpen: true,
     title: "Modal Abierto",
     children: "Este modal está abierto al cargar.",
+  },
+};
+
+export const WithoutOverlayClose: Story = {
+  render: (args) => <ModalWrapper args={args} />,
+  args: {
+    isOpen: false,
+    title: "Modal que no se cierra al hacer clic afuera",
+    children: "Haz clic fuera y verás que no se cierra 😎",
+    closeOnOverlayClick: false,
   },
 };

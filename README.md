@@ -1,5 +1,9 @@
 # Complexes Components
 
+![npm version](https://img.shields.io/npm/v/complexes-next-components)  
+![npm downloads](https://img.shields.io/npm/dm/complexes-next-components)  
+![license](https://img.shields.io/npm/l/complexes-next-components)
+
 ## Versions
 
 <div align="center">
