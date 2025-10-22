@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SelectField } from "./Select";
+import { User, Home, Star } from "lucide-react"; // ejemplo de íconos JSX
 
 const meta: Meta<typeof SelectField> = {
   title: "Components/SelectField",
@@ -41,20 +42,32 @@ const meta: Meta<typeof SelectField> = {
     defaultOption: {
       type: "string",
       control: { type: "text" },
-      description: "Opción por defecto que aparece en el select (placeholder)",
+      description: "Texto que aparece como placeholder inicial",
     },
     required: {
       type: "boolean",
       control: { type: "boolean" },
       description: "Indica si el campo es obligatorio",
     },
+    searchable: {
+      type: "boolean",
+      control: { type: "boolean" },
+      description: "Habilita el buscador dentro del select",
+    },
+    prefixImage: {
+      type: "string",
+      control: { type: "text" },
+      description: "URL de imagen a mostrar como prefijo",
+    },
   },
 };
 
 export default meta;
-
 type Story = StoryObj<typeof SelectField>;
 
+/* --------------------------------------------------------
+ * 1️⃣ Select básico
+ * -------------------------------------------------------- */
 export const Default: Story = {
   args: {
     label: "Selecciona una opción",
@@ -73,6 +86,9 @@ export const Default: Story = {
   },
 };
 
+/* --------------------------------------------------------
+ * 2️⃣ Con error
+ * -------------------------------------------------------- */
 export const WithError: Story = {
   args: {
     ...Default.args,
@@ -81,6 +97,9 @@ export const WithError: Story = {
   },
 };
 
+/* --------------------------------------------------------
+ * 3️⃣ Requerido
+ * -------------------------------------------------------- */
 export const Required: Story = {
   args: {
     ...Default.args,
@@ -88,6 +107,9 @@ export const Required: Story = {
   },
 };
 
+/* --------------------------------------------------------
+ * 4️⃣ Deshabilitado
+ * -------------------------------------------------------- */
 export const Disabled: Story = {
   args: {
     ...Default.args,
@@ -95,6 +117,9 @@ export const Disabled: Story = {
   },
 };
 
+/* --------------------------------------------------------
+ * 5️⃣ Con texto de ayuda
+ * -------------------------------------------------------- */
 export const WithHelpText: Story = {
   args: {
     ...Default.args,
@@ -102,18 +127,68 @@ export const WithHelpText: Story = {
   },
 };
 
-export const WithCustomColors: Story = {
+/* --------------------------------------------------------
+ * 6️⃣ Con prefijo de imagen
+ * -------------------------------------------------------- */
+export const WithPrefixImage: Story = {
   args: {
     ...Default.args,
-    className: "text-blue-600 bg-yellow-100 font-semibold",
-    label: "Select con colores personalizados",
+    label: "Selecciona un usuario",
+    prefixImage: "https://i.pravatar.cc/40?img=8",
+    options: [
+      { value: "juan", label: "Juan" },
+      { value: "maria", label: "María" },
+      { value: "pedro", label: "Pedro" },
+    ],
   },
 };
 
-export const WithSearch: Story = {
+/* --------------------------------------------------------
+ * 7️⃣ Opciones con íconos JSX
+ * -------------------------------------------------------- */
+export const WithIcons: Story = {
   args: {
     ...Default.args,
+    label: "Selecciona un tipo",
+    options: [
+      { value: "user", label: "Usuario", icon: <User className="w-4 h-4" /> },
+      { value: "home", label: "Propiedad", icon: <Home className="w-4 h-4" /> },
+      {
+        value: "vip",
+        label: "VIP",
+        icon: <Star className="w-4 h-4 text-yellow-500" />,
+      },
+    ],
     searchable: true,
-    helpText: "Selecciona una de las opciones disponibles.",
+    helpText: "Busca entre las opciones con íconos",
+  },
+};
+
+/* --------------------------------------------------------
+ * 8️⃣ Searchable con imágenes
+ * -------------------------------------------------------- */
+export const WithImagesSearchable: Story = {
+  args: {
+    ...Default.args,
+    label: "Selecciona un país",
+    searchable: true,
+    helpText: "Puedes buscar o seleccionar de la lista.",
+    options: [
+      {
+        value: "colombia",
+        label: "Colombia",
+        image: "https://flagcdn.com/w40/co.png",
+      },
+      {
+        value: "mexico",
+        label: "México",
+        image: "https://flagcdn.com/w40/mx.png",
+      },
+      {
+        value: "brasil",
+        label: "Brasil",
+        image: "https://flagcdn.com/w40/br.png",
+      },
+    ],
   },
 };

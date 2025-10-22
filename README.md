@@ -7,7 +7,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.3.6</p>
+<p>VERSION: v1.3.7</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -20,7 +20,8 @@
  <li>Title</li>
  <li>Text</li>
  <li>SelectField</li>
-  <li>Multiselect</li>
+ <li>Multiselect</li>
+ <li>TextAreaField</li>
  <li>Modal</li>
  <li>Tooltip</li>
  <li>Table</li>

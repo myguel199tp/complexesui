@@ -4,6 +4,8 @@ import {
   forwardRef,
   useEffect,
   useState,
+  ReactNode,
+  useRef,
 } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -35,6 +37,8 @@ interface Option {
   value: string;
   label: string;
   tKeyLabel?: string;
+  icon?: ReactNode;
+  image?: string;
 }
 
 interface SelectFieldProps
@@ -56,6 +60,8 @@ interface SelectFieldProps
   searchable?: boolean;
   inputSize?: "sm" | "md" | "lg" | "full";
   rounded?: "basic" | "sm" | "md" | "lg";
+  prefixElement?: ReactNode;
+  prefixImage?: string;
 }
 
 const SelectField: FC<SelectFieldProps> = forwardRef<
@@ -83,6 +89,12 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       sizeHelp,
       hidden,
       searchable = false,
+      prefixElement,
+      prefixImage,
+      id,
+      onChange,
+      value,
+      defaultValue,
       ...props
     },
     ref
@@ -92,18 +104,38 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       className,
       hasError ? "bg-red-100 border border-red-500" : ""
     );
+
     const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
+    void fieldClass;
+    void disabledClass;
 
     const { t } = useTranslation();
-    const [isOpen, setIsOpen] = useState(false);
-    const [search, setSearch] = useState("");
-    const [selected, setSelected] = useState("");
 
     useEffect(() => {
-      if (language) {
-        i18n.changeLanguage(language);
-      }
+      if (language) i18n.changeLanguage(language);
     }, [language]);
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const [selected, setSelected] = useState<string>(
+      (typeof value === "string" && value) ||
+        (typeof defaultValue === "string" && defaultValue) ||
+        ""
+    );
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      if (typeof value === "string") setSelected(value);
+    }, [value]);
+
+    useEffect(() => {
+      const onDocClick = (e: MouseEvent) => {
+        if (!containerRef.current) return;
+        if (!containerRef.current.contains(e.target as Node)) setIsOpen(false);
+      };
+      if (isOpen) document.addEventListener("mousedown", onDocClick);
+      return () => document.removeEventListener("mousedown", onDocClick);
+    }, [isOpen]);
 
     const filteredOptions = searchable
       ? options.filter((opt) =>
@@ -113,149 +145,239 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
         )
       : options;
 
-    const handleSelect = (value: string) => {
-      setSelected(value);
-      setIsOpen(false);
-      if (props.onChange) {
-        // simular evento nativo de <select>
-        const event = {
-          target: { value },
+    const emitNativeChange = (val: string) => {
+      if (onChange) {
+        const fakeEvent = {
+          target: { value: val },
         } as unknown as React.ChangeEvent<HTMLSelectElement>;
-        props.onChange(event);
+        onChange(fakeEvent);
       }
     };
 
-    if (hidden) {
-      return <select ref={ref} hidden {...props} />;
-    }
+    const handleSelect = (valueSelected: string) => {
+      setSelected(valueSelected);
+      setIsOpen(false);
+      emitNativeChange(valueSelected);
+    };
+
+    if (hidden) return <select ref={ref} hidden {...props} />;
+
+    const selectedOption = options.find((o) => o.value === selected);
 
     return (
-      <div>
+      <div className="w-full" ref={containerRef}>
         {(label || tKeyLabel) && (
-          <label className="block mb-1 text-gray-500" htmlFor={props.id}>
-            {tKeyLabel ? t(tKeyLabel) : label}{" "}
-            {required && <span className="text-red-500">*</span>}
+          <label className="block mb-1 text-gray-500" htmlFor={id}>
+            {tKeyLabel ? t(tKeyLabel) : label}
+            {required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
 
-        {/* Contenedor gris */}
         <div
           className={cn(
-            "bg-gray-200 rounded-md px-4 py-2 relative",
-            hasError && "bg-red-100 border border-red-500"
+            "flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-md",
+            hasError && "bg-red-100 border border-red-500",
+            disabled && "opacity-50 cursor-not-allowed"
           )}
         >
-          {(helpText || tKeyHelpText) && !hasError && (
-            <Text
-              id={`${props.id}-help`}
-              size={sizeHelp ?? "xxs"}
-              colVariant="default"
-            >
-              {tKeyHelpText ? t(tKeyHelpText) : helpText}
-            </Text>
+          {prefixImage && (
+            <img
+              src={prefixImage}
+              alt="prefix"
+              className="w-6 h-6 rounded-full object-cover"
+            />
+          )}
+          {prefixElement && (
+            <div className="flex-shrink-0">{prefixElement}</div>
           )}
 
-          {/* Caso 1: Select normal */}
           {!searchable && (
-            <select
-              ref={ref}
-              id={props.id}
-              className={`w-full bg-gray-200 rounded-md focus:outline-none ${fieldClass} ${disabledClass}`}
-              disabled={disabled}
-              aria-required={required}
-              aria-invalid={hasError}
-              aria-describedby={
-                hasError
-                  ? `${props.id}-error`
-                  : helpText
-                  ? `${props.id}-help`
-                  : undefined
-              }
-              defaultValue=""
-              {...props}
-            >
-              {defaultOption && (
-                <option value="" disabled hidden>
-                  {/* {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption} */}
-                  <span className="text-gray-500 whitespace-nowrap">
-                    {tKeyDefaultOption
-                      ? t(tKeyDefaultOption)
-                      : defaultOption ?? "Seleccione opciones"}
-                    {required && <span className="text-gray-500 ml-1">*</span>}
+            <div className="relative flex-1">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                onClick={() => !disabled && setIsOpen((s) => !s)}
+                className="w-full text-left px-2 py-1 rounded-md bg-transparent flex items-center gap-2"
+              >
+                {selectedOption ? (
+                  <>
+                    {selectedOption.image && (
+                      <img
+                        src={selectedOption.image}
+                        alt={selectedOption.label}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                    )}
+                    {selectedOption.icon && (
+                      <div className="flex-shrink-0">{selectedOption.icon}</div>
+                    )}
+                    <span className="truncate">
+                      {selectedOption.tKeyLabel
+                        ? t(selectedOption.tKeyLabel)
+                        : selectedOption.label}
+                    </span>
+                  </>
+                ) : (
+                  <span className="truncate text-gray-500">
+                    {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
                   </span>
-                </option>
+                )}
+              </button>
+
+              {isOpen && !disabled && (
+                <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto">
+                  <ul
+                    role="listbox"
+                    aria-activedescendant={selected}
+                    className="divide-y"
+                  >
+                    {options.map((opt) => {
+                      const isSelected = opt.value === selected;
+                      return (
+                        <li
+                          key={opt.value}
+                          role="option"
+                          aria-selected={isSelected}
+                          onClick={() => handleSelect(opt.value)}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100",
+                            isSelected && "bg-gray-100"
+                          )}
+                        >
+                          {opt.image && (
+                            <img
+                              src={opt.image}
+                              alt={opt.label}
+                              className="w-6 h-6 rounded-full object-cover"
+                            />
+                          )}
+                          {opt.icon && (
+                            <div className="flex-shrink-0">{opt.icon}</div>
+                          )}
+                          <div className="truncate">
+                            {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               )}
-              {options.map((option) => (
-                <option
-                  key={option.value}
-                  className="bg-gray-200 my-2 w-full"
-                  value={option.value}
-                >
-                  {option.tKeyLabel ? t(option.tKeyLabel) : option.label}
-                </option>
-              ))}
-            </select>
+            </div>
           )}
 
           {searchable && (
-            <div
-              className={cn(
-                "relative w-full", // 🔹 relative aquí para posicionar el dropdown debajo
-                disabled && "opacity-50 cursor-not-allowed"
-              )}
-            >
-              {/* Campo seleccionado */}
-              <div
-                className={cn(
-                  "w-full px-3 py-2 border rounded-md bg-gray-200 cursor-pointer",
-                  disabled && "cursor-not-allowed"
-                )}
-                onClick={() => !disabled && setIsOpen((prev) => !prev)}
+            <div className="relative flex-1">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                onClick={() => !disabled && setIsOpen((s) => !s)}
+                className="w-full text-left px-2 py-1 rounded-md bg-transparent flex items-center gap-2"
               >
-                {selected
-                  ? options.find((o) => o.value === selected)?.label
-                  : tKeyDefaultOption
-                  ? t(tKeyDefaultOption)
-                  : defaultOption}
-              </div>
+                {selectedOption ? (
+                  <>
+                    {selectedOption.image && (
+                      <img
+                        src={selectedOption.image}
+                        alt={selectedOption.label}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                    )}
+                    {selectedOption.icon && (
+                      <div className="flex-shrink-0">{selectedOption.icon}</div>
+                    )}
+                    <span className="truncate">
+                      {selectedOption.tKeyLabel
+                        ? t(selectedOption.tKeyLabel)
+                        : selectedOption.label}
+                    </span>
+                  </>
+                ) : (
+                  <span className="truncate text-gray-500">
+                    {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
+                  </span>
+                )}
+              </button>
 
-              {/* Dropdown */}
               {isOpen && !disabled && (
-                <div className="absolute left-0 top-full mt-1 w-full bg-gray-200 border rounded-md shadow-lg z-10 max-h-60 overflow-y-auto">
-                  {/* Input de búsqueda */}
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder={t("Buscar...")}
-                    className="w-full bg-gray-200 h-10 p-2 py-1 text-sm border-b focus:outline-none"
-                  />
+                <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto">
+                  <div className="p-2 border-b bg-gray-50">
+                    <input
+                      type="text"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder={t("Buscar...")}
+                      className="w-full bg-transparent outline-none p-2"
+                    />
+                  </div>
 
-                  {/* Opciones */}
-                  {filteredOptions.length > 0 ? (
-                    filteredOptions.map((opt) => (
-                      <div
-                        key={opt.value}
-                        onClick={() => handleSelect(opt.value)}
-                        className="px-4 py-2 bg-gray-200 hover:bg-gray-300 cursor-pointer"
-                        // 🔹 siempre gris claro, y hover más oscuro
-                      >
-                        {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
-                      </div>
-                    ))
-                  ) : (
-                    <div className="px-4 py-2 text-gray-500">
-                      {t("No hay opciones")}
-                    </div>
-                  )}
+                  <ul
+                    role="listbox"
+                    aria-activedescendant={selected}
+                    className="divide-y"
+                  >
+                    {filteredOptions.length > 0 ? (
+                      filteredOptions.map((opt) => {
+                        const isSelected = opt.value === selected;
+                        return (
+                          <li
+                            key={opt.value}
+                            role="option"
+                            aria-selected={isSelected}
+                            onClick={() => handleSelect(opt.value)}
+                            className={cn(
+                              "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100",
+                              isSelected && "bg-gray-100"
+                            )}
+                          >
+                            {opt.image && (
+                              <img
+                                src={opt.image}
+                                alt={opt.label}
+                                className="w-6 h-6 rounded-full object-cover"
+                              />
+                            )}
+                            {opt.icon && (
+                              <div className="flex-shrink-0">{opt.icon}</div>
+                            )}
+                            <div className="truncate">
+                              {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                            </div>
+                          </li>
+                        );
+                      })
+                    ) : (
+                      <li className="px-3 py-2 text-gray-500">
+                        {t("No hay opciones")}
+                      </li>
+                    )}
+                  </ul>
                 </div>
               )}
             </div>
           )}
         </div>
 
+        {(helpText || tKeyHelpText) && !hasError && (
+          <Text
+            id={`${id}-help`}
+            size={sizeHelp ?? "xxs"}
+            colVariant="default"
+            className="mt-1"
+          >
+            {tKeyHelpText ? t(tKeyHelpText) : helpText}
+          </Text>
+        )}
+
         {hasError && (
-          <Text id={`${props.id}-error`} colVariant="danger" size="xs">
+          <Text
+            id={`${id}-error`}
+            colVariant="danger"
+            size="xs"
+            className="mt-1"
+          >
             {tKeyError ? t(tKeyError) : errorMessage}
           </Text>
         )}

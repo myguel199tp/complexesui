@@ -1,4 +1,11 @@
-import { FC, InputHTMLAttributes, forwardRef, useEffect } from "react";
+import {
+  FC,
+  InputHTMLAttributes,
+  forwardRef,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 import { Text } from "../main";
@@ -44,6 +51,10 @@ interface FieldProps
   tKeyPlaceholder?: string;
   language?: "es" | "en" | "pt";
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
+  prefixText?: string;
+  prefixImage?: string;
+  prefixElement?: ReactNode;
+  allowXML?: boolean;
 }
 
 const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
@@ -65,28 +76,37 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       language,
       type,
       sizeHelp,
+      prefixText,
+      prefixImage,
+      prefixElement,
+      allowXML = false,
       ...props
     },
     ref
   ) => {
+    const [fileName, setFileName] = useState<string | null>(null);
     const fieldClass = cn(
       field({ inputSize, rounded }),
       className,
       hasError ? "bg-red-100 border border-red-500" : ""
     );
     const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
-
     const { t } = useTranslation();
 
     useEffect(() => {
-      if (language) {
-        i18n.changeLanguage(language);
-      }
+      if (language) i18n.changeLanguage(language);
     }, [language]);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) setFileName(file.name);
+    };
 
     if (type === "hidden") {
       return <input type="hidden" ref={ref} {...props} />;
     }
+
+    const acceptTypes = allowXML ? ".xml,image/*" : undefined;
 
     return (
       <div className="w-full">
@@ -107,14 +127,39 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               {tKeyHelpText ? t(tKeyHelpText) : helpText}
             </Text>
           )}
-          <input
-            type={type}
-            ref={ref}
-            placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
-            className={`bg-transparent outline-none ${disabledClass}`}
-            disabled={disabled}
-            {...props}
-          />
+
+          <div className="flex items-center gap-3">
+            {prefixElement && (
+              <div className="flex-shrink-0">{prefixElement}</div>
+            )}
+
+            {prefixImage && (
+              <img
+                src={prefixImage}
+                alt="prefix"
+                className="w-8 h-8 object-cover rounded-md"
+              />
+            )}
+
+            {prefixText && <div className="text-gray-700">{prefixText}</div>}
+
+            <input
+              type={type}
+              ref={ref}
+              placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
+              className={`bg-transparent outline-none ${disabledClass} flex-1`}
+              disabled={disabled}
+              onChange={type === "file" ? handleFileChange : props.onChange}
+              accept={acceptTypes}
+              {...props}
+            />
+          </div>
+
+          {fileName && (
+            <Text size="xs" className="mt-1 text-gray-600 italic">
+              Archivo: {fileName}
+            </Text>
+          )}
         </div>
 
         {hasError && (
@@ -128,5 +173,4 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
 );
 
 InputField.displayName = "InputField";
-
 export { InputField };

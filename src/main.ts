@@ -13,6 +13,7 @@ export { Text } from "./Text/Text";
 export { SelectField } from "./Select/Select";
 export { Modal } from "./Modal/modal";
 export { Tooltip } from "./Tooltip/Tooltip";
+export { TextAreaField } from "./TextArea/TextArera";
 
 export { Table } from "./Table/Table";
 export { MultiSelect } from "./MultiSelect/MultiSelect";
