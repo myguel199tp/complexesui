@@ -64,7 +64,8 @@ interface MultiSelectProps
   tKeyDefaultOption?: string;
   language?: "es" | "en" | "pt";
   disabled?: boolean;
-
+  rounded?: "sm" | "md" | "lg" | "basic";
+  inputSize?: "sm" | "md" | "lg" | "full";
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
   searchable?: boolean;
 
