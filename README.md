@@ -7,7 +7,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.3.7</p>
+<p>VERSION: v1.3.8</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -71,6 +71,7 @@ import { InputField } from "complexes-next-components";
   inputSize="full"
   rounded="md"
   className="mt-2"
+  prefixElement= "<FaUpload className="text-blue-600 w-5 h-5" />",
   type="text"
   {...register("name")}
   hasError={!!errors.name}
