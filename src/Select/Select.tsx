@@ -48,6 +48,7 @@ interface SelectFieldProps
   label?: string;
   errorMessage?: string;
   helpText?: string;
+  tkeySearch?: string;
   options: Option[];
   defaultOption?: string;
   required?: boolean;
@@ -102,6 +103,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       tKeyHelpText,
       tKeyError,
       tKeyDefaultOption,
+      tkeySearch,
       language,
       sizeHelp,
       hidden,
@@ -256,14 +258,13 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 
             {isOpen && !disabled && (
               <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto">
-                {/* Si es searchable mostramos el input de búsqueda */}
                 {searchable && (
                   <div className="p-2 border-b bg-gray-50">
                     <input
                       type="text"
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder={t("Buscar...")}
+                      placeholder={t(tkeySearch || "Buscar...")}
                       className="w-full bg-transparent outline-none p-2"
                     />
                   </div>
