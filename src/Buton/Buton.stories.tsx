@@ -27,7 +27,7 @@ const meta: Meta<typeof Buton & { language?: "es" | "en" | "pt" }> = {
     },
     borderWidth: {
       type: "string",
-      options: ["bold", "semi", "thin"],
+      options: ["bold", "semi", "thin", "none"],
       control: { type: "radio" },
       description: "colors",
     },
