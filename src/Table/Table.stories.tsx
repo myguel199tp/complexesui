@@ -92,7 +92,7 @@ export const Default: Story = {
     font: "normal",
     size: "md",
     sizeText: "md",
-    fontText: "semi",
+    fontText: "light",
     background: "default",
     padding: "md",
     rounded: "sm",
@@ -137,7 +137,7 @@ export const Danger: Story = {
 export const SmallHeaderText: Story = {
   args: {
     ...Default.args,
-    sizeText: "sm",
+    sizeText: "md",
     fontText: "light",
     headers: ["Small Header 1", "Small Header 2", "Small Header 3"],
   },
@@ -146,8 +146,8 @@ export const SmallHeaderText: Story = {
 export const LargeHeaderText: Story = {
   args: {
     ...Default.args,
-    sizeText: "xl",
-    fontText: "bold",
+    sizeText: "md",
+    fontText: "light",
     headers: ["Big Header 1", "Big Header 2", "Big Header 3"],
   },
 };
@@ -155,8 +155,8 @@ export const LargeHeaderText: Story = {
 export const MixedTextStyle: Story = {
   args: {
     ...Default.args,
-    sizeText: "lg",
-    fontText: "semi",
+    sizeText: "md",
+    fontText: "light",
     headers: ["Stylish Header 1", "Stylish Header 2", "Stylish Header 3"],
     rows: [
       ["Normal text row 1", "Normal text row 1", "Normal text row 1"],
@@ -210,7 +210,7 @@ export const WithActions: Story = {
     font: "normal",
     size: "md",
     sizeText: "md",
-    fontText: "bold",
+    fontText: "light",
     background: "default",
     padding: "md",
     rounded: "sm",
@@ -281,8 +281,8 @@ const LanguageSwitcherTable = () => {
         colVariant="primary"
         font="normal"
         size="md"
-        sizeText="lg"
-        fontText="bold"
+        sizeText="md"
+        fontText="light"
         background="default"
         padding="md"
         rounded="sm"

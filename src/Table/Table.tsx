@@ -58,20 +58,6 @@ const TableStyle = cva("font-bold border-collapse w-full", {
       md: "rounded-md",
       lg: "rounded-2xl",
     },
-  },
-  defaultVariants: {
-    colVariant: "default",
-    size: "md",
-    font: "normal",
-    background: "default",
-    padding: "md",
-    rounded: "sm",
-  },
-});
-
-/* 🆕 Estilos de texto (header y body) */
-const TableTextStyle = cva("", {
-  variants: {
     sizeText: {
       xxs: "text-[10px]",
       xs: "text-xs",
@@ -89,8 +75,14 @@ const TableTextStyle = cva("", {
     },
   },
   defaultVariants: {
-    sizeText: "md",
-    fontText: "semi",
+    colVariant: "default",
+    font: "normal",
+    size: "md",
+    background: "default",
+    padding: "md",
+    rounded: "sm",
+    sizeText: "sm",
+    fontText: "normal",
   },
 });
 
@@ -101,10 +93,14 @@ interface Action {
   icon?: ReactNode;
 }
 
+/**
+ * ✅ Tipado correcto:
+ * - Se heredan todas las variantes del cva.
+ * - Se eliminan los literales fijos que limitaban las props.
+ */
 interface TableProps
   extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof TableStyle>,
-    VariantProps<typeof TableTextStyle> {
+    VariantProps<typeof TableStyle> {
   as?: ElementType;
   headers?: string[];
   headerKeys?: string[];
@@ -116,7 +112,6 @@ interface TableProps
   borderColor?: string;
 }
 
-/* 🧩 Componente principal */
 const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
   (
     {
@@ -163,12 +158,20 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
       if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
+    // ✅ Unificamos los estilos, incluyendo sizeText y fontText
     const tableClasses = classNames(
-      TableStyle({ colVariant, size, font, background, padding, rounded }),
+      TableStyle({
+        colVariant,
+        size,
+        font,
+        background,
+        padding,
+        rounded,
+        sizeText,
+        fontText,
+      }),
       className
     );
-
-    const textClasses = TableTextStyle({ sizeText, fontText });
 
     return (
       <>
@@ -191,18 +194,9 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                       key={index}
                       className={classNames(
                         "px-4 py-2 text-center border text-gray-800",
-                        textClasses,
-                        borderColor,
-                        index === 0 && "rounded-tl-lg",
-                        index === headers.length - 1 &&
-                          actions.length === 0 &&
-                          "rounded-tr-lg"
+                        tableClasses,
+                        borderColor
                       )}
-                      style={
-                        columnWidths[index]
-                          ? { width: columnWidths[index] }
-                          : {}
-                      }
                     >
                       {headerKeys.length > 0 ? t(header as string) : header}
                     </th>
@@ -213,7 +207,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                   <th
                     className={classNames(
                       "px-4 py-2 text-center border bg-gray-100 text-gray-800 rounded-tr-lg",
-                      textClasses,
+                      tableClasses,
                       borderColor
                     )}
                   >
@@ -235,7 +229,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                       key={cellIndex}
                       className={classNames(
                         "px-4 py-2 text-center border",
-                        textClasses,
+                        tableClasses,
                         borderColor,
                         cellClasses[rowIndex]?.[cellIndex],
                         rowIndex === currentRows.length - 1 &&
