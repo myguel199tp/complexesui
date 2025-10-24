@@ -14,6 +14,7 @@ import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
+// 🎨 Estilos base de la tabla
 const TableStyle = cva("font-bold border-collapse w-full", {
   variants: {
     colVariant: {
@@ -29,6 +30,7 @@ const TableStyle = cva("font-bold border-collapse w-full", {
       normal: "font-normal",
     },
     size: {
+      xxs: "text-[10px]",
       xs: "text-xs",
       sm: "text-sm",
       md: "text-xl",
@@ -63,16 +65,41 @@ const TableStyle = cva("font-bold border-collapse w-full", {
   },
 });
 
+// 🆕 Estilos de texto (header y body)
+const TableTextStyle = cva("", {
+  variants: {
+    sizeText: {
+      xxs: "text-[10px]",
+      xs: "text-xs",
+      sm: "text-sm",
+      md: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+    },
+    fontText: {
+      normal: "font-normal",
+      semi: "font-semibold",
+      bold: "font-bold",
+      light: "font-light",
+    },
+  },
+  defaultVariants: {
+    sizeText: "md",
+    fontText: "semi",
+  },
+});
+
 interface Action {
   label?: string;
-  tKey?: string; // 👈 Para traducción
+  tKey?: string;
   onClick: (rowIndex: number) => void;
   icon?: ReactNode;
 }
 
 interface TableProps
   extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof TableStyle> {
+    VariantProps<typeof TableStyle>,
+    VariantProps<typeof TableTextStyle> {
   as?: ElementType;
   headers?: string[];
   headerKeys?: string[];
@@ -81,7 +108,7 @@ interface TableProps
   cellClasses?: string[][];
   columnWidths?: string[];
   language?: "es" | "en" | "pt";
-  borderColor?: string; // 👈 nuevo prop
+  borderColor?: string;
 }
 
 const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
@@ -102,7 +129,9 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
       columnWidths = [],
       className,
       language,
-      borderColor = "border-gray-300", // 👈 por defecto
+      borderColor = "border-gray-300",
+      sizeText,
+      fontText,
       ...props
     },
     ref
@@ -110,7 +139,6 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
     const [currentPage, setCurrentPage] = useState(1);
     const { t } = useTranslation();
 
-    // 👇 Cambia idioma cuando se pasa por props
     useEffect(() => {
       if (language) {
         i18n.changeLanguage(language);
@@ -132,14 +160,17 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
       if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
+    // 🎨 Clases base de la tabla
     const classes = classNames(
       TableStyle({ colVariant, size, font, background, padding, rounded }),
       className
     );
 
+    // 🎨 Clases de texto
+    const textClasses = TableTextStyle({ sizeText, fontText });
+
     return (
       <>
-        {/* Contenedor con borde redondeado */}
         <div className="w-full overflow-x-auto p-4">
           <Tag
             ref={ref}
@@ -150,6 +181,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
             )}
             {...props}
           >
+            {/* HEADER */}
             <thead className="bg-gray-100">
               <tr>
                 {(headerKeys.length > 0 ? headerKeys : headers).map(
@@ -157,7 +189,8 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                     <th
                       key={index}
                       className={classNames(
-                        "px-4 py-2 text-center border",
+                        "px-4 py-2 text-center border text-gray-800",
+                        textClasses,
                         borderColor,
                         index === 0 && "rounded-tl-lg",
                         index === headers.length - 1 &&
@@ -178,7 +211,8 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                 {actions.length > 0 && (
                   <th
                     className={classNames(
-                      "px-4 py-2 text-center border rounded-tr-lg bg-gray-100",
+                      "px-4 py-2 text-center border rounded-tr-lg bg-gray-100 text-gray-800",
+                      textClasses,
                       borderColor
                     )}
                   >
@@ -188,6 +222,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
               </tr>
             </thead>
 
+            {/* BODY */}
             <tbody>
               {currentRows.map((row, rowIndex) => (
                 <tr
@@ -199,6 +234,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                       key={cellIndex}
                       className={classNames(
                         "px-4 py-2 text-center border",
+                        textClasses,
                         borderColor,
                         cellClasses[rowIndex]?.[cellIndex],
                         rowIndex === currentRows.length - 1 &&
@@ -246,7 +282,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
           </Tag>
         </div>
 
-        {/* Paginación */}
+        {/* PAGINACIÓN */}
         <div className="flex justify-center space-x-2 mt-4">
           <Button
             size="sm"

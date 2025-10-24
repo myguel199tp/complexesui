@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Table } from "./Table";
 import { Buton } from "../Buton/Buton";
 import { Button } from "../Button/Button";
-import i18n from "../i18n"; // 👈 asegúrate de tener tu configuración de i18n
+import i18n from "../i18n";
 
 const meta: Meta<typeof Table & { language?: "es" | "en" | "pt" }> = {
   title: "Components/Table",
@@ -33,7 +33,7 @@ const meta: Meta<typeof Table & { language?: "es" | "en" | "pt" }> = {
     },
     size: {
       type: "string",
-      options: ["xs", "sm", "md", "lg"],
+      options: ["xxs", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "Size of the text",
     },
@@ -61,6 +61,18 @@ const meta: Meta<typeof Table & { language?: "es" | "en" | "pt" }> = {
       control: { type: "radio" },
       description: "HTML element to render",
     },
+    sizeText: {
+      type: "string",
+      options: ["xxs", "xs", "sm", "md", "lg", "xl"],
+      control: { type: "radio" },
+      description: "Text size of the table headers",
+    },
+    fontText: {
+      type: "string",
+      options: ["light", "normal", "semi", "bold"],
+      control: { type: "radio" },
+      description: "Font weight of the table headers",
+    },
   },
 };
 
@@ -70,31 +82,17 @@ type Story = StoryObj<typeof Table>;
 
 export const Default: Story = {
   args: {
-    headers: [
-      "Header 1",
-      "Header 2",
-      "Header 3",
-      "Header 4",
-      "Header 5",
-      "Header 6",
-      "Header 7",
-      "Header 8",
-      "Header 9",
-      "Header 10",
-    ],
+    headers: ["Header 1", "Header 2", "Header 3"],
     rows: [
       ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
       ["Row 2, Col 1", "Row 2, Col 2", "Row 2, Col 3"],
-      ["Row 1, Col 1", "Row 1, Col 2", "Row 1, Col 3"],
-    ],
-    cellClasses: [
-      ["bg-red-100", "bg-red-100", "bg-red-100"],
-      ["bg-yellow-100", "bg-purple-100", ""],
-      ["", "", "bg-gray-100"],
+      ["Row 3, Col 1", "Row 3, Col 2", "Row 3, Col 3"],
     ],
     colVariant: "default",
     font: "normal",
     size: "md",
+    sizeText: "md",
+    fontText: "semi",
     background: "default",
     padding: "md",
     rounded: "sm",
@@ -134,6 +132,39 @@ export const Danger: Story = {
   },
 };
 
+// 🆕 NUEVOS STORIES PARA sizeText y fontText
+
+export const SmallHeaderText: Story = {
+  args: {
+    ...Default.args,
+    sizeText: "sm",
+    fontText: "light",
+    headers: ["Small Header 1", "Small Header 2", "Small Header 3"],
+  },
+};
+
+export const LargeHeaderText: Story = {
+  args: {
+    ...Default.args,
+    sizeText: "xl",
+    fontText: "bold",
+    headers: ["Big Header 1", "Big Header 2", "Big Header 3"],
+  },
+};
+
+export const MixedTextStyle: Story = {
+  args: {
+    ...Default.args,
+    sizeText: "lg",
+    fontText: "semi",
+    headers: ["Stylish Header 1", "Stylish Header 2", "Stylish Header 3"],
+    rows: [
+      ["Normal text row 1", "Normal text row 1", "Normal text row 1"],
+      ["Another row", "With medium size", "and semi-bold headers"],
+    ],
+  },
+};
+
 export const WithActions: Story = {
   args: {
     headers: ["Name", "Email", "Actions"],
@@ -143,13 +174,13 @@ export const WithActions: Story = {
         "john.doe@example.com",
         <div className="flex gap-2">
           <div
-            className=" text-black px-2 py-1 rounded"
+            className="text-black px-2 py-1 rounded cursor-pointer"
             onClick={() => alert("Edit John Doe")}
           >
             Edit
           </div>
           <div
-            className="bg-red-500 text-white px-2 py-1 rounded"
+            className="bg-red-500 text-white px-2 py-1 rounded cursor-pointer"
             onClick={() => alert("Delete John Doe")}
           >
             Delete
@@ -178,7 +209,9 @@ export const WithActions: Story = {
     colVariant: "primary",
     font: "normal",
     size: "md",
-    background: "success",
+    sizeText: "md",
+    fontText: "bold",
+    background: "default",
     padding: "md",
     rounded: "sm",
     as: "table",
@@ -187,48 +220,14 @@ export const WithActions: Story = {
 
 export const WithWiderColumns: Story = {
   args: {
-    headers: [
-      "Header 1",
-      "Header 2",
-      "Header 3",
-      "Header 4",
-      "Header 5",
-      "Header 6",
-      "Header 7",
-      "Header 8",
-      "Header 9",
-      "Header 10",
-      "Header 11",
-      "Header 12",
-      "Header 13",
-    ],
-    rows: [
-      [
-        "Row 1, Col 1",
-        "Row 1, Col 2",
-        "Row 1, Col 3",
-        "Row 1, Col 4",
-        "Row 1, Col 5",
-        "Row 1, Col 6",
-        "Row 1, Col 7",
-        "Row 1, Col 8",
-        "Row 1, Col 9",
-        "Row 1, Col 10",
-        "Row 1, Col 11",
-      ],
-    ],
-    colVariant: "default",
-    font: "normal",
-    size: "md",
-    background: "default",
-    padding: "md",
-    rounded: "sm",
-    as: "table",
-    cellClasses: [["w-[200px]", "", "", "w-[300px]", "", "", "", "", "", ""]],
+    ...Default.args,
+    headers: Array.from({ length: 10 }, (_, i) => `Header ${i + 1}`),
+    rows: [["Wide column test", "Column 2", "Column 3"]],
+    cellClasses: [["w-[200px]", "w-[100px]", "w-[150px]"]],
   },
 };
 
-// 🔥 Nuevo story con traducción
+// 🔥 Ejemplo con cambio de idioma
 const LanguageSwitcherTable = () => {
   const [language, setLanguage] = useState<"es" | "en" | "pt">("es");
 
@@ -240,38 +239,15 @@ const LanguageSwitcherTable = () => {
   const translations = {
     es: {
       headers: ["Nombre", "Correo", "Acciones"],
-      rows: [
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-        ["Juan Pérez", "juan.perez@example.com", "Acción 1"],
-        ["Ana Gómez", "ana.gomez@example.com", "Acción 2"],
-      ],
+      rows: [["Juan", "juan@correo.com", "Ver"]],
     },
     en: {
       headers: ["Name", "Email", "Actions"],
-      rows: [
-        ["John Doe", "juan.perez@example.com", "Action 1"],
-        ["Jane Smith", "jane.smith@example.com", "Action 2"],
-      ],
+      rows: [["John", "john@mail.com", "View"]],
     },
     pt: {
       headers: ["Nome", "Email", "Ações"],
-      rows: [
-        ["João Silva", "juan.perez@example.com", "Ação 1"],
-        ["Maria Souza", "maria.souza@example.com", "Ação 2"],
-      ],
+      rows: [["João", "joao@mail.com", "Ver"]],
     },
   };
 
@@ -301,9 +277,12 @@ const LanguageSwitcherTable = () => {
       <Table
         headers={translations[language].headers}
         rows={translations[language].rows}
+        language={language}
         colVariant="primary"
         font="normal"
         size="md"
+        sizeText="lg"
+        fontText="bold"
         background="default"
         padding="md"
         rounded="sm"
@@ -318,19 +297,12 @@ export const WithLanguageSwitcher: Story = {
 
 export const WithRedBorder: Story = {
   args: {
+    ...Default.args,
     headers: ["Col 1", "Col 2", "Col 3"],
     rows: [
       ["Fila 1, Col 1", "Fila 1, Col 2", "Fila 1, Col 3"],
       ["Fila 2, Col 1", "Fila 2, Col 2", "Fila 2, Col 3"],
     ],
-    colVariant: "default",
-    font: "normal",
-    size: "md",
-    background: "default",
-    padding: "md",
-    rounded: "sm",
-    as: "table",
-    // 👇 aquí le agregamos borde rojo a todas las celdas
     cellClasses: [
       [
         "border border-red-500",
