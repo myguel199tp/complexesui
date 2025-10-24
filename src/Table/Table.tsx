@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FC,
   HTMLAttributes,
@@ -14,7 +16,7 @@ import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
-// 🎨 Estilos base de la tabla
+/* 🎨 Estilos base de la tabla */
 const TableStyle = cva("font-bold border-collapse w-full", {
   variants: {
     colVariant: {
@@ -33,8 +35,10 @@ const TableStyle = cva("font-bold border-collapse w-full", {
       xxs: "text-[10px]",
       xs: "text-xs",
       sm: "text-sm",
-      md: "text-xl",
-      lg: "text-2xl",
+      md: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+      xxl: "text-2xl",
     },
     background: {
       default: "bg-transparent",
@@ -65,7 +69,7 @@ const TableStyle = cva("font-bold border-collapse w-full", {
   },
 });
 
-// 🆕 Estilos de texto (header y body)
+/* 🆕 Estilos de texto (header y body) */
 const TableTextStyle = cva("", {
   variants: {
     sizeText: {
@@ -75,12 +79,13 @@ const TableTextStyle = cva("", {
       md: "text-base",
       lg: "text-lg",
       xl: "text-xl",
+      xxl: "text-2xl",
     },
     fontText: {
+      light: "font-light",
       normal: "font-normal",
       semi: "font-semibold",
       bold: "font-bold",
-      light: "font-light",
     },
   },
   defaultVariants: {
@@ -111,6 +116,7 @@ interface TableProps
   borderColor?: string;
 }
 
+/* 🧩 Componente principal */
 const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
   (
     {
@@ -140,16 +146,13 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
     const { t } = useTranslation();
 
     useEffect(() => {
-      if (language) {
-        i18n.changeLanguage(language);
-      }
+      if (language) i18n.changeLanguage(language);
     }, [language]);
 
     const rowsPerPage = 15;
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = rows.slice(indexOfFirstRow, indexOfLastRow);
-
     const totalPages = Math.ceil(rows.length / rowsPerPage);
 
     const handlePrevPage = () => {
@@ -160,13 +163,11 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
       if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
-    // 🎨 Clases base de la tabla
-    const classes = classNames(
+    const tableClasses = classNames(
       TableStyle({ colVariant, size, font, background, padding, rounded }),
       className
     );
 
-    // 🎨 Clases de texto
     const textClasses = TableTextStyle({ sizeText, fontText });
 
     return (
@@ -175,8 +176,8 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
           <Tag
             ref={ref}
             className={classNames(
-              classes,
-              "rounded-lg overflow-hidden",
+              tableClasses,
+              "rounded-lg overflow-hidden border",
               borderColor
             )}
             {...props}
@@ -211,7 +212,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                 {actions.length > 0 && (
                   <th
                     className={classNames(
-                      "px-4 py-2 text-center border rounded-tr-lg bg-gray-100 text-gray-800",
+                      "px-4 py-2 text-center border bg-gray-100 text-gray-800 rounded-tr-lg",
                       textClasses,
                       borderColor
                     )}
@@ -283,27 +284,29 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
         </div>
 
         {/* PAGINACIÓN */}
-        <div className="flex justify-center space-x-2 mt-4">
-          <Button
-            size="sm"
-            rounded="sm"
-            onClick={handlePrevPage}
-            disabled={currentPage === 1}
-          >
-            <GrCaretPrevious size={20} />
-          </Button>
-          <span className="px-4 py-2 text-lg">
-            {currentPage} / {totalPages}
-          </span>
-          <Button
-            size="sm"
-            rounded="sm"
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            <GrCaretNext size={20} />
-          </Button>
-        </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center space-x-2 mt-4">
+            <Button
+              size="sm"
+              rounded="sm"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
+              <GrCaretPrevious size={20} />
+            </Button>
+            <span className="px-4 py-2 text-lg">
+              {currentPage} / {totalPages}
+            </span>
+            <Button
+              size="sm"
+              rounded="sm"
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              <GrCaretNext size={20} />
+            </Button>
+          </div>
+        )}
       </>
     );
   }
