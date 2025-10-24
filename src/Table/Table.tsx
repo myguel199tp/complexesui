@@ -9,7 +9,7 @@ import {
   useState,
   useEffect,
 } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import classNames from "classnames";
 import { Button } from "../main";
 import { GrCaretNext, GrCaretPrevious } from "react-icons/gr";
@@ -98,9 +98,7 @@ interface Action {
  * - Se heredan todas las variantes del cva.
  * - Se eliminan los literales fijos que limitaban las props.
  */
-interface TableProps
-  extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof TableStyle> {
+interface TableProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
   headers?: string[];
   headerKeys?: string[];
@@ -110,6 +108,16 @@ interface TableProps
   columnWidths?: string[];
   language?: "es" | "en" | "pt";
   borderColor?: string;
+
+  // 🧩 Agrega las variantes manualmente si el cva no las propaga
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  font?: "bold" | "semi" | "normal";
+  size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+  background?: "default" | "primary" | "success" | "warning" | "danger";
+  padding?: "default" | "sm" | "md";
+  rounded?: "basic" | "sm" | "md" | "lg";
+  sizeText?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+  fontText?: "light" | "normal" | "semi" | "bold";
 }
 
 const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
