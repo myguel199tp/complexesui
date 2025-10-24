@@ -148,6 +148,13 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
       if (open) document.addEventListener("mousedown", onDocClick);
       return () => document.removeEventListener("mousedown", onDocClick);
     }, [open]);
+    const toggleOption = (val: string) => {
+      const newValues = selected.includes(val)
+        ? selected.filter((v) => v !== val)
+        : [...selected, val];
+      setSelected(newValues);
+      onChange?.(newValues);
+    };
 
     if (hidden) return <div ref={ref} hidden {...props} />;
 
