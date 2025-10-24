@@ -130,19 +130,24 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     useEffect(() => {
       const onDocClick = (e: MouseEvent) => {
         if (!containerRef.current) return;
-        if (!containerRef.current.contains(e.target as Node)) setOpen(false);
+
+        // Si el clic fue dentro del contenedor o dentro del dropdown, no cierres
+        const target = e.target as Node;
+        const dropdown = document.querySelector(".multiselect-dropdown");
+
+        if (
+          containerRef.current.contains(target) ||
+          (dropdown && dropdown.contains(target))
+        ) {
+          return;
+        }
+
+        setOpen(false);
       };
+
       if (open) document.addEventListener("mousedown", onDocClick);
       return () => document.removeEventListener("mousedown", onDocClick);
     }, [open]);
-
-    const toggleOption = (val: string) => {
-      const newValues = selected.includes(val)
-        ? selected.filter((v) => v !== val)
-        : [...selected, val];
-      setSelected(newValues);
-      onChange?.(newValues);
-    };
 
     if (hidden) return <div ref={ref} hidden {...props} />;
 
@@ -269,6 +274,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                       onChange={(e) => setSearch(e.target.value)}
                       placeholder={t(tkeySearch || "Buscar...")}
                       className="w-full bg-transparent outline-none p-2"
+                      onClick={(e) => e.stopPropagation()} // ✅ evita cierre accidental
                     />
                   </div>
                 )}
