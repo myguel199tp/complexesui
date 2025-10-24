@@ -41,6 +41,16 @@ const field = cva(
   }
 );
 
+// Mapa de padding/texto para opciones
+const optionSizeClassMap = {
+  xxs: "px-1 py-0.5 text-xxs",
+  xs: "px-1.5 py-1 text-xs",
+  sm: "px-2 py-1 text-xs",
+  md: "px-4 py-2 text-base",
+  lg: "px-6 py-3 text-lg",
+  full: "px-6 py-3 text-lg",
+};
+
 interface Option {
   value: string;
   label: string;
@@ -67,7 +77,7 @@ interface SelectFieldProps
   language?: "es" | "en" | "pt";
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
   searchable?: boolean;
-  inputSize?: "xs" | "xxs" | "sm" | "md" | "lg" | "full";
+  inputSize?: "xxs" | "xs" | "sm" | "md" | "lg" | "full";
   rounded?: "basic" | "sm" | "md" | "lg";
   prefixElement?: ReactNode;
   prefixImage?: string;
@@ -283,7 +293,8 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                           aria-selected={isSelected}
                           onClick={() => handleSelect(opt.value)}
                           className={cn(
-                            "flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100",
+                            "flex items-center gap-3 cursor-pointer hover:bg-gray-100",
+                            optionSizeClassMap[inputSize ?? "md"],
                             isSelected && "bg-gray-100"
                           )}
                         >

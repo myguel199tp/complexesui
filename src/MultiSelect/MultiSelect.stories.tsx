@@ -15,7 +15,7 @@ const meta: Meta<typeof MultiSelect> = {
     },
     inputSize: {
       type: "string",
-      options: ["full", "sm", "md", "lg"],
+      options: ["full", "xxs", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "Tamaño del select",
     },
