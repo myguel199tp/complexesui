@@ -16,6 +16,7 @@ const button = cva(
         warning:
           "border-orange-400 bg-orange-50 hover:bg-orange-100 text-orange-600",
         danger: "border-red-400 bg-red-50 hover:bg-red-100 text-red-600",
+        none: "border-none bg-transparent text-inherit",
       },
       rounded: {
         basic: "rounded-none",
@@ -24,6 +25,7 @@ const button = cva(
         lg: "rounded-2xl",
       },
       size: {
+        xs: "py-0.5 px-1 text-[10px]",
         sm: "py-1 px-2 text-xs",
         md: "py-2 px-4 text-base",
         lg: "py-3 px-6 text-lg",
@@ -35,6 +37,7 @@ const button = cva(
         thin: "font-light",
       },
       borderWidth: {
+        none: "border-0",
         thin: "border-2",
         semi: "border-4",
         bold: "border-8",
@@ -53,9 +56,15 @@ const button = cva(
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof button> {
-  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
+  colVariant?:
+    | "default"
+    | "primary"
+    | "success"
+    | "warning"
+    | "danger"
+    | "none";
   rounded?: "basic" | "sm" | "md" | "lg";
-  size?: "sm" | "md" | "lg" | "full";
+  size?: "xs" | "sm" | "md" | "lg" | "full";
   fonts?: "bold" | "semi" | "thin";
   borderWidth?: "bold" | "semi" | "thin";
   tKey?: string;

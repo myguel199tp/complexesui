@@ -12,6 +12,7 @@ const badgeStyle = cva("font-bold", {
       success: "text-green-500",
       warning: "text-orange-500",
       danger: "text-red-500",
+      on: "text-white",
     },
     font: {
       bold: "font-bold",
@@ -19,17 +20,20 @@ const badgeStyle = cva("font-bold", {
       normal: "font-normal",
     },
     size: {
-      xs: "text-xs",
-      sm: "text-sm",
+      xxs: "text-[10px]",
+      xs: "text-sm",
+      sm: "text-xs",
       md: "text-xl",
       lg: "text-2xl",
     },
     background: {
       default: "bg-transparent",
+      citian: "bg-cyan-800",
       primary: "bg-blue-100",
       success: "bg-green-100",
       warning: "bg-orange-100",
       danger: "bg-red-100",
+      none: "bg-transpatent",
     },
     padding: {
       default: "p-0",
@@ -57,9 +61,16 @@ interface BadgeProps
   extends HTMLAttributes<HTMLElement>,
     VariantProps<typeof badgeStyle> {
   as?: ElementType;
-  colVariant?: "default" | "primary" | "success" | "warning" | "danger";
-  size?: "xs" | "sm" | "md" | "lg";
-  background?: "default" | "primary" | "success" | "warning" | "danger";
+  colVariant?: "default" | "primary" | "success" | "warning" | "danger" | "on";
+  size?: "xxs" | "xs" | "sm" | "md" | "lg";
+  background?:
+    | "default"
+    | "primary"
+    | "success"
+    | "warning"
+    | "danger"
+    | "citian"
+    | "none";
   padding?: "default" | "sm" | "md";
   rounded?: "basic" | "sm" | "md" | "lg";
   tKey?: string;

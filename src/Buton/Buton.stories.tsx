@@ -15,7 +15,7 @@ const meta: Meta<typeof Buton & { language?: "es" | "en" | "pt" }> = {
     },
     colVariant: {
       type: "string",
-      options: ["default", "primary", "success", "warning", "danger"],
+      options: ["default", "primary", "success", "warning", "danger", "none"],
       control: { type: "radio" },
       description: "colors",
     },
@@ -39,7 +39,7 @@ const meta: Meta<typeof Buton & { language?: "es" | "en" | "pt" }> = {
     },
     size: {
       type: "string",
-      options: ["full", "sm", "md", "lg"],
+      options: ["full", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "size",
     },

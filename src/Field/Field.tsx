@@ -23,6 +23,8 @@ const field = cva(
         lg: "rounded-2xl",
       },
       inputSize: {
+        xxs: "py-[1px] px-[3px] text-[9px]",
+        xs: "py-0.5 px-1 text-[10px]",
         sm: "py-1 px-2 text-xs",
         md: "py-2 px-4 text-base",
         lg: "py-3 px-6 text-lg",
@@ -44,7 +46,7 @@ interface FieldProps
   helpText?: string;
   errorMessage?: string;
   rounded?: "basic" | "sm" | "md" | "lg";
-  inputSize?: "full" | "sm" | "md" | "lg";
+  inputSize?: "full" | "xxs" | "xs" | "sm" | "md" | "lg";
   tKeyLabel?: string;
   tKeyHelpText?: string;
   tKeyError?: string;
@@ -61,7 +63,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
   (
     {
       className,
-      inputSize,
+      inputSize = "md",
       rounded,
       disabled,
       placeholder,
@@ -108,10 +110,22 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
 
     const acceptTypes = allowXML ? ".xml,image/*" : undefined;
 
+    // 👇 Mapa de tamaños del label según inputSize
+    const labelSizeMap: Record<NonNullable<FieldProps["inputSize"]>, string> = {
+      xxs: "text-[10px]",
+      xs: "text-[11px]",
+      sm: "text-xs",
+      md: "text-sm",
+      lg: "text-base",
+      full: "text-base",
+    };
+
     return (
       <div className="w-full">
         {(label || tKeyLabel) && (
-          <label className="block mb-1 text-gray-500">
+          <label
+            className={cn("block mb-1 text-gray-500", labelSizeMap[inputSize])}
+          >
             {tKeyLabel ? t(tKeyLabel) : label}
           </label>
         )}

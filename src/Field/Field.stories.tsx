@@ -16,7 +16,7 @@ const meta: Meta<typeof InputField> = {
     },
     inputSize: {
       type: "string",
-      options: ["full", "sm", "md", "lg"],
+      options: ["full", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "Tamaño del input",
     },

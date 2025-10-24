@@ -20,7 +20,7 @@ const textStyle = cva("font-bold", {
       normal: "font-normal",
     },
     size: {
-      xxs: "text-[10px]", // 👈 más pequeño que xs
+      xxs: "text-[10px]",
       xs: "text-xs",
       sm: "text-sm",
       md: "text-xl",

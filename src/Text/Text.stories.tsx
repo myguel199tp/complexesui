@@ -17,7 +17,7 @@ const meta: Meta<typeof Text & { language?: "es" | "en" | "pt" }> = {
       control: "text",
     },
     colVariant: {
-      options: ["default", "primary", "success", "warning", "danger"],
+      options: ["default", "primary", "success", "warning", "danger", "on"],
       control: { type: "radio" },
       description: "Colores predefinidos",
     },

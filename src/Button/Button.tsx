@@ -20,6 +20,7 @@ const button = cva("inline-block bg-blue-400 px-5 py-3 font-bold", {
       lg: "rounded-2xl",
     },
     size: {
+      xs: "py-0.5 px-1 text-[10px]",
       sm: "py-1 px-2 text-xs",
       md: "py-2 px-4 text-base",
       lg: "py-3 px-6 text-lg",
@@ -44,7 +45,7 @@ interface ButtonProps
     VariantProps<typeof button> {
   colVariant?: "default" | "primary" | "success" | "warning" | "danger";
   rounded?: "basic" | "sm" | "md" | "lg";
-  size?: "sm" | "md" | "lg" | "full";
+  size?: "xs" | "sm" | "md" | "lg" | "full";
   fonts?: "bold" | "semi" | "thin";
   tKey?: string;
   language?: "es" | "en" | "pt";

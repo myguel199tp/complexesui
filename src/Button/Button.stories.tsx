@@ -33,7 +33,7 @@ const meta: Meta<typeof Button & { language?: "es" | "en" | "pt" }> = {
     },
     size: {
       type: "string",
-      options: ["full", "sm", "md", "lg"],
+      options: ["full", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "size",
     },

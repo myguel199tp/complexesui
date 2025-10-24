@@ -12,7 +12,7 @@ const meta: Meta<typeof Badge & { language?: "es" | "en" | "pt" }> = {
     },
     colVariant: {
       type: "string",
-      options: ["default", "primary", "success", "warning", "danger"],
+      options: ["default", "primary", "success", "warning", "danger", "on"],
       control: { type: "radio" },
       description: "Color del texto",
     },
@@ -24,13 +24,21 @@ const meta: Meta<typeof Badge & { language?: "es" | "en" | "pt" }> = {
     },
     size: {
       type: "string",
-      options: ["xs", "sm", "md", "lg"],
+      options: ["xxs", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "Tamaño del texto",
     },
     background: {
       type: "string",
-      options: ["default", "primary", "success", "warning", "danger"],
+      options: [
+        "default",
+        "primary",
+        "success",
+        "warning",
+        "danger",
+        "citian",
+        "none",
+      ],
       control: { type: "radio" },
       description: "Color de fondo",
     },
