@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FC,
   SelectHTMLAttributes,
@@ -14,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "inline-block bg-gray-200 px-5 py-3 font-thin border-none w-full focus:outline-none",
+  "inline-flex items-center gap-2 bg-gray-200 font-thin w-full focus:outline-none transition-all",
   {
     variants: {
       rounded: {
@@ -24,11 +26,17 @@ const field = cva(
         lg: "rounded-2xl",
       },
       inputSize: {
-        sm: "py-1 px-2 text-xs",
-        md: "py-2 px-4 text-base",
-        lg: "py-3 px-6 text-lg",
-        full: "py-3 px-6 text-lg w-full",
+        xxs: "px-1 py-0.5 text-xxs",
+        xs: "px-1.5 py-1 text-xs",
+        sm: "px-2 py-1 text-xs",
+        md: "px-4 py-2 text-base",
+        lg: "px-6 py-3 text-lg",
+        full: "px-6 py-3 text-lg w-full",
       },
+    },
+    defaultVariants: {
+      rounded: "md",
+      inputSize: "md",
     },
   }
 );
@@ -59,7 +67,7 @@ interface SelectFieldProps
   language?: "es" | "en" | "pt";
   sizeHelp?: "sm" | "md" | "lg" | "xxs" | "xs";
   searchable?: boolean;
-  inputSize?: "sm" | "md" | "lg" | "full";
+  inputSize?: "xs" | "xxs" | "sm" | "md" | "lg" | "full";
   rounded?: "basic" | "sm" | "md" | "lg";
   prefixElement?: ReactNode;
   prefixImage?: string;
@@ -68,7 +76,7 @@ interface SelectFieldProps
 const helpSizeClass = (size?: SelectFieldProps["sizeHelp"]) => {
   switch (size) {
     case "xxs":
-      return "text-xxs"; // si tienes utilidades personalizadas
+      return "text-xxs";
     case "xs":
       return "text-xs";
     case "sm":
@@ -78,7 +86,7 @@ const helpSizeClass = (size?: SelectFieldProps["sizeHelp"]) => {
     case "lg":
       return "text-lg";
     default:
-      return "text-xxs";
+      return "text-xs";
   }
 };
 
@@ -118,22 +126,13 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
     },
     ref
   ) => {
-    const fieldClass = cn(
-      field({ inputSize, rounded }),
-      className,
-      hasError ? "bg-red-100 border border-red-500" : ""
-    );
-
-    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
-    void fieldClass;
-    void disabledClass;
-
     const { t } = useTranslation();
 
     useEffect(() => {
       if (language) i18n.changeLanguage(language);
     }, [language]);
 
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [selected, setSelected] = useState<string>(
@@ -141,7 +140,6 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
         (typeof defaultValue === "string" && defaultValue) ||
         ""
     );
-    const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
       if (typeof value === "string") setSelected(value);
@@ -183,6 +181,13 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 
     const selectedOption = options.find((o) => o.value === selected);
 
+    const fieldClass = cn(
+      field({ inputSize, rounded }),
+      className,
+      hasError && "bg-red-100 border border-red-500",
+      disabled && "opacity-50 cursor-not-allowed"
+    );
+
     return (
       <div className="w-full" ref={containerRef}>
         {(label || tKeyLabel) && (
@@ -192,13 +197,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
           </label>
         )}
 
-        <div
-          className={cn(
-            "flex items-center gap-2 bg-gray-200 px-3 py-2 rounded-md",
-            hasError && "bg-red-100 border border-red-500",
-            disabled && "opacity-50 cursor-not-allowed"
-          )}
-        >
+        <div className={fieldClass}>
           {prefixImage && (
             <img
               src={prefixImage}
@@ -210,14 +209,13 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
             <div className="flex-shrink-0">{prefixElement}</div>
           )}
 
-          {/* Contenedor principal */}
           <div className="relative flex-1">
             <button
               type="button"
               aria-haspopup="listbox"
               aria-expanded={isOpen}
               onClick={() => !disabled && setIsOpen((s) => !s)}
-              className="w-full text-left px-2 py-1 rounded-md bg-transparent flex flex-col text-gray-700"
+              className="w-full text-left bg-transparent flex flex-col text-gray-700"
             >
               {selectedOption ? (
                 <div className="flex items-center gap-2">
@@ -316,7 +314,6 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
           </div>
         </div>
 
-        {/* Solo mostramos error (si existe). EL helpText ya no se muestra debajo. */}
         {hasError && (
           <Text
             id={`${id}-error`}

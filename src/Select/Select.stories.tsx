@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { SelectField } from "./Select";
-import { User, Home, Star } from "lucide-react"; // ejemplo de íconos JSX
+import { User, Home, Star } from "lucide-react";
 
 const meta: Meta<typeof SelectField> = {
   title: "Components/SelectField",
@@ -16,7 +16,7 @@ const meta: Meta<typeof SelectField> = {
     },
     inputSize: {
       type: "string",
-      options: ["full", "sm", "md", "lg"],
+      options: ["full", "xxs", "xs", "sm", "md", "lg"],
       control: { type: "radio" },
       description: "Tamaño del select",
     },

@@ -66,7 +66,7 @@ interface ButtonProps
   rounded?: "basic" | "sm" | "md" | "lg";
   size?: "xs" | "sm" | "md" | "lg" | "full";
   fonts?: "bold" | "semi" | "thin";
-  borderWidth?: "bold" | "semi" | "thin";
+  borderWidth?: "none" | "bold" | "semi" | "thin";
   tKey?: string;
   language?: "es" | "en" | "pt";
 }
