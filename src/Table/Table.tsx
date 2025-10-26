@@ -191,6 +191,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
               "rounded-lg overflow-hidden border",
               borderColor
             )}
+            style={{ tableLayout: "fixed", width: "100%" }} // 👈 importante
             {...props}
           >
             {/* HEADER */}
@@ -205,6 +206,11 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                         tableClasses,
                         borderColor
                       )}
+                      style={
+                        columnWidths[index]
+                          ? { width: columnWidths[index] }
+                          : undefined
+                      } // ✅ aplicar aquí también
                     >
                       {headerKeys.length > 0 ? t(header as string) : header}
                     </th>
