@@ -205,8 +205,11 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
         {prefixElement && <div className="flex-shrink-0">{prefixElement}</div>}
 
         <div className="relative flex-1">
+          {/* Si hay elementos seleccionados */}
           {selected.length > 0 ? (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1 pr-6">
+              {" "}
+              {/* pr-6 para dejar espacio a la X */}
               {selectedOptions.slice(0, 3).map((opt) => (
                 <Badge
                   key={opt.value}
@@ -237,25 +240,28 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                           background="primary"
                           colVariant="primary"
                           size="xs"
+                          rounded="lg"
                         >
-                          {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                          <Text size="xs">
+                            {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                          </Text>
                         </Badge>
                       </div>
                     ))}
                     <span
-                      className="text-gray-500 whitespace-nowrap cursor-pointer block text-right"
+                      className="text-red-500 font-bold whitespace-nowrap cursor-pointer block text-right"
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowAll(false);
                       }}
                     >
-                      Ver menos
+                      -
                     </span>
                   </div>
                 ))}
             </div>
           ) : (
-            <div className="flex flex-col text-gray-500">
+            <div className="flex flex-col text-gray-500 pr-6">
               {(helpText || tKeyHelpText) && !hasError && (
                 <Text
                   id={`${id}-help`}
@@ -267,7 +273,6 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                 </Text>
               )}
 
-              {/* 🔥 AQUÍ el cambio */}
               {open && searchable ? (
                 <input
                   type="text"
@@ -286,6 +291,23 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
             </div>
           )}
 
+          {/* 🔥 Botón X para limpiar búsqueda o selección */}
+          {(selected.length > 0 || search) && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSearch("");
+                setSelected([]);
+                onChange?.([]);
+              }}
+              className="absolute right-1 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              ✕
+            </button>
+          )}
+
+          {/* Dropdown */}
           {open && !disabled && (
             <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto multiselect-dropdown">
               <ul className="divide-y">

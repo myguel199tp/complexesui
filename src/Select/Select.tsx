@@ -162,13 +162,13 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
         onChange(fakeEvent);
       }
     };
-
     const handleSelect = (valueSelected: string) => {
+      const opt = options.find((o) => o.value === valueSelected);
       setSelected(valueSelected);
+      setSearch(opt ? (opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label) : ""); // completa el texto con la opción
       setIsOpen(false);
       emitNativeChange(valueSelected);
     };
-
     if (hidden) return <select ref={ref} hidden {...props} />;
 
     const selectedOption = options.find((o) => o.value === selected);
@@ -215,9 +215,8 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                   {tKeyHelpText ? t(tKeyHelpText) : helpText}
                 </Text>
               )}
-
               {searchable ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 relative w-full">
                   {prefixImage && (
                     <img
                       src={prefixImage}
@@ -231,28 +230,40 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 
                   <input
                     type="text"
-                    value={
-                      search ||
-                      (selectedOption
-                        ? selectedOption.tKeyLabel
-                          ? t(selectedOption.tKeyLabel)
-                          : selectedOption.label
-                        : "")
-                    }
+                    value={search}
                     onChange={(e) => {
-                      setSearch(e.target.value);
-                      setIsOpen(true); // abre cuando escribe
+                      const val = e.target.value;
+                      setSearch(val);
+                      if (val.trim() === "") {
+                        setSelected(""); // limpia selección al borrar manualmente
+                        emitNativeChange("");
+                      }
+                      setIsOpen(true);
                     }}
-                    onFocus={() => setIsOpen(true)} // 🔥 abre cuando hace clic o enfoca
-                    onClick={() => setIsOpen(true)} // 🔥 abre al clic
+                    onFocus={() => setIsOpen(true)}
                     placeholder={
                       tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption
                     }
                     className={cn(
-                      "w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 cursor-pointer",
+                      "w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 cursor-pointer pr-6",
                       optionSizeClassMap[inputSize ?? "md"]
                     )}
                   />
+
+                  {/* Botón X para limpiar */}
+                  {search && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearch("");
+                        setSelected("");
+                        emitNativeChange("");
+                      }}
+                      className="absolute right-1 text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               ) : (
                 <button
