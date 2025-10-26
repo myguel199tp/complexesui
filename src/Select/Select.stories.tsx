@@ -172,6 +172,7 @@ export const WithImagesSearchable: Story = {
     ...Default.args,
     label: "Selecciona un país",
     searchable: true,
+    sizeHelp: "xs",
     helpText: "Puedes buscar o seleccionar de la lista.",
     options: [
       {

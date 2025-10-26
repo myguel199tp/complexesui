@@ -266,27 +266,28 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                   {tKeyHelpText ? t(tKeyHelpText) : helpText}
                 </Text>
               )}
-              <span className="truncate">
-                {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
-              </span>
+
+              {/* 🔥 AQUÍ el cambio */}
+              {open && searchable ? (
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={t(tkeySearch || "Buscar...")}
+                  className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500"
+                  onClick={(e) => e.stopPropagation()}
+                  autoFocus
+                />
+              ) : (
+                <span className="truncate">
+                  {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
+                </span>
+              )}
             </div>
           )}
 
           {open && !disabled && (
             <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto multiselect-dropdown">
-              {searchable && (
-                <div className="p-2 border-b bg-gray-50">
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder={t(tkeySearch || "Buscar...")}
-                    className="w-full bg-transparent outline-none p-2"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </div>
-              )}
-
               <ul className="divide-y">
                 {filteredOptions.length > 0 ? (
                   filteredOptions.map((opt) => {
@@ -298,7 +299,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                         className={cn(
                           "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100",
                           isSelected && "bg-gray-100",
-                          inputSize // ✅ aplicamos tamaño al li
+                          inputSize
                         )}
                       >
                         {opt.image && (

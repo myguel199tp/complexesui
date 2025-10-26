@@ -191,7 +191,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
               "rounded-lg overflow-hidden border",
               borderColor
             )}
-            style={{ tableLayout: "fixed", width: "100%" }} // 👈 importante
+            style={{ tableLayout: "fixed", width: "100%" }}
             {...props}
           >
             {/* HEADER */}
