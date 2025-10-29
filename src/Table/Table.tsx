@@ -93,11 +93,6 @@ interface Action {
   icon?: ReactNode;
 }
 
-/**
- * ✅ Tipado correcto:
- * - Se heredan todas las variantes del cva.
- * - Se eliminan los literales fijos que limitaban las props.
- */
 interface TableProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType;
   headers?: string[];
@@ -109,7 +104,6 @@ interface TableProps extends HTMLAttributes<HTMLElement> {
   language?: "es" | "en" | "pt";
   borderColor?: string;
 
-  // 🧩 Agrega las variantes manualmente si el cva no las propaga
   colVariant?: "default" | "primary" | "success" | "warning" | "danger";
   font?: "bold" | "semi" | "normal";
   size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
@@ -166,7 +160,6 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
       if (currentPage < totalPages) setCurrentPage(currentPage + 1);
     };
 
-    // ✅ Unificamos los estilos, incluyendo sizeText y fontText
     const tableClasses = classNames(
       TableStyle({
         colVariant,
@@ -188,14 +181,13 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
             ref={ref}
             className={classNames(
               tableClasses,
-              "rounded-lg overflow-hidden border",
+              "rounded-lg overflow-hidden border w-full",
               borderColor
             )}
-            style={{ tableLayout: "fixed", width: "100%" }}
             {...props}
           >
             {/* HEADER */}
-            <thead className="bg-gray-100">
+            <thead className="bg-gray-100 md:table-header-group hidden md:table">
               <tr>
                 {(headerKeys.length > 0 ? headerKeys : headers).map(
                   (header, index) => (
@@ -210,7 +202,7 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                         columnWidths[index]
                           ? { width: columnWidths[index] }
                           : undefined
-                      } // ✅ aplicar aquí también
+                      }
                     >
                       {headerKeys.length > 0 ? t(header as string) : header}
                     </th>
@@ -232,27 +224,23 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
             </thead>
 
             {/* BODY */}
-            <tbody>
+            <tbody className="block md:table-row-group w-full">
               {currentRows.map((row, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={classNames("border", borderColor)}
+                  className={classNames(
+                    "border md:table-row block mb-4 md:mb-0 rounded-lg md:rounded-none shadow-sm md:shadow-none p-3 md:p-0 bg-white md:bg-transparent",
+                    borderColor
+                  )}
                 >
                   {row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
+                      data-label={headers[cellIndex]}
                       className={classNames(
-                        "px-4 py-2 text-center border",
+                        "px-4 py-2 text-left md:text-center border md:border-gray-300 border-transparent flex justify-between md:table-cell w-full",
                         tableClasses,
-                        borderColor,
-                        cellClasses[rowIndex]?.[cellIndex],
-                        rowIndex === currentRows.length - 1 &&
-                          cellIndex === 0 &&
-                          "rounded-bl-lg",
-                        rowIndex === currentRows.length - 1 &&
-                          cellIndex === row.length - 1 &&
-                          actions.length === 0 &&
-                          "rounded-br-lg"
+                        cellClasses[rowIndex]?.[cellIndex]
                       )}
                       style={
                         columnWidths[cellIndex]
@@ -260,16 +248,19 @@ const Table: FC<TableProps> = forwardRef<HTMLElement, TableProps>(
                           : {}
                       }
                     >
-                      {cell}
+                      <span className="font-semibold text-gray-700 md:hidden">
+                        {headers[cellIndex]}
+                      </span>
+                      <span className="text-gray-800">{cell}</span>
                     </td>
                   ))}
 
                   {actions.length > 0 && (
                     <td
+                      data-label="Acciones"
                       className={classNames(
-                        "flex justify-center items-center space-x-2 px-4 py-2 text-center border",
-                        borderColor,
-                        rowIndex === currentRows.length - 1 && "rounded-br-lg"
+                        "flex justify-center items-center space-x-2 px-4 py-2 border md:table-cell",
+                        borderColor
                       )}
                     >
                       {actions.map((action, actionIndex) => (
