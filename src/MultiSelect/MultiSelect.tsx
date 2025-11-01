@@ -203,13 +203,10 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
           />
         )}
         {prefixElement && <div className="flex-shrink-0">{prefixElement}</div>}
-
         <div className="relative flex-1">
-          {/* Si hay elementos seleccionados */}
-          {selected.length > 0 ? (
+          {/* 🟢 Si hay elementos seleccionados, los badges se muestran */}
+          {selected.length > 0 && (
             <div className="flex flex-wrap gap-1 pr-6">
-              {" "}
-              {/* pr-6 para dejar espacio a la X */}
               {selectedOptions.slice(0, 3).map((opt) => (
                 <Badge
                   key={opt.value}
@@ -221,6 +218,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                   {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
                 </Badge>
               ))}
+
               {selected.length > 3 &&
                 (!showAll ? (
                   <span
@@ -260,38 +258,41 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                   </div>
                 ))}
             </div>
-          ) : (
-            <div className="flex flex-col text-gray-500 pr-6">
-              {(helpText || tKeyHelpText) && !hasError && (
-                <Text
-                  id={`${id}-help`}
-                  size={sizeHelp ?? "xxs"}
-                  colVariant="default"
-                  className="text-gray-500"
-                >
-                  {tKeyHelpText ? t(tKeyHelpText) : helpText}
-                </Text>
-              )}
-
-              {open && searchable ? (
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder={t(tkeySearch || "Buscar...")}
-                  className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500"
-                  onClick={(e) => e.stopPropagation()}
-                  autoFocus
-                />
-              ) : (
-                <span className="truncate">
-                  {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
-                </span>
-              )}
-            </div>
           )}
 
-          {/* 🔥 Botón X para limpiar búsqueda o selección */}
+          {/* 🟡 Campo de ayuda (helpText) — visible cuando no hay seleccionados */}
+          {selected.length === 0 && (helpText || tKeyHelpText) && !hasError && (
+            <Text
+              id={`${id}-help`}
+              size={sizeHelp ?? "xxs"}
+              colVariant="default"
+              className="text-gray-500"
+            >
+              {tKeyHelpText ? t(tKeyHelpText) : helpText}
+            </Text>
+          )}
+
+          {/* 🔍 Campo de búsqueda visible siempre que el dropdown esté abierto */}
+          {open && searchable && (
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t(tkeySearch || "Buscar...")}
+              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 mt-1"
+              onClick={(e) => e.stopPropagation()}
+              autoFocus
+            />
+          )}
+
+          {/* Texto por defecto cuando no hay selección y el dropdown está cerrado */}
+          {selected.length === 0 && !open && (
+            <span className="truncate text-gray-500">
+              {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
+            </span>
+          )}
+
+          {/* ❌ Botón para limpiar búsqueda o selección */}
           {(selected.length > 0 || search) && (
             <button
               type="button"
@@ -307,7 +308,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
             </button>
           )}
 
-          {/* Dropdown */}
+          {/* 📜 Dropdown */}
           {open && !disabled && (
             <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto multiselect-dropdown">
               <ul className="divide-y">
