@@ -74,7 +74,13 @@ const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
         className={cn(textStyle({ colVariant, size, font, className }))}
         {...props}
       >
-        {tKey ? t(tKey) : children}
+        {tKey ? (
+          <>
+            {t(tKey)} {children}
+          </>
+        ) : (
+          children
+        )}
       </Component>
     );
   }
