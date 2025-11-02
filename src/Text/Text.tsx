@@ -1,4 +1,11 @@
-import { FC, HTMLAttributes, ElementType, forwardRef, useEffect } from "react";
+import {
+  FC,
+  HTMLAttributes,
+  ElementType,
+  forwardRef,
+  useEffect,
+  ReactNode,
+} from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
 import { useTranslation } from "react-i18next";
@@ -43,6 +50,7 @@ interface TextProps
   font?: "bold" | "semi" | "normal";
   tKey?: string;
   language?: "es" | "en" | "pt";
+  children?: ReactNode;
 }
 
 const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
@@ -68,19 +76,23 @@ const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
       }
     }, [language]);
 
+    // Detectamos si children es texto simple o ReactNode complejo
+    const isSimpleChild =
+      typeof children === "string" || typeof children === "number";
+
+    const renderContent = isSimpleChild
+      ? tKey
+        ? `${t(tKey)} ${children}`
+        : children
+      : children || (tKey ? t(tKey) : null);
+
     return (
       <Component
         ref={ref}
         className={cn(textStyle({ colVariant, size, font, className }))}
         {...props}
       >
-        {tKey ? (
-          <>
-            {t(tKey)} {children}
-          </>
-        ) : (
-          children
-        )}
+        {renderContent}
       </Component>
     );
   }
