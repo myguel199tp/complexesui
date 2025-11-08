@@ -7,7 +7,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.4.9</p>
+<p>VERSION: v1.4.10</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
@@ -71,6 +71,7 @@ import { InputField } from "complexes-next-components";
   inputSize="full"
   rounded="md"
   className="mt-2"
+  regexType= "letters"
   prefixElement= "<FaUpload className="text-blue-600 w-5 h-5" />",
   type="text"
   {...register("name")}
@@ -97,6 +98,7 @@ const options = [
   defaultOption="Ciudad"
   options={options}
   inputSize="full"
+  regexType= "alphanumeric",
   rounded="md"
   hasError={false}
   className="mt-2"
@@ -128,6 +130,7 @@ const options = [
   id="country"
   options={options}
   inputSize="lg"
+  regexType= "numeric",
   rounded="md"
   {...register("country")}
   hasError={!!errors.country}
