@@ -193,3 +193,31 @@ export const WithImagesSearchable: Story = {
     ],
   },
 };
+
+export const WithImagesSearchableRegex: Story = {
+  args: {
+    ...Default.args,
+    label: "Selecciona un país",
+    searchable: true,
+    sizeHelp: "xs",
+    regexType: "letters",
+    helpText: "Puedes buscar o seleccionar de la lista.",
+    options: [
+      {
+        value: "colombia",
+        label: "Colombia",
+        image: "https://flagcdn.com/w40/co.png",
+      },
+      {
+        value: "mexico",
+        label: "México",
+        image: "https://flagcdn.com/w40/mx.png",
+      },
+      {
+        value: "brasil",
+        label: "Brasil",
+        image: "https://flagcdn.com/w40/br.png",
+      },
+    ],
+  },
+};

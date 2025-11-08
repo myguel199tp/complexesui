@@ -137,3 +137,21 @@ export const WithUploadIcon: Story = {
     rounded: "lg",
   },
 };
+
+export const OnlyNumbers: Story = {
+  args: {
+    label: "Solo números",
+    placeholder: "123456",
+    regexType: "number",
+    errorMessage: "Solo se permiten números",
+  },
+};
+
+export const OnlyLetters: Story = {
+  args: {
+    label: "Solo números",
+    placeholder: "FDDSF",
+    regexType: "letters",
+    errorMessage: "Solo se permiten números",
+  },
+};

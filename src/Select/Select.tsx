@@ -41,6 +41,26 @@ const field = cva(
   }
 );
 
+const REGEX_MAP: Record<string, RegExp> = {
+  number: /^[0-9]*$/,
+  letters: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/,
+  alphanumeric: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ]*$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[0-9+\-() ]*$/,
+  postal: /^[A-Za-z0-9 ]*$/,
+  id: /^[A-Za-z0-9]*$/,
+  uppercase: /^[A-ZÁÉÍÓÚÑ ]*$/,
+  lowercase: /^[a-záéíóúñ ]*$/,
+  decimal: /^[0-9]+(\.[0-9]*)?$/,
+  time: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
+  strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&.,\-+_]{8,}$/,
+  url: /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/,
+  hexColor: /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+  currency: /^\$?\d+(,\d{3})*(\.\d{1,2})?$/,
+  fullname: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]{2,}$/,
+  safeChars: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ.,;:!?\-() ]*$/,
+};
+
 // Mapa de padding/texto para opciones
 const optionSizeClassMap = {
   xxs: "px-1 py-0.5 text-xxs",
@@ -81,6 +101,29 @@ interface SelectFieldProps
   rounded?: "basic" | "sm" | "md" | "lg";
   prefixElement?: ReactNode;
   prefixImage?: string;
+
+  regexType?:
+    | "number"
+    | "letters"
+    | "alphanumeric"
+    | "custom"
+    | "customRegex"
+    | "email"
+    | "phone"
+    | "postal"
+    | "uppercase"
+    | "lowercase"
+    | "decimal"
+    | "time"
+    | "strongPassword"
+    | "url"
+    | "hexColor"
+    | "currency"
+    | "fullname"
+    | "safeChars";
+
+  customRegex?: RegExp;
+  onRegexError?: (value: string) => void;
 }
 
 const SelectField: FC<SelectFieldProps> = forwardRef<
@@ -114,6 +157,9 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       onChange,
       value,
       defaultValue,
+      regexType,
+      customRegex,
+      onRegexError,
       ...props
     },
     ref
@@ -233,11 +279,33 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                     value={search}
                     onChange={(e) => {
                       const val = e.target.value;
+
+                      let regex: RegExp | undefined;
+
+                      // ✅ Soporte para custom y customRegex
+                      if (
+                        (regexType === "custom" ||
+                          regexType === "customRegex") &&
+                        customRegex
+                      ) {
+                        regex = customRegex;
+                      } else if (regexType) {
+                        regex = REGEX_MAP[regexType];
+                      }
+
+                      // 🚫 Falla → dispara error pero NO actualiza input
+                      if (regex && !regex.test(val)) {
+                        onRegexError?.(val);
+                        return;
+                      }
+
                       setSearch(val);
+
                       if (val.trim() === "") {
-                        setSelected(""); // limpia selección al borrar manualmente
+                        setSelected("");
                         emitNativeChange("");
                       }
+
                       setIsOpen(true);
                     }}
                     onFocus={() => setIsOpen(true)}

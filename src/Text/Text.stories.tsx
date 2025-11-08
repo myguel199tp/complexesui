@@ -130,7 +130,7 @@ export const WithButtonToggleLanguage: Story = {
 
       return (
         <div className="flex flex-col gap-4 items-center">
-          <Text {...args} />
+          <Text {...args}>Hola mundo</Text>
           <button
             className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
             onClick={changeLanguage}

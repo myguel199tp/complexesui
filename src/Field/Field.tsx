@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   FC,
   InputHTMLAttributes,
@@ -38,6 +39,26 @@ const field = cva(
   }
 );
 
+const REGEX_MAP: Record<string, RegExp> = {
+  number: /^[0-9]*$/,
+  letters: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/,
+  alphanumeric: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ]*$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[0-9+\-() ]*$/,
+  postal: /^[A-Za-z0-9 ]*$/,
+  id: /^[A-Za-z0-9]*$/,
+  uppercase: /^[A-ZÁÉÍÓÚÑ ]*$/,
+  lowercase: /^[a-záéíóúñ ]*$/,
+  decimal: /^[0-9]+(\.[0-9]*)?$/,
+  time: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
+  strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&.,\-+_]{8,}$/,
+  url: /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/,
+  hexColor: /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+  currency: /^\$?\d+(,\d{3})*(\.\d{1,2})?$/,
+  fullname: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]{2,}$/,
+  safeChars: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ.,;:!?\-() ]*$/,
+};
+
 interface FieldProps
   extends InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof field> {
@@ -57,6 +78,30 @@ interface FieldProps
   prefixImage?: string;
   prefixElement?: ReactNode;
   allowXML?: boolean;
+
+  /** New props to control regex validation */
+  regexType?:
+    | "number"
+    | "letters"
+    | "alphanumeric"
+    | "custom"
+    | "email"
+    | "phone"
+    | "postal"
+    | "uppercase"
+    | "lowercase"
+    | "decimal"
+    | "time"
+    | "strongPassword"
+    | "url"
+    | "hexColor"
+    | "currency"
+    | "fullname"
+    | "safeChars"
+    | "customRegex";
+
+  customRegex?: RegExp;
+  onRegexError?: (value: string) => void;
 }
 
 const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
@@ -82,6 +127,9 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       prefixImage,
       prefixElement,
       allowXML = false,
+      regexType,
+      customRegex,
+      onRegexError,
       ...props
     },
     ref
@@ -104,13 +152,38 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       if (file) setFileName(file.name);
     };
 
+    /** Regex validation wrapper */
+    const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
+      const data = (e as any).data;
+      if (!data) return;
+      let regex: RegExp | undefined;
+      if (regexType === "custom" && customRegex) regex = customRegex;
+      else if (regexType) regex = REGEX_MAP[regexType];
+      if (regex && !regex.test(data)) {
+        e.preventDefault();
+        onRegexError?.(data);
+      }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      let regex: RegExp | undefined;
+      if (regexType === "custom" && customRegex) regex = customRegex;
+      else if (regexType) regex = REGEX_MAP[regexType];
+      if (regex && !regex.test(value)) {
+        const cleaned = value.replace(/[^0-9]/g, "");
+        e.target.value = cleaned;
+        onRegexError?.(value);
+      }
+      props.onChange?.(e);
+    };
+
     if (type === "hidden") {
       return <input type="hidden" ref={ref} {...props} />;
     }
 
     const acceptTypes = allowXML ? ".xml,image/*" : undefined;
 
-    // 👇 Mapa de tamaños del label según inputSize
     const labelSizeMap: Record<NonNullable<FieldProps["inputSize"]>, string> = {
       xxs: "text-[10px]",
       xs: "text-[11px]",
@@ -163,7 +236,8 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
               className={`bg-transparent outline-none ${disabledClass} flex-1`}
               disabled={disabled}
-              onChange={type === "file" ? handleFileChange : props.onChange}
+              onBeforeInput={handleBeforeInput}
+              onChange={type === "file" ? handleFileChange : handleChange}
               accept={acceptTypes}
               {...props}
             />

@@ -41,6 +41,26 @@ const field = cva(
   }
 );
 
+const REGEX_MAP: Record<string, RegExp> = {
+  number: /^[0-9]*$/,
+  letters: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/,
+  alphanumeric: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ]*$/,
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  phone: /^[0-9+\-() ]*$/,
+  postal: /^[A-Za-z0-9 ]*$/,
+  id: /^[A-Za-z0-9]*$/,
+  uppercase: /^[A-ZÁÉÍÓÚÑ ]*$/,
+  lowercase: /^[a-záéíóúñ ]*$/,
+  decimal: /^[0-9]+(\.[0-9]*)?$/,
+  time: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
+  strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&.,\-+_]{8,}$/,
+  url: /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/,
+  hexColor: /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+  currency: /^\$?\d+(,\d{3})*(\.\d{1,2})?$/,
+  fullname: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]{2,}$/,
+  safeChars: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ.,;:!?\-() ]*$/,
+};
+
 // map para checkbox según tamaño
 const checkboxSizeMap = {
   xxs: "w-3 h-3",
@@ -87,6 +107,29 @@ interface MultiSelectProps
   prefixElement?: ReactNode;
   prefixImage?: string;
   hidden?: boolean;
+
+  regexType?:
+    | "number"
+    | "letters"
+    | "alphanumeric"
+    | "custom"
+    | "customRegex"
+    | "email"
+    | "phone"
+    | "postal"
+    | "uppercase"
+    | "lowercase"
+    | "decimal"
+    | "time"
+    | "strongPassword"
+    | "url"
+    | "hexColor"
+    | "currency"
+    | "fullname"
+    | "safeChars";
+
+  customRegex?: RegExp;
+  onRegexError?: (value: string) => void;
 }
 
 const MultiSelect: FC<MultiSelectProps> = forwardRef<
@@ -119,6 +162,9 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     onChange,
     prefixElement,
     prefixImage,
+    regexType,
+    customRegex,
+    onRegexError,
     ...props
   },
   ref
@@ -277,7 +323,26 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+
+                let regex: RegExp | undefined;
+
+                // ✅ Soporte para custom y customRegex
+                if (regexType === "custom" && customRegex) {
+                  regex = customRegex;
+                } else if (regexType) {
+                  regex = REGEX_MAP[regexType];
+                }
+
+                // ❌ Si falla → no escribe y dispara callback
+                if (regex && !regex.test(val)) {
+                  onRegexError?.(val);
+                  return;
+                }
+
+                setSearch(val);
+              }}
               placeholder={t(tkeySearch || "Buscar...")}
               className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 mt-1"
               onClick={(e) => e.stopPropagation()}

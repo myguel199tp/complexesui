@@ -129,3 +129,12 @@ export const WithSearch: Story = {
     helpText: "Selecciona una de las opciones disponibles.",
   },
 };
+
+export const WithSearchRegex: Story = {
+  args: {
+    ...Default.args,
+    searchable: true,
+    regexType: "alphanumeric",
+    helpText: "Selecciona una de las opciones disponibles.",
+  },
+};
