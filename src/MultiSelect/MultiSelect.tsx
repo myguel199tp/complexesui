@@ -375,7 +375,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
 
           {/* 📜 Dropdown */}
           {open && !disabled && (
-            <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto multiselect-dropdown">
+            <div>
               <ul className="divide-y">
                 {filteredOptions.length > 0 ? (
                   filteredOptions.map((opt) => {

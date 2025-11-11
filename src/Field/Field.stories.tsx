@@ -155,3 +155,12 @@ export const OnlyLetters: Story = {
     errorMessage: "Solo se permiten números",
   },
 };
+
+export const OnlyEmail: Story = {
+  args: {
+    label: "Solo números",
+    placeholder: "FDDSF",
+    regexType: "email",
+    errorMessage: "Solo se permiten números",
+  },
+};

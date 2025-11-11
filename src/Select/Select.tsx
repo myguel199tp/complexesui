@@ -222,12 +222,12 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
     const fieldClass = cn(
       field({ inputSize, rounded }),
       className,
-      hasError && "bg-red-100 border border-red-500",
+      hasError && "bg-red-100 border border-red-500", // si hay error, sobreescribe
       disabled && "opacity-50 cursor-not-allowed"
     );
 
     return (
-      <div className="w-full" ref={containerRef}>
+      <div className="w-full " ref={containerRef}>
         {(label || tKeyLabel) && (
           <label className="block mb-1 text-gray-500" htmlFor={id}>
             {tKeyLabel ? t(tKeyLabel) : label}
@@ -339,10 +339,13 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                   aria-haspopup="listbox"
                   aria-expanded={isOpen}
                   onClick={() => !disabled && setIsOpen((s) => !s)}
-                  className="w-full text-left bg-transparent flex flex-col text-gray-700"
+                  className={cn(
+                    "w-full text-left bg-transparent flex flex-col text-gray-700",
+                    optionSizeClassMap[inputSize ?? "md"] // 🔥 esto aplica padding y tamaño
+                  )}
                 >
                   {selectedOption ? (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full">
                       {selectedOption.image && (
                         <img
                           src={selectedOption.image}
@@ -362,8 +365,8 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                       </span>
                     </div>
                   ) : (
-                    <span className="truncate text-gray-500">
-                      {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
+                    <span className="truncate text-gray-500 w-full">
+                      {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}{" "}
                     </span>
                   )}
                 </button>
@@ -371,14 +374,14 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 
               {/* Dropdown */}
               {isOpen && !disabled && (
-                <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-md shadow-lg z-50 max-h-72 overflow-auto">
+                <div>
                   <ul
                     role="listbox"
                     aria-activedescendant={selected}
                     className="divide-y"
                   >
-                    {(search.trim() === "" ? options : filteredOptions) // 🔥 si no busca, muestra todas
-                      .map((opt) => {
+                    {(search.trim() === "" ? options : filteredOptions).map(
+                      (opt) => {
                         const isSelected = opt.value === selected;
                         return (
                           <li
@@ -407,7 +410,8 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                             </div>
                           </li>
                         );
-                      })}
+                      }
+                    )}
 
                     {search.trim() !== "" && filteredOptions.length === 0 && (
                       <li className="px-3 py-2 text-gray-500">

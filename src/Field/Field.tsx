@@ -39,11 +39,17 @@ const field = cva(
   }
 );
 
+// ✅ Regex que valida caracteres PERMITIDOS mientras se escribe
+const EMAIL_ALLOWED = /^[A-Za-z0-9@._-]+$/;
+
+// ✅ Regex que valida email COMPLETO
+const EMAIL_FULL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const REGEX_MAP: Record<string, RegExp> = {
   number: /^[0-9]*$/,
   letters: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/,
   alphanumeric: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ]*$/,
-  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  email: EMAIL_ALLOWED,
   phone: /^[0-9+\-() ]*$/,
   postal: /^[A-Za-z0-9 ]*$/,
   id: /^[A-Za-z0-9]*$/,
@@ -79,7 +85,6 @@ interface FieldProps
   prefixElement?: ReactNode;
   allowXML?: boolean;
 
-  /** New props to control regex validation */
   regexType?:
     | "number"
     | "letters"
@@ -135,12 +140,6 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
     ref
   ) => {
     const [fileName, setFileName] = useState<string | null>(null);
-    const fieldClass = cn(
-      field({ inputSize, rounded }),
-      className,
-      hasError ? "bg-red-100 border border-red-500" : ""
-    );
-    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -152,37 +151,65 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       if (file) setFileName(file.name);
     };
 
-    /** Regex validation wrapper */
+    /** ✅ Validación de caracteres mientras escribe */
     const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
       const data = (e as any).data;
       if (!data) return;
+
+      // email → solo permitir caracteres
+      if (regexType === "email") {
+        if (!EMAIL_ALLOWED.test(data)) {
+          e.preventDefault();
+          onRegexError?.(data);
+        }
+        return;
+      }
+
+      // Otros regex
       let regex: RegExp | undefined;
       if (regexType === "custom" && customRegex) regex = customRegex;
       else if (regexType) regex = REGEX_MAP[regexType];
+
       if (regex && !regex.test(data)) {
         e.preventDefault();
         onRegexError?.(data);
       }
     };
 
+    /** ✅ Validación de valor completo */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
+
+      // email → validar completo
+      if (regexType === "email") {
+        if (!EMAIL_FULL.test(value)) {
+          onRegexError?.(value);
+        }
+        props.onChange?.(e);
+        return;
+      }
+
+      // otros regex controlan todo:
       let regex: RegExp | undefined;
       if (regexType === "custom" && customRegex) regex = customRegex;
       else if (regexType) regex = REGEX_MAP[regexType];
+
       if (regex && !regex.test(value)) {
-        const cleaned = value.replace(/[^0-9]/g, "");
-        e.target.value = cleaned;
         onRegexError?.(value);
       }
+
       props.onChange?.(e);
     };
 
-    if (type === "hidden") {
-      return <input type="hidden" ref={ref} {...props} />;
-    }
-
     const acceptTypes = allowXML ? ".xml,image/*" : undefined;
+
+    const fieldClass = cn(
+      field({ inputSize, rounded }),
+      className,
+      hasError ? "bg-red-100 border border-red-500" : ""
+    );
+
+    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
 
     const labelSizeMap: Record<NonNullable<FieldProps["inputSize"]>, string> = {
       xxs: "text-[10px]",
@@ -234,7 +261,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               type={type}
               ref={ref}
               placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
-              className={`bg-transparent outline-none ${disabledClass} flex-1`}
+              className={`bg-transparent outline-none ${disabledClass} flex-1 bg-red-500 p-2`}
               disabled={disabled}
               onBeforeInput={handleBeforeInput}
               onChange={type === "file" ? handleFileChange : handleChange}
