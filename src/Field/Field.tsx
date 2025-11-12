@@ -151,6 +151,10 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       if (file) setFileName(file.name);
     };
 
+    if (type === "hidden") {
+      return <input ref={ref} type="hidden" {...props} />;
+    }
+
     /** ✅ Validación de caracteres mientras escribe */
     const handleBeforeInput = (e: React.FormEvent<HTMLInputElement>) => {
       const data = (e as any).data;
