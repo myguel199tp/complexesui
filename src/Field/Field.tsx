@@ -218,6 +218,16 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
         )}
 
         <div className={`${fieldClass} flex flex-col`}>
+          {(helpText || tKeyHelpText) && !hasError && (
+            <Text
+              id={`${props.id}-help`}
+              size={sizeHelp ?? "xxs"}
+              colVariant="default"
+              className="text-gray-500"
+            >
+              {tKeyHelpText ? t(tKeyHelpText) : helpText}
+            </Text>
+          )}
           <div className="flex items-center gap-3">
             {prefixElement && (
               <div className="flex-shrink-0">{prefixElement}</div>
@@ -248,17 +258,6 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               {...props}
             />
           </div>
-
-          {(helpText || tKeyHelpText) && !hasError && (
-            <Text
-              id={`${props.id}-help`}
-              size={sizeHelp ?? "xxs"}
-              colVariant="default"
-              className="mt-1"
-            >
-              {tKeyHelpText ? t(tKeyHelpText) : helpText}
-            </Text>
-          )}
 
           {fileName && (
             <Text size="xs" className="mt-1 text-gray-600 italic">
