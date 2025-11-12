@@ -164,3 +164,24 @@ export const OnlyEmail: Story = {
     errorMessage: "Solo se permiten números",
   },
 };
+
+export const VisibleInput: Story = {
+  args: {
+    label: "Campo visible",
+    placeholder: "Este input se puede ver",
+    type: "text",
+    inputSize: "md",
+    rounded: "md",
+  },
+};
+
+//
+// 🔹 8. Input oculto (hidden)
+//
+export const HiddenInput: Story = {
+  args: {
+    label: "Campo oculto",
+    placeholder: "No deberías ver esto",
+    type: "hidden",
+  },
+};

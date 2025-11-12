@@ -1,6 +1,6 @@
 {
   "name": "complexes-next-components",
-  "version": "1.4.12",
+  "version": "1.4.13",
   "type": "module",
   "files": [
     "dist"

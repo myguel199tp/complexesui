@@ -160,18 +160,10 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       const data = (e as any).data;
       if (!data) return;
 
-      // email → solo permitir caracteres
-      if (regexType === "email") {
-        if (!EMAIL_ALLOWED.test(data)) {
-          e.preventDefault();
-          onRegexError?.(data);
-        }
-        return;
-      }
-
-      // Otros regex
       let regex: RegExp | undefined;
-      if (regexType === "custom" && customRegex) regex = customRegex;
+
+      if (regexType === "email") regex = EMAIL_ALLOWED;
+      else if (regexType === "custom" && customRegex) regex = customRegex;
       else if (regexType) regex = REGEX_MAP[regexType];
 
       if (regex && !regex.test(data)) {
@@ -180,22 +172,13 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       }
     };
 
-    /** ✅ Validación de valor completo */
+    /** ✅ Validación del valor completo */
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
 
-      // email → validar completo
-      if (regexType === "email") {
-        if (!EMAIL_FULL.test(value)) {
-          onRegexError?.(value);
-        }
-        props.onChange?.(e);
-        return;
-      }
-
-      // otros regex controlan todo:
       let regex: RegExp | undefined;
-      if (regexType === "custom" && customRegex) regex = customRegex;
+      if (regexType === "email") regex = EMAIL_FULL;
+      else if (regexType === "custom" && customRegex) regex = customRegex;
       else if (regexType) regex = REGEX_MAP[regexType];
 
       if (regex && !regex.test(value)) {
@@ -235,17 +218,6 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
         )}
 
         <div className={`${fieldClass} flex flex-col`}>
-          {(helpText || tKeyHelpText) && !hasError && (
-            <Text
-              id={`${props.id}-help`}
-              size={sizeHelp ?? "xxs"}
-              colVariant="default"
-              className="mt-1"
-            >
-              {tKeyHelpText ? t(tKeyHelpText) : helpText}
-            </Text>
-          )}
-
           <div className="flex items-center gap-3">
             {prefixElement && (
               <div className="flex-shrink-0">{prefixElement}</div>
@@ -265,7 +237,10 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               type={type}
               ref={ref}
               placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
-              className={`bg-transparent outline-none ${disabledClass} flex-1 bg-red-500 p-2`}
+              className={cn(
+                "bg-transparent outline-none flex-1 p-2 text-gray-800",
+                disabledClass
+              )}
               disabled={disabled}
               onBeforeInput={handleBeforeInput}
               onChange={type === "file" ? handleFileChange : handleChange}
@@ -273,6 +248,17 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               {...props}
             />
           </div>
+
+          {(helpText || tKeyHelpText) && !hasError && (
+            <Text
+              id={`${props.id}-help`}
+              size={sizeHelp ?? "xxs"}
+              colVariant="default"
+              className="mt-1"
+            >
+              {tKeyHelpText ? t(tKeyHelpText) : helpText}
+            </Text>
+          )}
 
           {fileName && (
             <Text size="xs" className="mt-1 text-gray-600 italic">
