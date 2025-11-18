@@ -70,26 +70,20 @@ const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
   ) => {
     const { t } = useTranslation();
 
+    // Cambiar idioma si se pasa "language"
     useEffect(() => {
-      if (language) {
-        i18n.changeLanguage(language);
-      }
+      if (language) i18n.changeLanguage(language);
     }, [language]);
 
-    // Detectamos si children es texto simple o ReactNode complejo
-    const isSimpleChild =
-      typeof children === "string" || typeof children === "number";
-
-    const renderContent = isSimpleChild
-      ? tKey
-        ? `${t(tKey)} ${children}`
-        : children
-      : children || (tKey ? t(tKey) : null);
+    // Opción C implementada:
+    // 1. Si viene tKey → se usa traducción
+    // 2. Si NO viene tKey → se usa children
+    const renderContent = tKey ? t(tKey) : children;
 
     return (
       <Component
         ref={ref}
-        className={cn(textStyle({ colVariant, size, font, className }))}
+        className={cn(textStyle({ colVariant, size, font }), className)}
         {...props}
       >
         {renderContent}

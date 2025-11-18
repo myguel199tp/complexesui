@@ -26,12 +26,12 @@ const field = cva(
         lg: "rounded-2xl",
       },
       inputSize: {
-        xxs: "px-1 py-0.5 text-xxs",
-        xs: "px-1.5 py-1 text-xs",
-        sm: "px-2 py-1 text-xs",
-        md: "px-4 py-2 text-base",
-        lg: "px-6 py-3 text-lg",
-        full: "px-6 py-3 text-lg w-full",
+        xxs: " text-xxs",
+        xs: " text-xs",
+        sm: " text-xs",
+        md: " text-base",
+        lg: " text-lg",
+        full: " text-lg w-full",
       },
     },
     defaultVariants: {
@@ -222,12 +222,12 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
     const fieldClass = cn(
       field({ inputSize, rounded }),
       className,
-      hasError && "bg-red-100 border border-red-500", // si hay error, sobreescribe
-      disabled && "opacity-50 cursor-not-allowed"
+      hasError && "bg-red-100 border border-red-500 block", // si hay error, sobreescribe
+      disabled && "opacity-50 cursor-not-allowed block"
     );
 
     return (
-      <div className="w-full " ref={containerRef}>
+      <div className={fieldClass} ref={containerRef}>
         {(label || tKeyLabel) && (
           <label className="block mb-1 text-gray-500" htmlFor={id}>
             {tKeyLabel ? t(tKeyLabel) : label}
@@ -235,194 +235,187 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
           </label>
         )}
 
-        <div className={fieldClass}>
-          {prefixImage && (
-            <img
-              src={prefixImage}
-              alt="prefix"
-              className="w-6 h-6 rounded-full object-cover"
-            />
-          )}
-          {prefixElement && (
-            <div className="flex-shrink-0">{prefixElement}</div>
-          )}
+        {prefixImage && (
+          <img
+            src={prefixImage}
+            alt="prefix"
+            className="w-6 h-6 rounded-full object-cover"
+          />
+        )}
+        {prefixElement && <div className="flex-shrink-0">{prefixElement}</div>}
 
-          <div className={fieldClass}>
-            <div className="relative flex flex-col w-full">
-              {/* helpText dentro del recuadro gris */}
+        <div className="relative flex flex-col w-full">
+          {/* helpText dentro del recuadro gris */}
 
-              {(helpText || tKeyHelpText) && !hasError && (
-                <Text
-                  id={`${id}-help`}
-                  size={sizeHelp ?? "xxs"}
-                  colVariant="default"
-                  className="text-gray-500"
-                >
-                  {tKeyHelpText ? t(tKeyHelpText) : helpText}
-                </Text>
+          {(helpText || tKeyHelpText) && !hasError && (
+            <Text
+              id={`${id}-help`}
+              size={sizeHelp ?? "xxs"}
+              colVariant="default"
+              className="text-gray-500"
+            >
+              {tKeyHelpText ? t(tKeyHelpText) : helpText}
+            </Text>
+          )}
+          {searchable ? (
+            <div className="flex items-center gap-2 relative w-full">
+              {prefixImage && (
+                <img
+                  src={prefixImage}
+                  alt="prefix"
+                  className="w-6 h-6 rounded-full object-cover"
+                />
               )}
-              {searchable ? (
-                <div className="flex items-center gap-2 relative w-full">
-                  {prefixImage && (
+              {prefixElement && (
+                <div className="flex-shrink-0">{prefixElement}</div>
+              )}
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  const val = e.target.value;
+
+                  let regex: RegExp | undefined;
+
+                  // ✅ Soporte para custom y customRegex
+                  if (
+                    (regexType === "custom" || regexType === "customRegex") &&
+                    customRegex
+                  ) {
+                    regex = customRegex;
+                  } else if (regexType) {
+                    regex = REGEX_MAP[regexType];
+                  }
+
+                  // 🚫 Falla → dispara error pero NO actualiza input
+                  if (regex && !regex.test(val)) {
+                    onRegexError?.(val);
+                    return;
+                  }
+
+                  setSearch(val);
+
+                  if (val.trim() === "") {
+                    setSelected("");
+                    emitNativeChange("");
+                  }
+
+                  setIsOpen(true);
+                }}
+                onFocus={() => setIsOpen(true)}
+                placeholder={
+                  tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption
+                }
+                className={cn(
+                  "w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 cursor-pointer pr-6",
+                  optionSizeClassMap[inputSize ?? "md"]
+                )}
+              />
+
+              {/* Botón X para limpiar */}
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setSelected("");
+                    emitNativeChange("");
+                  }}
+                  className="absolute right-1 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              aria-haspopup="listbox"
+              aria-expanded={isOpen}
+              onClick={() => !disabled && setIsOpen((s) => !s)}
+              className={cn(
+                "w-full text-left bg-transparent flex flex-col text-gray-700",
+                optionSizeClassMap[inputSize ?? "md"]
+              )}
+            >
+              {selectedOption ? (
+                <div className="flex items-center gap-2 w-full">
+                  {selectedOption.image && (
                     <img
-                      src={prefixImage}
-                      alt="prefix"
+                      src={selectedOption.image}
+                      alt={selectedOption.label}
                       className="w-6 h-6 rounded-full object-cover"
                     />
                   )}
-                  {prefixElement && (
-                    <div className="flex-shrink-0">{prefixElement}</div>
+                  {selectedOption.icon && (
+                    <div className="flex-shrink-0">{selectedOption.icon}</div>
                   )}
-
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => {
-                      const val = e.target.value;
-
-                      let regex: RegExp | undefined;
-
-                      // ✅ Soporte para custom y customRegex
-                      if (
-                        (regexType === "custom" ||
-                          regexType === "customRegex") &&
-                        customRegex
-                      ) {
-                        regex = customRegex;
-                      } else if (regexType) {
-                        regex = REGEX_MAP[regexType];
-                      }
-
-                      // 🚫 Falla → dispara error pero NO actualiza input
-                      if (regex && !regex.test(val)) {
-                        onRegexError?.(val);
-                        return;
-                      }
-
-                      setSearch(val);
-
-                      if (val.trim() === "") {
-                        setSelected("");
-                        emitNativeChange("");
-                      }
-
-                      setIsOpen(true);
-                    }}
-                    onFocus={() => setIsOpen(true)}
-                    placeholder={
-                      tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption
-                    }
-                    className={cn(
-                      "w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 cursor-pointer pr-6",
-                      optionSizeClassMap[inputSize ?? "md"]
-                    )}
-                  />
-
-                  {/* Botón X para limpiar */}
-                  {search && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSearch("");
-                        setSelected("");
-                        emitNativeChange("");
-                      }}
-                      className="absolute right-1 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      ✕
-                    </button>
-                  )}
+                  <span className="truncate">
+                    {selectedOption.tKeyLabel
+                      ? t(selectedOption.tKeyLabel)
+                      : selectedOption.label}
+                  </span>
                 </div>
               ) : (
-                <button
-                  type="button"
-                  aria-haspopup="listbox"
-                  aria-expanded={isOpen}
-                  onClick={() => !disabled && setIsOpen((s) => !s)}
-                  className={cn(
-                    "w-full text-left bg-transparent flex flex-col text-gray-700",
-                    optionSizeClassMap[inputSize ?? "md"] // 🔥 esto aplica padding y tamaño
-                  )}
-                >
-                  {selectedOption ? (
-                    <div className="flex items-center gap-2 w-full">
-                      {selectedOption.image && (
-                        <img
-                          src={selectedOption.image}
-                          alt={selectedOption.label}
-                          className="w-6 h-6 rounded-full object-cover"
-                        />
-                      )}
-                      {selectedOption.icon && (
-                        <div className="flex-shrink-0">
-                          {selectedOption.icon}
-                        </div>
-                      )}
-                      <span className="truncate">
-                        {selectedOption.tKeyLabel
-                          ? t(selectedOption.tKeyLabel)
-                          : selectedOption.label}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className="truncate text-gray-500 w-full">
-                      {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}{" "}
-                    </span>
-                  )}
-                </button>
+                <span className="truncate text-gray-500 w-full">
+                  {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}{" "}
+                </span>
               )}
+            </button>
+          )}
 
-              {/* Dropdown */}
-              {isOpen && !disabled && (
-                <div>
-                  <ul
-                    role="listbox"
-                    aria-activedescendant={selected}
-                    className="divide-y"
+          {/* Dropdown */}
+          {isOpen && !disabled && (
+            <ul
+              role="listbox"
+              aria-activedescendant={selected}
+              className="
+                absolute w-full bg-gray-200 divide-y
+                max-h-56 overflow-y-auto  
+                z-50                     
+                mt-1                      
+                rounded-md shadow-lg      
+              "
+            >
+              {(search.trim() === "" ? options : filteredOptions).map((opt) => {
+                const isSelected = opt.value === selected;
+                return (
+                  <li
+                    key={opt.value}
+                    role="option"
+                    aria-selected={isSelected}
+                    onClick={() => handleSelect(opt.value)}
+                    className={cn(
+                      "flex items-center gap-3 cursor-pointer hover:bg-gray-100",
+                      optionSizeClassMap[inputSize ?? "md"],
+                      isSelected && "bg-gray-100"
+                    )}
                   >
-                    {(search.trim() === "" ? options : filteredOptions).map(
-                      (opt) => {
-                        const isSelected = opt.value === selected;
-                        return (
-                          <li
-                            key={opt.value}
-                            role="option"
-                            aria-selected={isSelected}
-                            onClick={() => handleSelect(opt.value)}
-                            className={cn(
-                              "flex items-center gap-3 cursor-pointer hover:bg-gray-100",
-                              optionSizeClassMap[inputSize ?? "md"],
-                              isSelected && "bg-gray-100"
-                            )}
-                          >
-                            {opt.image && (
-                              <img
-                                src={opt.image}
-                                alt={opt.label}
-                                className="w-6 h-6 rounded-full object-cover"
-                              />
-                            )}
-                            {opt.icon && (
-                              <div className="flex-shrink-0">{opt.icon}</div>
-                            )}
-                            <div className="truncate">
-                              {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
-                            </div>
-                          </li>
-                        );
-                      }
+                    {opt.image && (
+                      <img
+                        src={opt.image}
+                        alt={opt.label}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
                     )}
+                    {opt.icon && (
+                      <div className="flex-shrink-0">{opt.icon}</div>
+                    )}
+                    <div className="truncate">
+                      {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                    </div>
+                  </li>
+                );
+              })}
 
-                    {search.trim() !== "" && filteredOptions.length === 0 && (
-                      <li className="px-3 py-2 text-gray-500">
-                        {t("No hay opciones")}
-                      </li>
-                    )}
-                  </ul>
-                </div>
+              {search.trim() !== "" && filteredOptions.length === 0 && (
+                <li className="px-3 py-2 text-gray-500">
+                  {t("No hay opciones")}
+                </li>
               )}
-            </div>
-          </div>
+            </ul>
+          )}
         </div>
 
         {hasError && (

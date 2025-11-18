@@ -26,12 +26,12 @@ const field = cva(
         lg: "rounded-2xl",
       },
       inputSize: {
-        xxs: "px-1 py-0.5 text-xxs",
-        xs: "px-1.5 py-1 text-xs",
-        sm: "px-2 py-1 text-xs",
-        md: "px-4 py-2 text-base",
-        lg: "px-6 py-3 text-lg",
-        full: "px-6 py-3 text-lg w-full",
+        xxs: " text-xxs",
+        xs: "py-1 text-xs",
+        sm: " text-xs",
+        md: " text-base",
+        lg: " text-lg",
+        full: " text-lg w-full",
       },
     },
     defaultVariants: {
@@ -375,54 +375,60 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
 
           {/* 📜 Dropdown */}
           {open && !disabled && (
-            <div>
-              <ul className="divide-y">
-                {filteredOptions.length > 0 ? (
-                  filteredOptions.map((opt) => {
-                    const isSelected = selected.includes(opt.value);
-                    return (
-                      <li
-                        key={opt.value}
-                        onClick={() => toggleOption(opt.value)}
-                        className={cn(
-                          "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100",
-                          isSelected && "bg-gray-100",
-                          inputSize
-                        )}
-                      >
-                        {opt.image && (
-                          <img
-                            src={opt.image}
-                            alt={opt.label}
-                            className="w-6 h-6 rounded-full object-cover"
-                          />
-                        )}
-                        {opt.icon && (
-                          <div className="flex-shrink-0">{opt.icon}</div>
-                        )}
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => toggleOption(opt.value)}
-                          onClick={(e) => e.stopPropagation()}
-                          className={cn(
-                            "mr-4 accent-cyan-800 cursor-pointer border-gray-300 rounded-md",
-                            checkboxSizeMap[inputSize ?? "md"]
-                          )}
+            <ul
+              className="
+                absolute w-full bg-gray-200 divide-y
+                max-h-56 overflow-y-auto  
+                z-50                     
+                mt-1                      
+                rounded-md shadow-lg      
+              "
+            >
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((opt) => {
+                  const isSelected = selected.includes(opt.value);
+                  return (
+                    <li
+                      key={opt.value}
+                      onClick={() => toggleOption(opt.value)}
+                      className={cn(
+                        "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100",
+                        isSelected && "bg-gray-100",
+                        inputSize
+                      )}
+                    >
+                      {opt.image && (
+                        <img
+                          src={opt.image}
+                          alt={opt.label}
+                          className="w-6 h-6 rounded-full object-cover"
                         />
-                        <span className="truncate">
-                          {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
-                        </span>
-                      </li>
-                    );
-                  })
-                ) : (
-                  <li className="px-3 py-2 text-gray-500">
-                    {t("No hay opciones")}
-                  </li>
-                )}
-              </ul>
-            </div>
+                      )}
+                      {opt.icon && (
+                        <div className="flex-shrink-0">{opt.icon}</div>
+                      )}
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleOption(opt.value)}
+                        onClick={(e) => e.stopPropagation()}
+                        className={cn(
+                          "mr-4 accent-cyan-800 cursor-pointer border-gray-300 rounded-md",
+                          checkboxSizeMap[inputSize ?? "md"]
+                        )}
+                      />
+                      <span className="truncate">
+                        {opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label}
+                      </span>
+                    </li>
+                  );
+                })
+              ) : (
+                <li className="px-3 py-2 text-gray-500">
+                  {t("No hay opciones")}
+                </li>
+              )}
+            </ul>
           )}
         </div>
       </div>

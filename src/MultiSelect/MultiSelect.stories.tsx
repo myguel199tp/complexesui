@@ -138,3 +138,28 @@ export const WithSearchRegex: Story = {
     helpText: "Selecciona una de las opciones disponibles.",
   },
 };
+
+export const MultipleSelects: Story = {
+  render: (args) => (
+    <div className="flex flex-col gap-4">
+      <MultiSelect {...args} />
+      <MultiSelect {...args} />
+      <MultiSelect {...args} />
+    </div>
+  ),
+
+  args: {
+    inputSize: "md",
+    rounded: "md",
+    disabled: false,
+    hasError: false,
+    errorMessage: "Seleccione una opción",
+    defaultOption: "Seleccione una opción",
+    required: false,
+    options: [
+      { value: "option1", label: "Opción 1" },
+      { value: "option2", label: "Opción 2" },
+      { value: "option3", label: "Opción 3" },
+    ],
+  },
+};
