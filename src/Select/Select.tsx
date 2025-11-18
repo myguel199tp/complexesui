@@ -16,7 +16,8 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "flex items-center gap-2 bg-gray-200 font-thin w-full focus:outline-none transition-all",
+  // <-- FIX: usar layout vertical para que w-full funcione y label quede encima
+  "flex flex-col gap-2 bg-transparent w-full focus:outline-none transition-all",
   {
     variants: {
       rounded: {
@@ -235,18 +236,9 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
           </label>
         )}
 
-        {prefixImage && (
-          <img
-            src={prefixImage}
-            alt="prefix"
-            className="w-6 h-6 rounded-full object-cover"
-          />
-        )}
-        {prefixElement && <div className="flex-shrink-0">{prefixElement}</div>}
-
+        {/* prefixImage y prefixElement se mantienen pero los colocamos dentro del control */}
         <div className="relative flex flex-col w-full">
           {/* helpText dentro del recuadro gris */}
-
           {(helpText || tKeyHelpText) && !hasError && (
             <Text
               id={`${id}-help`}
@@ -257,8 +249,10 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               {tKeyHelpText ? t(tKeyHelpText) : helpText}
             </Text>
           )}
+
+          {/* CONTROL (input o boton) */}
           {searchable ? (
-            <div className="flex items-center gap-2 relative w-full">
+            <div className="flex items-center gap-2 relative w-full bg-gray-200 px-3 py-2 rounded-md">
               {prefixImage && (
                 <img
                   src={prefixImage}
@@ -339,10 +333,18 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               aria-expanded={isOpen}
               onClick={() => !disabled && setIsOpen((s) => !s)}
               className={cn(
-                "w-full text-left bg-transparent flex flex-col text-gray-700",
+                "w-full text-left bg-gray-200 px-3 py-2 rounded-md flex items-center gap-2 text-gray-700",
                 optionSizeClassMap[inputSize ?? "md"]
               )}
             >
+              {/* prefixImage/element dentro del botón */}
+              {prefixImage && (
+                <img
+                  src={prefixImage}
+                  alt="prefix"
+                  className="w-6 h-6 rounded-full object-cover"
+                />
+              )}
               {selectedOption ? (
                 <div className="flex items-center gap-2 w-full">
                   {selectedOption.image && (
@@ -374,11 +376,12 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
             <ul
               role="listbox"
               aria-activedescendant={selected}
+              // <-- FIX: positionar justo debajo con top-full y pequeño mt
               className="
-                absolute w-full bg-gray-200 divide-y
+                absolute top-full left-0 w-full bg-white divide-y
                 max-h-56 overflow-y-auto  
                 z-50                     
-                mt-12                     
+                mt-1                     
                 rounded-md shadow-lg      
               "
             >
