@@ -273,12 +273,14 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               <input
                 type="text"
                 value={search}
+                onClick={() => {
+                  if (!disabled) setIsOpen(true);
+                }}
                 onChange={(e) => {
                   const val = e.target.value;
 
                   let regex: RegExp | undefined;
 
-                  // ✅ Soporte para custom y customRegex
                   if (
                     (regexType === "custom" || regexType === "customRegex") &&
                     customRegex
@@ -288,7 +290,6 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                     regex = REGEX_MAP[regexType];
                   }
 
-                  // 🚫 Falla → dispara error pero NO actualiza input
                   if (regex && !regex.test(val)) {
                     onRegexError?.(val);
                     return;
@@ -296,14 +297,17 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 
                   setSearch(val);
 
+                  // Si queda vacío → se cierra
                   if (val.trim() === "") {
+                    setIsOpen(false);
                     setSelected("");
                     emitNativeChange("");
+                    return;
                   }
 
+                  // Si está escribiendo → abre
                   setIsOpen(true);
                 }}
-                onFocus={() => setIsOpen(true)}
                 placeholder={
                   tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption
                 }
@@ -374,7 +378,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                 absolute w-full bg-gray-200 divide-y
                 max-h-56 overflow-y-auto  
                 z-50                     
-                mt-1                      
+                mt-14                     
                 rounded-md shadow-lg      
               "
             >

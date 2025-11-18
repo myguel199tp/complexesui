@@ -380,7 +380,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                 absolute w-full bg-gray-200 divide-y
                 max-h-56 overflow-y-auto  
                 z-50                     
-                mt-1                      
+                mt-15                      
                 rounded-md shadow-lg      
               "
             >
@@ -392,7 +392,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                       key={opt.value}
                       onClick={() => toggleOption(opt.value)}
                       className={cn(
-                        "flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100",
+                        "flex items-center gap-3 p-3 mt-10 cursor-pointer hover:bg-gray-100",
                         isSelected && "bg-gray-100",
                         inputSize
                       )}
