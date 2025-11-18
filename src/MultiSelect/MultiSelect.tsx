@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "inline-block bg-gray-200 font-thin border-none w-full focus:outline-none flex items-center gap-2",
+  "flex bg-gray-200 font-thin border-none w-full focus:outline-none flex items-center gap-2",
   {
     variants: {
       rounded: {
@@ -380,7 +380,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                 absolute w-full bg-gray-200 divide-y
                 max-h-56 overflow-y-auto  
                 z-50                     
-                mt-15                      
+                mt-12                    
                 rounded-md shadow-lg      
               "
             >

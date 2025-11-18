@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "inline-flex items-center gap-2 bg-gray-200 font-thin w-full focus:outline-none transition-all",
+  "flex items-center gap-2 bg-gray-200 font-thin w-full focus:outline-none transition-all",
   {
     variants: {
       rounded: {
@@ -378,7 +378,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                 absolute w-full bg-gray-200 divide-y
                 max-h-56 overflow-y-auto  
                 z-50                     
-                mt-14                     
+                mt-12                     
                 rounded-md shadow-lg      
               "
             >

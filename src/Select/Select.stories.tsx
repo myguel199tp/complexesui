@@ -149,7 +149,6 @@ export const WithPrefixImage: Story = {
 export const WithIcons: Story = {
   args: {
     ...Default.args,
-    label: "Selecciona un tipo",
     options: [
       { value: "user", label: "Usuario", icon: <User className="w-4 h-4" /> },
       { value: "home", label: "Propiedad", icon: <Home className="w-4 h-4" /> },
@@ -170,7 +169,6 @@ export const WithIcons: Story = {
 export const WithImagesSearchable: Story = {
   args: {
     ...Default.args,
-    label: "Selecciona un país",
     searchable: true,
     sizeHelp: "xs",
     helpText: "Puedes buscar o seleccionar de la lista.",
