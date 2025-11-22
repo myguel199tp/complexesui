@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Text } from "../main";
 import i18n from "../i18n";
 
-// Definir variantes para textarea usando cva
+// Definir variantes con cva
 const textArea = cva(
   "border p-2 resize-none outline-none w-full transition-colors",
   {
@@ -35,7 +35,27 @@ const textArea = cva(
   }
 );
 
-// Props para textarea
+// Regex predefinidos
+const REGEX_MAP: Record<string, RegExp> = {
+  number: /^[0-9]*$/,
+  letters: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]*$/,
+  alphanumeric: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ ]*$/,
+  email: /^[A-Za-z0-9@._-]*$/,
+  phone: /^[0-9+\-() ]*$/,
+  postal: /^[A-Za-z0-9 ]*$/,
+  id: /^[A-Za-z0-9]*$/,
+  uppercase: /^[A-ZÁÉÍÓÚÑ ]*$/,
+  lowercase: /^[a-záéíóúñ ]*$/,
+  decimal: /^[0-9]+(\.[0-9]*)?$/,
+  time: /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
+  strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&.,\-+_]{8,}$/,
+  url: /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/,
+  hexColor: /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+  currency: /^\$?\d+(,\d{3})*(\.\d{1,2})?$/,
+  fullname: /^[A-Za-záéíóúÁÉÍÓÚñÑ ]{2,}$/,
+  safeChars: /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ.,;:!?\-() ]*$/,
+};
+
 interface TextAreaProps
   extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size">,
     VariantProps<typeof textArea> {
@@ -53,6 +73,29 @@ interface TextAreaProps
   prefixImage?: string;
   prefixElement?: ReactNode;
   rows?: number;
+
+  regexType?:
+    | "number"
+    | "letters"
+    | "alphanumeric"
+    | "custom"
+    | "email"
+    | "phone"
+    | "postal"
+    | "uppercase"
+    | "lowercase"
+    | "decimal"
+    | "time"
+    | "strongPassword"
+    | "url"
+    | "hexColor"
+    | "currency"
+    | "fullname"
+    | "safeChars"
+    | "customRegex";
+
+  customRegex?: RegExp;
+  onRegexError?: (value: string) => void;
 }
 
 const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -77,15 +120,38 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       prefixImage,
       prefixElement,
       rows = 4,
+      regexType,
+      customRegex,
+      onRegexError,
       ...props
     },
     ref
   ) => {
     const { t } = useTranslation();
 
+    // Cambiar idioma
     useEffect(() => {
       if (language) i18n.changeLanguage(language);
     }, [language]);
+
+    // 🔍 VALIDACIÓN REGEX
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const value = e.target.value;
+
+      const selectedRegex =
+        regexType === "customRegex"
+          ? customRegex
+          : regexType
+          ? REGEX_MAP[regexType]
+          : null;
+
+      if (selectedRegex && !selectedRegex.test(value)) {
+        if (onRegexError) onRegexError(value);
+        return; // ❌ Evitamos actualizar si no cumple
+      }
+
+      if (props.onChange) props.onChange(e);
+    };
 
     const fieldClass = cn(
       textArea({ inputSize, rounded }),
@@ -132,6 +198,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             className="bg-transparent outline-none flex-1"
             disabled={disabled}
             rows={rows}
+            onChange={handleChange}
             {...props}
           />
         </div>
