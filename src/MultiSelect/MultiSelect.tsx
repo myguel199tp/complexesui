@@ -312,7 +312,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
               id={`${id}-help`}
               size={sizeHelp ?? "xxs"}
               colVariant="default"
-              className="text-gray-500"
+              className="text-gray-500 p-2"
             >
               {tKeyHelpText ? t(tKeyHelpText) : helpText}
             </Text>
@@ -344,7 +344,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                 setSearch(val);
               }}
               placeholder={t(tkeySearch || "Buscar...")}
-              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 mt-1"
+              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 mt-1 px-2"
               onClick={(e) => e.stopPropagation()}
               autoFocus
             />
@@ -352,7 +352,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
 
           {/* Texto por defecto cuando no hay selección y el dropdown está cerrado */}
           {selected.length === 0 && !open && (
-            <span className="truncate text-gray-500">
+            <span className="truncate text-gray-500 p-1">
               {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
             </span>
           )}
@@ -380,7 +380,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                 absolute w-full bg-gray-200 divide-y
                 max-h-56 overflow-y-auto  
                 z-50                     
-                mt-12                    
+                mt-1                    
                 rounded-md shadow-lg      
               "
             >
@@ -392,7 +392,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                       key={opt.value}
                       onClick={() => toggleOption(opt.value)}
                       className={cn(
-                        "flex items-center gap-3 p-3 mt-10 cursor-pointer hover:bg-gray-100",
+                        "flex items-center gap-3 p-3 mt-1 cursor-pointer hover:bg-gray-100",
                         isSelected && "bg-gray-100",
                         inputSize
                       )}

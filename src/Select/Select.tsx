@@ -364,7 +364,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                   </span>
                 </div>
               ) : (
-                <span className="truncate text-gray-500 w-full">
+                <span className="truncate text-gray-500 w-full p-1">
                   {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}{" "}
                 </span>
               )}
