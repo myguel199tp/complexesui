@@ -7,7 +7,7 @@
 ## Versions
 
 <div align="center">
-<p>VERSION: v1.4.21</p>
+<p>VERSION: v1.4.22</p>
 <p>COMPONENTS</p>
 <br />
 <ul>
