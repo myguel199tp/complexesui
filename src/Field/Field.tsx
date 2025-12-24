@@ -248,7 +248,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               ref={ref}
               placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
               className={cn(
-                "bg-transparent outline-none flex-1 p-2 text-gray-800",
+                "bg-transparent outline-none font-semibold text-xl flex-1 p-2 text-gray-800",
                 disabledClass
               )}
               disabled={disabled}
