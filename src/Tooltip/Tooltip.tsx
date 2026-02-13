@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef, forwardRef, Ref, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
@@ -25,10 +26,10 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       tKey,
       language,
     },
-    ref: Ref<HTMLDivElement>
+    ref: Ref<HTMLDivElement>,
   ) => {
     const [isVisible, setIsVisible] = useState(false);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const { t } = useTranslation();
 
     const positionClasses = {
@@ -80,11 +81,11 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
             {tKey
               ? t(tKey)
               : typeof content === "string"
-              ? t(content)
-              : content}
+                ? t(content)
+                : content}
           </div>
         )}
       </div>
     );
-  }
+  },
 );

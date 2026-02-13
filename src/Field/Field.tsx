@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   FC,
@@ -36,7 +37,7 @@ const field = cva(
       inputSize: "md",
       rounded: "md",
     },
-  }
+  },
 );
 
 // ✅ Regex que valida caracteres PERMITIDOS mientras se escribe
@@ -66,8 +67,7 @@ const REGEX_MAP: Record<string, RegExp> = {
 };
 
 interface FieldProps
-  extends InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof field> {
+  extends InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof field> {
   hasError?: boolean;
   label?: string;
   helpText?: string;
@@ -137,7 +137,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
       onRegexError,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [fileName, setFileName] = useState<string | null>(null);
     const { t } = useTranslation();
@@ -193,7 +193,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
     const fieldClass = cn(
       field({ inputSize, rounded }),
       className,
-      hasError ? "bg-red-100 border border-red-500" : ""
+      hasError ? "bg-red-100 border border-red-500" : "",
     );
 
     const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";
@@ -249,7 +249,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
               className={cn(
                 "bg-transparent outline-none font-semibold text-xl flex-1 p-2 text-gray-800",
-                disabledClass
+                disabledClass,
               )}
               disabled={disabled}
               onBeforeInput={handleBeforeInput}
@@ -273,7 +273,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 InputField.displayName = "InputField";

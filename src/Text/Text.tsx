@@ -1,3 +1,4 @@
+"use client";
 import {
   FC,
   HTMLAttributes,
@@ -42,8 +43,7 @@ const textStyle = cva("font-bold", {
 });
 
 interface TextProps
-  extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof textStyle> {
+  extends HTMLAttributes<HTMLElement>, VariantProps<typeof textStyle> {
   as?: ElementType;
   colVariant?: "default" | "primary" | "success" | "warning" | "danger" | "on";
   size?: "xxs" | "xs" | "sm" | "md" | "lg";
@@ -66,7 +66,7 @@ const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
       language,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { t } = useTranslation();
 
@@ -89,7 +89,7 @@ const Text: FC<TextProps> = forwardRef<HTMLElement, TextProps>(
         {renderContent}
       </Component>
     );
-  }
+  },
 );
 
 Text.displayName = "Text";

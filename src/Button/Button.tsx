@@ -1,3 +1,4 @@
+"use client";
 import { ButtonHTMLAttributes, FC, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -41,8 +42,7 @@ const button = cva("inline-block bg-blue-400 px-5 py-3 font-bold", {
 });
 
 interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof button> {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof button> {
   colVariant?: "default" | "primary" | "success" | "warning" | "danger";
   rounded?: "basic" | "sm" | "md" | "lg";
   size?: "xs" | "sm" | "md" | "lg" | "full";
@@ -64,7 +64,7 @@ export const Button: FC<ButtonProps> = ({
   ...props
 }) => {
   const buttonClass = cn(
-    button({ colVariant, size, fonts, rounded, className })
+    button({ colVariant, size, fonts, rounded, className }),
   );
 
   const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "";

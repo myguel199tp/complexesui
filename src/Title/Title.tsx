@@ -1,3 +1,4 @@
+"use client";
 import { ElementType, FC, HTMLAttributes, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -34,7 +35,8 @@ const titleStyle = cva("font-bold", {
 });
 
 interface TitleProps
-  extends HTMLAttributes<HTMLParagraphElement>,
+  extends
+    HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof titleStyle> {
   as?: ElementType;
   colVariant?: "default" | "primary" | "success" | "warning" | "danger" | "on";
@@ -57,7 +59,7 @@ const Title: FC<TitleProps> = forwardRef<HTMLParagraphElement, TitleProps>(
       language,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { t } = useTranslation();
 
@@ -75,7 +77,7 @@ const Title: FC<TitleProps> = forwardRef<HTMLParagraphElement, TitleProps>(
         {tKey ? t(tKey) : children}
       </Component>
     );
-  }
+  },
 );
 
 Title.displayName = "Title";

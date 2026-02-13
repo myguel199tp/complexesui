@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { InputField } from "./Field";
 import { FaEnvelope, FaUpload } from "react-icons/fa";
+import { Tooltip } from "../main";
 
 const meta: Meta<typeof InputField> = {
   title: "Components/InputField",
@@ -117,7 +118,12 @@ export const WithIcon: Story = {
   args: {
     label: "Correo electrónico",
     placeholder: "ejemplo@email.com",
-    prefixElement: <FaEnvelope className="text-gray-500 w-5 h-5" />,
+    prefixElement: (
+      <Tooltip content="ddd">
+        {" "}
+        <FaEnvelope className="text-gray-500 w-5 h-5" />
+      </Tooltip>
+    ),
     inputSize: "md",
     rounded: "lg",
   },

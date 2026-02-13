@@ -1,3 +1,4 @@
+"use client";
 import { VariantProps, cva } from "class-variance-authority";
 import {
   forwardRef,
@@ -32,7 +33,7 @@ const textArea = cva(
       inputSize: "md",
       rounded: "md",
     },
-  }
+  },
 );
 
 // Regex predefinidos
@@ -57,7 +58,8 @@ const REGEX_MAP: Record<string, RegExp> = {
 };
 
 interface TextAreaProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size">,
+  extends
+    Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size">,
     VariantProps<typeof textArea> {
   hasError?: boolean;
   label?: string;
@@ -125,7 +127,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       onRegexError,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { t } = useTranslation();
 
@@ -142,8 +144,8 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         regexType === "customRegex"
           ? customRegex
           : regexType
-          ? REGEX_MAP[regexType]
-          : null;
+            ? REGEX_MAP[regexType]
+            : null;
 
       if (selectedRegex && !selectedRegex.test(value)) {
         if (onRegexError) onRegexError(value);
@@ -157,7 +159,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       textArea({ inputSize, rounded }),
       className,
       hasError ? "bg-red-100 border border-red-500" : "",
-      disabled ? "opacity-50 cursor-not-allowed" : ""
+      disabled ? "opacity-50 cursor-not-allowed" : "",
     );
 
     return (
@@ -210,7 +212,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 TextAreaField.displayName = "TextAreaField";

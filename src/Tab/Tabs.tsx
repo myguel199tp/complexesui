@@ -1,3 +1,4 @@
+"use client";
 import { useState, ReactNode, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -80,7 +81,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       <div ref={ref}>
         <div
           className={cn(
-            "flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0"
+            "flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0",
           )}
         >
           {tabs.map((tab, index) => (
@@ -94,7 +95,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
                   background: tab.background,
                   padding: tab.padding,
                   rounded: tab.rounded,
-                })
+                }),
               )}
               onClick={() => setActiveIndex(index)}
             >
@@ -108,7 +109,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 Tabs.displayName = "Tabs";

@@ -1,3 +1,4 @@
+"use client";
 import {
   FC,
   HTMLAttributes,
@@ -61,8 +62,7 @@ const flagStyle = cva("font-bold", {
 });
 
 interface FlagProps
-  extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof flagStyle> {
+  extends HTMLAttributes<HTMLElement>, VariantProps<typeof flagStyle> {
   as?: ElementType;
   disappearTime?: number;
   colVariant?: "default" | "primary" | "success" | "warning" | "danger";
@@ -92,7 +92,7 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
       language,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [opacity, setOpacity] = useState(1);
     const { t } = useTranslation();
@@ -132,7 +132,7 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
             padding,
             rounded,
           }),
-          className
+          className,
         )}
         style={{ opacity }}
         {...props}
@@ -140,7 +140,7 @@ const Flag: FC<FlagProps> = forwardRef<HTMLElement, FlagProps>(
         <div> {tKey ? t(tKey) : children}</div>
       </Tag>
     );
-  }
+  },
 );
 
 Flag.displayName = "Flag";

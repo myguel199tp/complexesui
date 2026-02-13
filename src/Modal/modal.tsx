@@ -1,3 +1,4 @@
+"use client";
 import { forwardRef, ReactNode, ForwardRefRenderFunction } from "react";
 import clsx from "clsx";
 
@@ -13,7 +14,7 @@ interface ModalProps {
 
 const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
   { isOpen, onClose, children, title, className, closeOnOverlayClick = true },
-  ref
+  ref,
 ) => {
   if (!isOpen) return null;
 
@@ -32,7 +33,7 @@ const ModalBase: ForwardRefRenderFunction<HTMLDivElement, ModalProps> = (
         ref={ref}
         className={clsx(
           "bg-white rounded-lg shadow-lg p-6 relative",
-          className ?? "w-11/12 max-w-md"
+          className ?? "w-11/12 max-w-md",
         )}
         onClick={(e) => e.stopPropagation()}
       >

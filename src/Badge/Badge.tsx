@@ -1,3 +1,4 @@
+"use client";
 import { FC, HTMLAttributes, ElementType, forwardRef, useEffect } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -58,8 +59,7 @@ const badgeStyle = cva("font-bold", {
 });
 
 interface BadgeProps
-  extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof badgeStyle> {
+  extends HTMLAttributes<HTMLElement>, VariantProps<typeof badgeStyle> {
   as?: ElementType;
   colVariant?: "default" | "primary" | "success" | "warning" | "danger" | "on";
   size?: "xxs" | "xs" | "sm" | "md" | "lg";
@@ -94,7 +94,7 @@ const Badge: FC<BadgeProps> = forwardRef<HTMLElement, BadgeProps>(
       language,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { t } = useTranslation();
 
@@ -115,14 +115,14 @@ const Badge: FC<BadgeProps> = forwardRef<HTMLElement, BadgeProps>(
             padding,
             rounded,
             className,
-          })
+          }),
         )}
         {...props}
       >
         {tKey ? t(tKey) : children}
       </Component>
     );
-  }
+  },
 );
 
 Badge.displayName = "Badge";

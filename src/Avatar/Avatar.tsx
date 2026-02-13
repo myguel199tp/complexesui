@@ -1,3 +1,4 @@
+"use client";
 import { FC, HTMLAttributes, forwardRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils/utils";
@@ -31,8 +32,7 @@ const avatarStyle = cva("object-cover", {
 });
 
 interface AvatarProps
-  extends HTMLAttributes<HTMLImageElement>,
-    VariantProps<typeof avatarStyle> {
+  extends HTMLAttributes<HTMLImageElement>, VariantProps<typeof avatarStyle> {
   src: string;
   alt: string;
   size: "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
@@ -53,7 +53,7 @@ const Avatar: FC<AvatarProps> = forwardRef<HTMLImageElement, AvatarProps>(
         />
       </picture>
     );
-  }
+  },
 );
 
 Avatar.displayName = "Avatar";
