@@ -38,7 +38,7 @@ const field = cva(
       inputSize: "md",
       rounded: "md",
     },
-  }
+  },
 );
 
 const REGEX_MAP: Record<string, RegExp> = {
@@ -80,7 +80,8 @@ interface Option {
 }
 
 interface MultiSelectProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange">,
+  extends
+    Omit<HTMLAttributes<HTMLDivElement>, "onChange">,
     VariantProps<typeof field> {
   hasError?: boolean;
   label?: string;
@@ -167,7 +168,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     onRegexError,
     ...props
   },
-  ref
+  ref,
 ) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>(value ?? []);
@@ -217,7 +218,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     ? options.filter((opt) =>
         (opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label)
           .toLowerCase()
-          .includes(search.toLowerCase())
+          .includes(search.toLowerCase()),
       )
     : options;
 
@@ -225,7 +226,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
     field({ inputSize, rounded }), // ✅ inputSize y rounded
     hasError && "bg-red-100 border border-red-500",
     disabled && "opacity-50 cursor-not-allowed",
-    className
+    className,
   );
 
   return (
@@ -352,7 +353,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
 
           {/* Texto por defecto cuando no hay selección y el dropdown está cerrado */}
           {selected.length === 0 && !open && (
-            <span className="truncate text-gray-500 p-1">
+            <span className="truncate flex-1 bg-transparent outline-none font-semibold text-xl text-gray-500">
               {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
             </span>
           )}
@@ -394,7 +395,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                       className={cn(
                         "flex items-center gap-3 p-3 mt-1 cursor-pointer hover:bg-gray-100",
                         isSelected && "bg-gray-100",
-                        inputSize
+                        inputSize,
                       )}
                     >
                       {opt.image && (
@@ -414,7 +415,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                         onClick={(e) => e.stopPropagation()}
                         className={cn(
                           "mr-4 accent-cyan-800 cursor-pointer border-gray-300 rounded-md",
-                          checkboxSizeMap[inputSize ?? "md"]
+                          checkboxSizeMap[inputSize ?? "md"],
                         )}
                       />
                       <span className="truncate">

@@ -39,7 +39,7 @@ const field = cva(
       rounded: "md",
       inputSize: "md",
     },
-  }
+  },
 );
 
 const REGEX_MAP: Record<string, RegExp> = {
@@ -81,8 +81,7 @@ interface Option {
 }
 
 interface SelectFieldProps
-  extends SelectHTMLAttributes<HTMLSelectElement>,
-    VariantProps<typeof field> {
+  extends SelectHTMLAttributes<HTMLSelectElement>, VariantProps<typeof field> {
   hasError?: boolean;
   label?: string;
   errorMessage?: string;
@@ -163,7 +162,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       onRegexError,
       ...props
     },
-    ref
+    ref,
   ) => {
     const { t } = useTranslation();
 
@@ -177,7 +176,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
     const [selected, setSelected] = useState<string>(
       (typeof value === "string" && value) ||
         (typeof defaultValue === "string" && defaultValue) ||
-        ""
+        "",
     );
 
     useEffect(() => {
@@ -197,7 +196,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       ? options.filter((opt) =>
           (opt.tKeyLabel ? t(opt.tKeyLabel) : opt.label)
             .toLowerCase()
-            .includes(search.toLowerCase())
+            .includes(search.toLowerCase()),
         )
       : options;
 
@@ -224,7 +223,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
       field({ inputSize, rounded }),
       className,
       hasError && "bg-red-100 border border-red-500 block", // si hay error, sobreescribe
-      disabled && "opacity-50 cursor-not-allowed block"
+      disabled && "opacity-50 cursor-not-allowed block",
     );
 
     return (
@@ -307,7 +306,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                 }
                 className={cn(
                   "w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 cursor-pointer pr-6",
-                  optionSizeClassMap[inputSize ?? "md"]
+                  optionSizeClassMap[inputSize ?? "md"],
                 )}
               />
 
@@ -334,7 +333,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               onClick={() => !disabled && setIsOpen((s) => !s)}
               className={cn(
                 "w-full text-left bg-gray-200 px-3 py-2 rounded-md flex items-center gap-2 text-gray-700",
-                optionSizeClassMap[inputSize ?? "md"]
+                optionSizeClassMap[inputSize ?? "md"],
               )}
             >
               {/* prefixImage/element dentro del botón */}
@@ -364,8 +363,8 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                   </span>
                 </div>
               ) : (
-                <span className="truncate text-gray-500 w-full p-1">
-                  {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}{" "}
+                <span className="truncate flex-1 bg-transparent outline-none font-semibold text-xl text-gray-500">
+                  {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
                 </span>
               )}
             </button>
@@ -396,7 +395,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                     className={cn(
                       "flex items-center gap-3 cursor-pointer hover:bg-gray-100",
                       optionSizeClassMap[inputSize ?? "md"],
-                      isSelected && "bg-gray-100"
+                      isSelected && "bg-gray-100",
                     )}
                   >
                     {opt.image && (
@@ -437,7 +436,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
         )}
       </div>
     );
-  }
+  },
 );
 
 SelectField.displayName = "SelectField";
