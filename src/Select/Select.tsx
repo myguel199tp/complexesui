@@ -238,20 +238,10 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
         {/* prefixImage y prefixElement se mantienen pero los colocamos dentro del control */}
         <div className="relative flex flex-col w-full">
           {/* helpText dentro del recuadro gris */}
-          {(helpText || tKeyHelpText) && !hasError && (
-            <Text
-              id={`${id}-help`}
-              size={sizeHelp ?? "xxs"}
-              colVariant="default"
-              className="text-gray-500"
-            >
-              {tKeyHelpText ? t(tKeyHelpText) : helpText}
-            </Text>
-          )}
 
           {/* CONTROL (input o boton) */}
           {searchable ? (
-            <div className="flex items-center gap-2 relative w-full bg-gray-200 px-3 py-2 rounded-md">
+            <div className="flex items-center gap-2 relative w-full border-2 border-cyan-800 px-3 py-2 rounded-md">
               {prefixImage && (
                 <img
                   src={prefixImage}
@@ -305,7 +295,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                   tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption
                 }
                 className={cn(
-                  "w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 cursor-pointer pr-6",
+                  "w-full bg-transparent outline-none text-gray-500 placeholder-gray-500 cursor-pointer pr-6",
                   optionSizeClassMap[inputSize ?? "md"],
                 )}
               />
@@ -332,7 +322,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               aria-expanded={isOpen}
               onClick={() => !disabled && setIsOpen((s) => !s)}
               className={cn(
-                "w-full text-left bg-gray-200 px-3 py-2 rounded-md flex items-center gap-2 text-gray-700",
+                "w-full text-left border-2 border-cyan-800 px-3 py-2 rounded-md flex items-center gap-2 text-gray-500",
                 optionSizeClassMap[inputSize ?? "md"],
               )}
             >
@@ -344,29 +334,48 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
                   className="w-6 h-6 rounded-full object-cover"
                 />
               )}
-              {selectedOption ? (
-                <div className="flex items-center gap-2 w-full">
-                  {selectedOption.image && (
-                    <img
-                      src={selectedOption.image}
-                      alt={selectedOption.label}
-                      className="w-6 h-6 rounded-full object-cover"
-                    />
-                  )}
-                  {selectedOption.icon && (
-                    <div className="flex-shrink-0">{selectedOption.icon}</div>
-                  )}
-                  <span className="truncate">
-                    {selectedOption.tKeyLabel
-                      ? t(selectedOption.tKeyLabel)
-                      : selectedOption.label}
+              <div>
+                {(helpText || tKeyHelpText) && !hasError && (
+                  <Text
+                    id={`${id}-help`}
+                    size={sizeHelp ?? "xxs"}
+                    colVariant="default"
+                    className="text-gray-500"
+                  >
+                    {tKeyHelpText ? t(tKeyHelpText) : helpText}
+                  </Text>
+                )}
+
+                {selectedOption ? (
+                  <div className="flex items-center gap-2 w-full">
+                    {selectedOption.image && (
+                      <img
+                        src={selectedOption.image}
+                        alt={selectedOption.label}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                    )}
+                    {selectedOption.icon && (
+                      <div className="flex-shrink-0">{selectedOption.icon}</div>
+                    )}
+                    <span className="truncate">
+                      {selectedOption.tKeyLabel
+                        ? t(selectedOption.tKeyLabel)
+                        : selectedOption.label}
+                    </span>
+                  </div>
+                ) : (
+                  <span
+                    className={cn(
+                      "truncate flex-1 bg-transparent outline-none font-semibold text-gray-500",
+                      optionSizeClassMap[inputSize ?? "sm"],
+                    )}
+                  >
+                    {" "}
+                    {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
                   </span>
-                </div>
-              ) : (
-                <span className="truncate flex-1 bg-transparent outline-none font-semibold text-xl text-gray-500">
-                  {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
-                </span>
-              )}
+                )}
+              </div>
             </button>
           )}
 

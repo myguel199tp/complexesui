@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "inline-block bg-gray-200 px-5 py-3 font-thin border-none w-full",
+  "inline-block px-2 py-3 font-thin border-2 border-cyan-800 w-full shadow-xl",
   {
     variants: {
       rounded: {
@@ -241,7 +241,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               />
             )}
 
-            {prefixText && <div className="text-gray-700">{prefixText}</div>}
+            {prefixText && <div className="text-gray-500">{prefixText}</div>}
 
             <input
               type={type}
@@ -260,7 +260,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
           </div>
 
           {fileName && (
-            <Text size="xs" className="mt-1 text-gray-600 italic">
+            <Text size="xs" className="mt-1 text-gray-500 italic">
               Archivo: {fileName}
             </Text>
           )}

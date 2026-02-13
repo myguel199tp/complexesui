@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "flex bg-gray-200 font-thin border-none w-full focus:outline-none flex items-center gap-2",
+  "flex font-thin border-2 border-cyan-800 w-full focus:outline-none flex items-center gap-2 shadow-xl",
   {
     variants: {
       rounded: {
@@ -345,7 +345,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
                 setSearch(val);
               }}
               placeholder={t(tkeySearch || "Buscar...")}
-              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-500 mt-1 px-2"
+              className="w-full bg-transparent outline-none text-gray-500 placeholder-gray-500 mt-1 px-2"
               onClick={(e) => e.stopPropagation()}
               autoFocus
             />
@@ -353,7 +353,7 @@ const MultiSelect: FC<MultiSelectProps> = forwardRef<
 
           {/* Texto por defecto cuando no hay selección y el dropdown está cerrado */}
           {selected.length === 0 && !open && (
-            <span className="truncate flex-1 bg-transparent outline-none font-semibold text-xl text-gray-500">
+            <span className="truncate flex-1 bg-transparent outline-none font-semibold text-sm text-gray-500">
               {tKeyDefaultOption ? t(tKeyDefaultOption) : defaultOption}
             </span>
           )}
