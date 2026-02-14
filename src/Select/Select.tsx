@@ -241,7 +241,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
 
           {/* CONTROL (input o boton) */}
           {searchable ? (
-            <div className="flex items-center gap-2 relative w-full border-2 border-cyan-800 px-3 py-2 rounded-md">
+            <div className="flex items-center bg-gray-200 gap-2 relative w-full border-1 border-cyan-800 px-3 py-2 rounded-md">
               {prefixImage && (
                 <img
                   src={prefixImage}
@@ -322,7 +322,7 @@ const SelectField: FC<SelectFieldProps> = forwardRef<
               aria-expanded={isOpen}
               onClick={() => !disabled && setIsOpen((s) => !s)}
               className={cn(
-                "w-full text-left border-2 border-cyan-800 px-3 py-2 rounded-md flex items-center gap-2 text-gray-500",
+                "w-full text-left bg-gray-200 border-1 border-cyan-800 px-3 py-2 rounded-md flex items-center gap-2 text-gray-500",
                 optionSizeClassMap[inputSize ?? "md"],
               )}
             >

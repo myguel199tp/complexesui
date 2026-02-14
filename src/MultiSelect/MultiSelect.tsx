@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "flex font-thin border-2 border-cyan-800 w-full focus:outline-none flex items-center gap-2 shadow-xl",
+  "flex font-thin border-1 bg-gray-200 border-cyan-800 w-full focus:outline-none flex items-center gap-2 shadow-xl",
   {
     variants: {
       rounded: {

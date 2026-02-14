@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 
 const field = cva(
-  "inline-block px-2 py-3 font-thin border-2 border-cyan-800 w-full shadow-xl",
+  "inline-block px-2 py-3 bg-gray-200 font-thin border-1 border-cyan-800 w-full shadow-xl",
   {
     variants: {
       rounded: {
@@ -248,7 +248,7 @@ const InputField: FC<FieldProps> = forwardRef<HTMLInputElement, FieldProps>(
               ref={ref}
               placeholder={tKeyPlaceholder ? t(tKeyPlaceholder) : placeholder}
               className={cn(
-                "bg-transparent outline-none font-semibold text-xl flex-1 p-2 text-gray-800",
+                "bg-transparent outline-none font-semibold text-sm flex-1 p-2 text-gray-500",
                 disabledClass,
               )}
               disabled={disabled}
