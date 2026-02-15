@@ -46,10 +46,10 @@ const tabStyle = cva("font-bold", {
   },
   defaultVariants: {
     colVariant: "default",
-    size: "md",
-    font: "normal",
+    size: "sm",
+    font: "bold",
     background: "default",
-    padding: "md",
+    padding: "sm",
     rounded: "sm",
   },
 });
@@ -79,11 +79,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
 
     return (
       <div ref={ref}>
-        <div
-          className={cn(
-            "flex flex-col space-y-2 md:flex-row md:space-x-4 md:space-y-0",
-          )}
-        >
+        <div className="flex flex-wrap gap-2">
           {tabs.map((tab, index) => (
             <button
               key={index}
